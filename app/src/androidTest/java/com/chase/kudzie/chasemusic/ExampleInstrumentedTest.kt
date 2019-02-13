@@ -1,4 +1,4 @@
-package com.chase.kudzie.musicplayer
+package com.chase.kudzie.chasemusic
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

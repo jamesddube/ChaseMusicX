@@ -2,7 +2,6 @@ package com.chase.kudzie.chasemusic
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.chase.kudzie.musicplayer.R
 
 class MainActivity : AppCompatActivity() {
 
