@@ -13,16 +13,22 @@ ext {
     androidXVersion = '1.0.0-beta01'
     ktXVersion = '1.1.0-alpha04'
     constraintLayoutVersion = '1.1.3'
-    coroutinesVersion = ''
+    coroutinesVersion = '1.1.1'
 
     //Testing Version
     jUnitVersion = '4.12'
     androidTestRunnerVersion = '1.1.0-alpha4'
     espressoVersion = '3.1.0-alpha4'
-    assertJVersion = ''
-    mockitoKotlinVersion = ''
+    assertJVersion = '3.8.0'
+    mockitoKotlinVersion = '2.0.0-RC1'
 
-    domainDependencies = []
-    domainTestDependencies = []
+    domainDependencies = [
+            kotlinCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}"
+    ]
+    domainTestDependencies = [
+            junit  : "junit:junit:${jUnitVersion}",
+            mockito: "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockitoKotlinVersion}",
+            assertj: "org.assertj:assertj-core:${assertJVersion}"
+    ]
 
 }

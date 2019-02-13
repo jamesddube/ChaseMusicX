@@ -1,7 +1,14 @@
 apply plugin: 'kotlin'
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    def domainDependencies = rootProject.ext.domainDependencies
+    def domainTestDependencies = rootProject.ext.domainTestDependencies
+
+    implementation domainDependencies.kotlinCoroutines
+
+    implementation domainTestDependencies.junit
+    implementation domainTestDependencies.mockito
+    implementation domainTestDependencies.assertj
 }
 
 sourceCompatibility = "7"
