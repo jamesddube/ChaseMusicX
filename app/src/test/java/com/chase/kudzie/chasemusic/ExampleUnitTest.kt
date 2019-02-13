@@ -1,4 +1,4 @@
-package com.chase.kudzie.musicplayer
+package com.chase.kudzie.chasemusic
 
 import org.junit.Test
 
