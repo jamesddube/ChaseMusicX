@@ -1,4 +1,7 @@
 package com.chase.kudzie.chasemusic.domain.model
 
-class Playlist {
-}
+data class Playlist(
+    val id: Long,
+    val name: String,
+    val songCount: Int
+)

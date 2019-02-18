@@ -1,4 +1,11 @@
 package com.chase.kudzie.chasemusic.domain.model
 
-class Artist {
-}
+/**
+ * @author Kudzai Chasinda
+ * */
+data class Artist(
+    val id: Long,
+    val albumCount: Int,
+    val name: String,
+    val songCount: Int
+)
