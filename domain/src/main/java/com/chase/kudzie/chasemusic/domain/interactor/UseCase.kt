@@ -3,13 +3,13 @@ package com.chase.kudzie.chasemusic.domain.interactor
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-abstract class UseCase<T> {
+abstract class UseCase<T, in Params> {
 
     private var parentJob: Job = Job()
     private var backgroundContext: CoroutineContext = Dispatchers.IO
     private var foregroundContext: CoroutineContext = Dispatchers.Main
 
-    protected abstract suspend fun executeOnBackground(): T
+    protected abstract suspend fun executeOnBackground(params: Params? = null): T
 
     fun execute(onComplete: (T) -> Unit, onError: (Throwable) -> Unit) {
         unsubscribe()

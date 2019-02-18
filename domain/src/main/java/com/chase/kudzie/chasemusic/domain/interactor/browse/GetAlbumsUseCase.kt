@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class GetAlbumsUseCase @Inject constructor(
     private val albumRepository: AlbumRepository
-) : UseCase<List<Album>>() {
-    override suspend fun executeOnBackground(): List<Album> {
+) : UseCase<List<Album>, Nothing>() {
+    override suspend fun executeOnBackground(params: Nothing?): List<Album> {
         return albumRepository.getAlbums()
     }
 }
