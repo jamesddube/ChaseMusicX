@@ -27,9 +27,10 @@ ext {
     mockitoKotlinVersion = '2.0.0-RC1'
 
     domainDependencies = [
-            kotlinCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
-            javaxAnnotation: "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
-            javaxInject    : "javax.inject:javax.inject:${javaxInjectVersion}",
+            kotlinCoroutines : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
+            androidCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion",
+            javaxAnnotation  : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            javaxInject      : "javax.inject:javax.inject:${javaxInjectVersion}",
     ]
 
     domainTestDependencies = [
@@ -40,10 +41,12 @@ ext {
 
 
     appDependencies = [
-            androidKtx      : "androidx.core:core-ktx:${ktxVersion}",
-            constraintLayout: "androidx.constraintlayout:constraintlayout:${constraintLayoutVersion}",
-            appCompat       : "androidx.appcompat:appcompat:${androidXVersion}",
-            supportDesign   : "com.google.android.material:material:${materialDesignVersion}"
+            androidKtx       : "androidx.core:core-ktx:${ktxVersion}",
+            constraintLayout : "androidx.constraintlayout:constraintlayout:${constraintLayoutVersion}",
+            appCompat        : "androidx.appcompat:appcompat:${androidXVersion}",
+            supportDesign    : "com.google.android.material:material:${materialDesignVersion}",
+            kotlinCoroutines : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
+            androidCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     ]
 
     appTestDependencies = [
