@@ -5,7 +5,7 @@ import kotlin.coroutines.CoroutineContext
 
 /**
  * @author Kudzai A Chasinda
- * */
+ */
 abstract class CoroutineUseCase<T, in Params> {
 
     private var parentJob: Job = Job()

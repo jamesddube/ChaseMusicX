@@ -1,4 +1,4 @@
-package com.chase.kudzie.chasemusic.domain.interactor.browse
+package com.chase.kudzie.chasemusic.domain.interactor.browse.album
 
 import com.chase.kudzie.chasemusic.domain.interactor.CoroutineUseCase
 import com.chase.kudzie.chasemusic.domain.model.Album
