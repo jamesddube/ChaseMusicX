@@ -2,7 +2,13 @@ package com.chase.kudzie.chasemusic.domain.interactor
 
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
-
+/**
+ * @author Kudzai A Chasinda
+ *
+ *  A coroutine implementation for our interactor.
+ *  Okay Kudzie, we have got to figure out how to retrieve the result
+ *  We can't have observables after all
+ * */
 abstract class UseCase<T, in Params> {
 
     private var parentJob: Job = Job()
@@ -21,7 +27,7 @@ abstract class UseCase<T, in Params> {
                 }
                 onComplete.invoke(result)
             } catch (e: CancellationException) {
-                //TODO handle case for cancellation
+                //TODO handle case for cancellation Kudzie
             } catch (e: Exception) {
                 onError(e)
             }
