@@ -8,10 +8,10 @@ interface SongRepository {
 
     fun getSongs(): Single<List<Song>>
 
-    fun findSongs(): Single<List<Song>>
+    fun findSongs(searchString: String): Single<List<Song>>
 
-    fun getSong(): Single<Song>
+    fun getSong(id:Long): Single<Song>
 
-    fun deleteSong(): Completable
+    fun deleteSong(id:Long): Completable
 
 }
