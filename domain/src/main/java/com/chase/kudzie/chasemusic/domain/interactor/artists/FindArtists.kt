@@ -11,18 +11,19 @@ import javax.inject.Inject
 /**
  * @author Kudzai Chasinda
  */
-class GetArtist @Inject constructor(
+class FindArtists @Inject constructor(
     private val repository: ArtistRepository,
     postExecutionThread: PostExecutionThread
-) : SingleUseCase<Artist, GetArtist.Params>(postExecutionThread) {
-    override fun buildUseCaseObservable(params: Params?): Single<Artist> {
-        if (params == null) throw IllegalArgumentException("Param id cannot be null")
-        return repository.getArtist(params.id)
+) : SingleUseCase<List<Artist>, FindArtists.Params>(postExecutionThread) {
+    override fun buildUseCaseObservable(params: Params?): Single<List<Artist>> {
+        if (params == null) throw IllegalArgumentException("Param searchString cannot be null")
+        return repository.findArtists(params.searchString)
     }
 
-    data class Params(val id: Long) {
+
+    data class Params(val searchString: String) {
         companion object {
-            fun forArtist(id: Long): Params = Params(id)
+            fun forArtist(searchString: String): Params = Params(searchString)
         }
     }
 }
