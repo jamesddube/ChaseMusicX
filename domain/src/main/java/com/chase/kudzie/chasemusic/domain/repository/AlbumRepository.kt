@@ -10,7 +10,7 @@ interface AlbumRepository {
 
     fun getAlbum(id: Long): Single<Album>
 
-    fun findAlbums(name: String): Single<List<Album>>
+    fun findAlbums(searchString: String): Single<List<Album>>
 
-    fun deleteAlbum():Completable //Umm this might return something
+    fun deleteAlbum(id: Long): Completable //Umm this might return something
 }
