@@ -18,7 +18,7 @@ ext {
     javaxInjectVersion = '1'
     javaxAnnotationVersion = '1.0'
     materialDesignVersion = '1.0.0'
-    rxJavaVersion = '2.0.2'
+    rxJavaVersion = '2.3.0'
 
     //Testing Version
     jUnitVersion = '4.12'
