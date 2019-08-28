@@ -4,7 +4,7 @@ ext {
     androidMinSdkVersion = 21
     androidTargetSdkVersion = 28
     androidCompileSdkVersion = 28
-    kotlinVersion = '1.3.20'
+    kotlinVersion = '1.3.41'
     versionCode = 1
     versionName = "1.0"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -19,6 +19,10 @@ ext {
     javaxAnnotationVersion = '1.0'
     materialDesignVersion = '1.0.0'
     rxJavaVersion = '2.2.9'
+    sqlDelightVersion = '1.1.4'
+    retrofitVersion = '2.6.1'
+    okHttpVersion = '4.0.1'
+    sqlBriteVersion = '3.2.0'
 
     //Testing Version
     jUnitVersion = '4.12'
@@ -28,17 +32,37 @@ ext {
     mockitoKotlinVersion = '2.0.0-RC1'
 
     domainDependencies = [
-            kotlinCoroutines : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
-            androidCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion",
-            javaxAnnotation  : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
-            javaxInject      : "javax.inject:javax.inject:${javaxInjectVersion}",
-            rxJava           : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            kotlinCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
+            javaxAnnotation : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            javaxInject     : "javax.inject:javax.inject:${javaxInjectVersion}",
     ]
 
     domainTestDependencies = [
             junit  : "junit:junit:${jUnitVersion}",
             mockito: "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockitoKotlinVersion}",
             assertj: "org.assertj:assertj-core:${assertJVersion}"
+    ]
+
+
+    dataDependencies = [
+            kotlinCoroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
+            androidCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion",
+            javaxAnnotation      : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            javaxInject          : "javax.inject:javax.inject:${javaxInjectVersion}",
+            rxJava               : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
+            androidKtx           : "androidx.core:core-ktx:${ktxVersion}",
+            retrofit             : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            moshiConverterFactory: "com.squareup.retrofit2:converter-moshi:${retrofitVersion}",
+            rxJavaAdapter        : "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
+            okHttp               : "com.squareup.okhttp3:okhttp:${okHttpVersion}",
+            sqlBrite             : "com.squareup.sqlbrite3:sqlbrite-kotlin:${sqlBriteVersion}"
+    ]
+
+    dataTestDependencies = [
+            junit              : "junit:junit:${jUnitVersion}",
+            mockito            : "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockitoKotlinVersion}",
+            assertj            : "org.assertj:assertj-core:${assertJVersion}",
+            okHttpMockWebServer: "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
     ]
 
 

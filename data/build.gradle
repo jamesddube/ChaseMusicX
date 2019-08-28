@@ -24,10 +24,23 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    def dataDependencies = rootProject.ext.dataDependencies
+    def dataTestDependencies = rootProject.ext.dataTestDependencies
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation project(':domain')
+
+    implementation dataDependencies.javaxAnnotation
+    implementation dataDependencies.javaxInject
+    implementation dataDependencies.rxJava
+    implementation dataDependencies.androidKtx
+    implementation dataDependencies.retrofit
+    implementation dataDependencies.moshiConverterFactory
+    implementation dataDependencies.okHttp
+    implementation dataDependencies.sqlBrite
+
+    implementation dataTestDependencies.junit
+    implementation dataTestDependencies.mockito
+    implementation dataTestDependencies.assertj
+    implementation dataTestDependencies.okHttpMockWebServer
+
 }

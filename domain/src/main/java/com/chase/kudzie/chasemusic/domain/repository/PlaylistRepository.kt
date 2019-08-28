@@ -4,8 +4,8 @@ import io.reactivex.Completable
 
 interface PlaylistRepository {
 
-    fun makePlaylist(): Completable //Change to completable use case
+    suspend fun makePlaylist()
 
-    fun deletePlaylist(): Completable
+    suspend fun deletePlaylist()
 
 }

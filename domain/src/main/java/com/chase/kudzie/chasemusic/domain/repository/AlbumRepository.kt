@@ -6,11 +6,11 @@ import io.reactivex.Single
 
 interface AlbumRepository {
 
-    fun getAlbums(): List<Album>
+    suspend fun getAlbums(): List<Album>
 
-    fun getAlbum(id: Long): Single<Album>
+    suspend fun getAlbum(id: Long): Album
 
-    fun findAlbums(searchString: String): Single<List<Album>>
+    suspend fun findAlbums(searchString: String): List<Album>
 
-    fun deleteAlbum(id: Long): Completable //Umm this might return something
+    suspend fun deleteAlbum(id: Long)
 }
