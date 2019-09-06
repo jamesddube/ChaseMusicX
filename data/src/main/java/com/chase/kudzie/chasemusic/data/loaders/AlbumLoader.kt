@@ -39,8 +39,9 @@ internal class AlbumLoader(
     @SuppressLint("Recycle")
     fun getAlbumSongs(id: Long): Cursor {
         val selection = "$_ID=?"
-        val selectionArgs = null
-
+        val selectionArgs = arrayOf(
+            "$id"
+        )
         return contentResolver.query(uri, projection, selection, selectionArgs, sortOrder)!!
     }
 
