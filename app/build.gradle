@@ -4,7 +4,11 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
@@ -24,16 +28,36 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    def appDependencies = rootProject.ext.appDependencies
+    def appTestDependencies = rootProject.ext.appTestDependencies
 
     implementation project(':data')
     implementation project(':domain')
 
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-    implementation 'androidx.core:core-ktx:1.2.0-alpha03'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.3.0-alpha02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha02'
+    implementation appDependencies.materialDesign
+    implementation appDependencies.kotlin
+    implementation appDependencies.androidKtx
+    implementation appDependencies.appCompat
+    implementation appDependencies.constraintLayout
+    implementation appDependencies.recyclerView
+    implementation appDependencies.recyclerViewSelection
+    implementation appDependencies.cardView
+    implementation appDependencies.viewPager
+    implementation appDependencies.glide
+    implementation appDependencies.javaxInject
+    implementation appDependencies.kotlinCoroutines
+    implementation appDependencies.androidCoroutines
+    implementation appDependencies.dagger
+    implementation appDependencies.daggerSupport
+    implementation appDependencies.timber
+    implementation appDependencies.timber
+
+    kapt appDependencies.daggerCompiler
+    kapt appDependencies.daggerProcessor
+    kapt appDependencies.glideAnnotation
+    compileOnly appDependencies.glassfishAnnotation
+
+    testImplementation appTestDependencies.junit
+    androidTestImplementation appTestDependencies.androidTestRunner
+    androidTestImplementation appTestDependencies.espresso
 }
