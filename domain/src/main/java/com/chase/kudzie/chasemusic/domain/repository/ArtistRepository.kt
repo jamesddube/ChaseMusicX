@@ -1,7 +1,6 @@
 package com.chase.kudzie.chasemusic.domain.repository
 
 import com.chase.kudzie.chasemusic.domain.model.Artist
-import io.reactivex.Single
 
 interface ArtistRepository {
 
