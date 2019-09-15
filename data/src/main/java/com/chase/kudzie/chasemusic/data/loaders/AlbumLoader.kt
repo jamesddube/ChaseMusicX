@@ -18,7 +18,6 @@ internal class AlbumLoader(
         val uri: Uri = EXTERNAL_CONTENT_URI
         val projection = arrayOf(
             _ID,
-            ALBUM_ID,
             ALBUM,
             NUMBER_OF_SONGS,
             FIRST_YEAR,
