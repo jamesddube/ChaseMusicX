@@ -2,6 +2,8 @@ package com.chase.kudzie.chasemusic
 
 import android.app.Activity
 import android.app.Application
+import androidx.multidex.MultiDex
+import com.chase.kudzie.chasemusic.injection.DaggerApplicationComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -20,9 +22,15 @@ class App : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
         initTimber()
+        initDagger()
+        MultiDex.install(this)
     }
 
     private fun initTimber() {
         Timber.plant(Timber.DebugTree())
+    }
+
+    private fun initDagger() {
+        DaggerApplicationComponent.builder().application(this).build().inject(this)
     }
 }
