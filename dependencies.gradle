@@ -30,6 +30,9 @@ ext {
     glideVersion = '4.9.0'
     timberVersion = '4.7.1'
     glassfishAnnotationVersion = '10.0-b28'
+    fragmentVersion = '1.2.0-alpha01'
+    androidXLifecycleVersion = '2.1.0-rc01'
+    multiDexVersion = '2.0.1'
 
     //Testing Version
     jUnitVersion = '4.12'
@@ -74,27 +77,31 @@ ext {
 
 
     appDependencies = [
-            javaxAnnotation      : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
-            javaxInject          : "javax.inject:javax.inject:${javaxInjectVersion}",
-            kotlin               : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}",
-            androidKtx           : "androidx.core:core-ktx:${ktxVersion}",
-            constraintLayout     : "androidx.constraintlayout:constraintlayout:${constraintLayoutVersion}",
-            appCompat            : "androidx.appcompat:appcompat:${androidXVersion}",
-            materialDesign        : "com.google.android.material:material:${materialDesignVersion}",
-            kotlinCoroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
-            androidCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion",
-            daggerCompiler       : "com.google.dagger:dagger-compiler:${daggerVersion}",
-            dagger               : "com.google.dagger:dagger:${daggerVersion}",
-            glide                : "com.github.bumptech.glide:glide:${glideVersion}",
-            glideAnnotation      : "com.github.bumptech.glide:compiler:${glideVersion}",
-            daggerSupport        : "com.google.dagger:dagger-android-support:${daggerVersion}",
-            daggerProcessor      : "com.google.dagger:dagger-android-processor:${daggerVersion}",
-            timber               : "com.jakewharton.timber:timber:${timberVersion}",
-            glassfishAnnotation  : "org.glassfish:javax.annotation:${glassfishAnnotationVersion}",
-            cardView             : "androidx.cardview:cardview:${cardViewVersion}",
-            recyclerView         : "androidx.recyclerview:recyclerview:${recyclerViewVersion}",
-            recyclerViewSelection: "androidx.recyclerview:recyclerview-selection:${recyclerViewSelectionVersion}",
-            viewPager            : "androidx.viewpager2:viewpager2:${viewPagerVersion}"
+            javaxAnnotation              : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            javaxInject                  : "javax.inject:javax.inject:${javaxInjectVersion}",
+            kotlin                       : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}",
+            androidKtx                   : "androidx.core:core-ktx:${ktxVersion}",
+            constraintLayout             : "androidx.constraintlayout:constraintlayout:${constraintLayoutVersion}",
+            appCompat                    : "androidx.appcompat:appcompat:${androidXVersion}",
+            materialDesign               : "com.google.android.material:material:${materialDesignVersion}",
+            kotlinCoroutines             : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
+            androidCoroutines            : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion",
+            daggerCompiler               : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger                       : "com.google.dagger:dagger:${daggerVersion}",
+            glide                        : "com.github.bumptech.glide:glide:${glideVersion}",
+            glideAnnotation              : "com.github.bumptech.glide:compiler:${glideVersion}",
+            daggerSupport                : "com.google.dagger:dagger-android-support:${daggerVersion}",
+            daggerProcessor              : "com.google.dagger:dagger-android-processor:${daggerVersion}",
+            timber                       : "com.jakewharton.timber:timber:${timberVersion}",
+            glassfishAnnotation          : "org.glassfish:javax.annotation:${glassfishAnnotationVersion}",
+            cardView                     : "androidx.cardview:cardview:${cardViewVersion}",
+            recyclerView                 : "androidx.recyclerview:recyclerview:${recyclerViewVersion}",
+            recyclerViewSelection        : "androidx.recyclerview:recyclerview-selection:${recyclerViewSelectionVersion}",
+            viewPager                    : "androidx.viewpager2:viewpager2:${viewPagerVersion}",
+            androidxFragment             : 'androidx.fragment:fragment:${fragmentVersion}',
+            androidxLifecycleExtensions  : "androidx.lifecycle:lifecycle-extensions:${androidXLifecycleVersion}",
+            androidxLifecycleViewmodelKtx: "androidx.lifecycle:lifecycle-viewmodel-ktx:${androidXLifecycleVersion}",
+            multiDex                     : "androidx.multidex:multidex:${multiDexVersion}"
     ]
 
     appTestDependencies = [

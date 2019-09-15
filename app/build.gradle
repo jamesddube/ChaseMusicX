@@ -5,7 +5,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
-
+kapt {
+    correctErrorTypes = true
+}
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
@@ -18,12 +20,25 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
     }
+
+    dexOptions {
+        preDexLibraries = false
+        dexInProcess = false
+        javaMaxHeapSize "4g"
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -50,7 +65,9 @@ dependencies {
     implementation appDependencies.dagger
     implementation appDependencies.daggerSupport
     implementation appDependencies.timber
-    implementation appDependencies.timber
+    implementation appDependencies.androidxLifecycleExtensions
+    implementation appDependencies.androidxLifecycleViewmodelKtx
+    implementation appDependencies.multiDex
 
     kapt appDependencies.daggerCompiler
     kapt appDependencies.daggerProcessor
