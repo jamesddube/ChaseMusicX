@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
 import android.provider.BaseColumns.*
+import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AlbumColumns.*
 
 import android.provider.MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
@@ -36,7 +37,7 @@ internal class AlbumLoader(
     }
 
     @SuppressLint("Recycle")
-    fun getAlbumSongs(id: Long): Cursor {
+    fun getAlbum(id: Long): Cursor {
         val selection = "$_ID=?"
         val selectionArgs = arrayOf(
             "$id"
@@ -46,10 +47,24 @@ internal class AlbumLoader(
 
     @SuppressLint("Recycle")
     fun findAlbums(searchString: String): Cursor {
-        val selection = "$_ID=?"
+        val selection = "$ALBUM LIKE ?"
         val selectionArgs = arrayOf(
             "%$searchString%"
         )
+
+        return contentResolver.query(uri, projection, selection, selectionArgs, sortOrder)!!
+    }
+
+    @SuppressLint("Recycle")
+    fun getAlbumSongs(id: Long): Cursor {
+        val selection =
+            "${MediaStore.Audio.AudioColumns.IS_MUSIC} = 1 " +
+                    "AND ${MediaStore.Audio.AudioColumns.TITLE} != '' " +
+                    "AND ${ALBUM_ID}=$id"
+        val selectionArgs = null
+        val uri = SongLoader.uri
+        val projection = SongLoader.projection
+        val sortOrder = SongLoader.sortOrder
 
         return contentResolver.query(uri, projection, selection, selectionArgs, sortOrder)!!
     }
