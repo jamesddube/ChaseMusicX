@@ -4,10 +4,14 @@ import android.database.Cursor
 import android.provider.BaseColumns
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.Media.*
+import com.chase.kudzie.chasemusic.data.extensions.*
 import com.chase.kudzie.chasemusic.data.extensions.getInt
 import com.chase.kudzie.chasemusic.data.extensions.getLong
+import com.chase.kudzie.chasemusic.data.extensions.getLongOrNull
 import com.chase.kudzie.chasemusic.data.extensions.getStringOrNull
 import com.chase.kudzie.chasemusic.domain.model.Album
+import com.chase.kudzie.chasemusic.domain.model.Artist
+import com.chase.kudzie.chasemusic.domain.model.Song
 
 
 fun Cursor.toAlbum(): Album {
@@ -21,4 +25,27 @@ fun Cursor.toAlbum(): Album {
     return Album(
         id, artistId, artistName, songCount, title, year
     )
+}
+
+fun Cursor.toSong(): Song {
+    val id = getLong(BaseColumns._ID)
+    val albumName = getStringOrNull(MediaStore.Audio.AudioColumns.ALBUM) ?: ""
+    val artistId = getLongOrNull(MediaStore.Audio.AudioColumns.ARTIST_ID) ?: 0L
+    val artistName = getStringOrNull(MediaStore.Audio.AudioColumns.ARTIST) ?: ""
+    val duration = getIntOrNull(MediaStore.Audio.AudioColumns.DURATION) ?: 0
+    val title = getStringOrNull(MediaStore.Audio.AudioColumns.TITLE) ?: ""
+    val trackNumber = getIntOrNull(MediaStore.Audio.AudioColumns.TRACK) ?: 0
+
+    return Song(
+        id, albumName, artistId, artistName, duration, title, trackNumber
+    )
+}
+
+fun Cursor.toArtist(): Artist {
+    val id = getLong(BaseColumns._ID)
+    val albumCount = 0
+    val name = getStringOrNull(MediaStore.Audio.ArtistColumns.ARTIST) ?: ""
+    val songCount = 0
+
+    return Artist(id, albumCount, name, songCount)
 }
