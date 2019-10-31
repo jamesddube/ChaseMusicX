@@ -9,5 +9,5 @@ import javax.inject.Inject
 class GetArtists @Inject constructor(
     private val repository: ArtistRepository
 ) {
-    suspend operator fun invoke(params: Nothing?) = repository.getArtists()
+    suspend operator fun invoke() = repository.getArtists()
 }

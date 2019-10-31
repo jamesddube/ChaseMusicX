@@ -10,6 +10,4 @@ class GetSongs @Inject constructor(
     private val repository: SongRepository
 ) {
     suspend operator fun invoke() = repository.getSongs()
-
-
 }
