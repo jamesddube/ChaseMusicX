@@ -11,6 +11,7 @@ import com.chase.kudzie.chasemusic.data.extensions.getLongOrNull
 import com.chase.kudzie.chasemusic.data.extensions.getStringOrNull
 import com.chase.kudzie.chasemusic.domain.model.Album
 import com.chase.kudzie.chasemusic.domain.model.Artist
+import com.chase.kudzie.chasemusic.domain.model.Playlist
 import com.chase.kudzie.chasemusic.domain.model.Song
 
 
@@ -48,4 +49,12 @@ fun Cursor.toArtist(): Artist {
     val songCount = 0
 
     return Artist(id, albumCount, name, songCount)
+}
+
+fun Cursor.toPlaylist(): Playlist {
+    val id = getLong(BaseColumns._ID)
+    val songCount = 0
+    val name = getStringOrNull(MediaStore.Audio.PlaylistsColumns.NAME) ?: ""
+
+    return Playlist(id, name, songCount)
 }

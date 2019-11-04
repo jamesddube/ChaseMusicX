@@ -2,14 +2,24 @@ package com.chase.kudzie.chasemusic.data.repository
 
 import android.content.ContentResolver
 import android.content.Context
+import com.chase.kudzie.chasemusic.data.extensions.queryAll
+import com.chase.kudzie.chasemusic.data.loaders.PlaylistLoader
+import com.chase.kudzie.chasemusic.data.mapper.toPlaylist
+import com.chase.kudzie.chasemusic.domain.model.Playlist
 import com.chase.kudzie.chasemusic.domain.repository.PlaylistRepository
 import javax.inject.Inject
 
 class PlaylistRepositoryImpl @Inject constructor(
     context: Context
-):PlaylistRepository{
+) : PlaylistRepository {
 
     private val contentResolver: ContentResolver = context.contentResolver
+
+    override suspend fun getPlaylists(): List<Playlist> {
+        return contentResolver.queryAll(
+            PlaylistLoader(contentResolver).getAll()
+        ) { it.toPlaylist() }
+    }
 
     override suspend fun deletePlaylist() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
