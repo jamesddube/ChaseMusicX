@@ -2,7 +2,7 @@ package com.chase.kudzie.chasemusic.data.extensions
 
 import android.database.Cursor
 
-internal inline fun Cursor.getInt(columnName: String): Int {
+internal fun Cursor.getInt(columnName: String): Int {
     try {
         return this.getInt(this.getColumnIndex(columnName))
     } catch (ex: IllegalStateException) {
@@ -10,7 +10,7 @@ internal inline fun Cursor.getInt(columnName: String): Int {
     }
 }
 
-internal inline fun Cursor.getLong(columnName: String): Long {
+internal fun Cursor.getLong(columnName: String): Long {
     try {
         return this.getLong(this.getColumnIndex(columnName))
     } catch (ex: IllegalStateException) {
@@ -18,7 +18,7 @@ internal inline fun Cursor.getLong(columnName: String): Long {
     }
 }
 
-internal inline fun Cursor.getString(columnName: String): String {
+internal fun Cursor.getString(columnName: String): String {
     try {
         return this.getString(this.getColumnIndex(columnName))
     } catch (ex: IllegalStateException) {
@@ -26,7 +26,7 @@ internal inline fun Cursor.getString(columnName: String): String {
     }
 }
 
-internal inline fun Cursor.getIntOrNull(columnName: String): Int? {
+internal fun Cursor.getIntOrNull(columnName: String): Int? {
     try {
         return this.getInt(this.getColumnIndex(columnName))
     } catch (ex: IllegalStateException) {
@@ -34,7 +34,7 @@ internal inline fun Cursor.getIntOrNull(columnName: String): Int? {
     }
 }
 
-internal inline fun Cursor.getLongOrNull(columnName: String): Long? {
+internal fun Cursor.getLongOrNull(columnName: String): Long? {
     try {
         return this.getLong(this.getColumnIndex(columnName))
     } catch (ex: IllegalStateException) {
@@ -43,7 +43,7 @@ internal inline fun Cursor.getLongOrNull(columnName: String): Long? {
 
 }
 
-internal inline fun Cursor.getStringOrNull(columnName: String): String? {
+internal fun Cursor.getStringOrNull(columnName: String): String? {
     try {
         return this.getString(this.getColumnIndex(columnName))
     } catch (ex: IllegalStateException) {
