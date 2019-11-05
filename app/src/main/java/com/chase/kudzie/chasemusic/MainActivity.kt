@@ -2,21 +2,33 @@ package com.chase.kudzie.chasemusic
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.chase.kudzie.chasemusic.injection.ViewModelFactory
-import com.chase.kudzie.chasemusic.viewmodel.AlbumViewModel
+import androidx.navigation.Navigation
+import androidx.navigation.ui.setupWithNavController
+import com.chase.kudzie.chasemusic.databinding.ActivityMainBinding
+import com.chase.kudzie.chasemusic.extensions.hide
+import com.chase.kudzie.chasemusic.extensions.show
+import com.chase.kudzie.chasemusic.util.contentView
 import dagger.android.AndroidInjection
-import dagger.android.HasActivityInjector
-import timber.log.Timber
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
+    private val binding: ActivityMainBinding by contentView(R.layout.activity_main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding.apply {
+            val navigationController =
+                Navigation.findNavController(this@MainActivity, R.id.nav_host)
+            bottomNav.setupWithNavController(navigationController)
+
+            navigationController.addOnDestinationChangedListener { _, destination, _ ->
+                when (destination.id) {
+                    R.id.songs, R.id.playlists, R.id.albums, R.id.artists -> bottomNav.show()
+                    else -> bottomNav.hide()
+                }
+            }
+        }
     }
 }

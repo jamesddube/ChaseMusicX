@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/home_navigation"
+    app:startDestination="@id/songs">
+
+    <fragment
+        android:id="@+id/albums"
+        android:name="com.chase.kudzie.chasemusic.ui.albums.AlbumsFragment"
+        android:label="AlbumsFragment" />
+    <fragment
+        android:id="@+id/artists"
+        android:name="com.chase.kudzie.chasemusic.ui.artists.ArtistsFragment"
+        android:label="ArtistsFragment" />
+    <fragment
+        android:id="@+id/playlists"
+        android:name="com.chase.kudzie.chasemusic.ui.playlists.PlaylistsFragment"
+        android:label="PlaylistsFragment" />
+    <fragment
+        android:id="@+id/songs"
+        android:name="com.chase.kudzie.chasemusic.ui.songs.SongsFragment"
+        android:label="SongsFragment" />
+</navigation>
