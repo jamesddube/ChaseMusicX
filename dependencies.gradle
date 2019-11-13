@@ -34,6 +34,8 @@ ext {
     androidXLifecycleVersion = '2.1.0-rc01'
     multiDexVersion = '2.0.1'
     navigationVersion = '2.2.0-rc01'
+    exoPlayerVersion = '2.10.7'
+    mediaVersion = '1.1.0'
 
     //Testing Version
     jUnitVersion = '4.12'
@@ -76,6 +78,16 @@ ext {
             okHttpMockWebServer: "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
     ]
 
+
+    serviceMusicDependencies = [
+            exoPlayer        : "com.google.android.exoplayer:exoplayer:${exoPlayerVersion}",
+            javaxAnnotation  : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            javaxInject      : "javax.inject:javax.inject:${javaxInjectVersion}",
+            androidKtx       : "androidx.core:core-ktx:${ktxVersion}",
+            kotlinCoroutines : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
+            androidCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutinesVersion}",
+            media            : "androidx.media:media:${mediaVersion}"
+    ]
 
     appDependencies = [
             javaxAnnotation              : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",

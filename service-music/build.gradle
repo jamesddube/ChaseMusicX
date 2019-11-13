@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -23,14 +25,23 @@ android {
         }
     }
 
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    def serviceMusicDependencies = rootProject.ext.serviceMusicDependencies
+
+    implementation project(':domain')
+
+    implementation serviceMusicDependencies.javaxAnnotation
+    implementation serviceMusicDependencies.javaxInject
+    implementation serviceMusicDependencies.androidKtx
+    implementation serviceMusicDependencies.exoPlayer
+    implementation serviceMusicDependencies.kotlinCoroutines
+    implementation serviceMusicDependencies.androidCoroutines
+    implementation serviceMusicDependencies.media
+
 }
