@@ -36,6 +36,7 @@ ext {
     navigationVersion = '2.2.0-rc01'
     exoPlayerVersion = '2.10.7'
     mediaVersion = '1.1.0'
+    lifecycleVersion = '2.1.0'
 
     //Testing Version
     jUnitVersion = '4.12'
@@ -80,13 +81,17 @@ ext {
 
 
     serviceMusicDependencies = [
-            exoPlayer        : "com.google.android.exoplayer:exoplayer:${exoPlayerVersion}",
-            javaxAnnotation  : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
-            javaxInject      : "javax.inject:javax.inject:${javaxInjectVersion}",
-            androidKtx       : "androidx.core:core-ktx:${ktxVersion}",
-            kotlinCoroutines : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
-            androidCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutinesVersion}",
-            media            : "androidx.media:media:${mediaVersion}"
+            exoPlayer          : "com.google.android.exoplayer:exoplayer:${exoPlayerVersion}",
+            javaxAnnotation    : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            javaxInject        : "javax.inject:javax.inject:${javaxInjectVersion}",
+            androidKtx         : "androidx.core:core-ktx:${ktxVersion}",
+            kotlinCoroutines   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
+            androidCoroutines  : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutinesVersion}",
+            media              : "androidx.media:media:${mediaVersion}",
+            lifecycleRuntime   : "androidx.lifecycle:lifecycle-runtime:${lifecycleVersion}",
+            lifecycleExtensions: "androidx.lifecycle:lifecycle-extensions:${lifecycleVersion}",
+            lifecycleCompiler  : "androidx.lifecycle:lifecycle-compiler:${lifecycleVersion}",
+            lifecycleJava8     : "androidx.lifecycle:lifecycle-common-java8:${lifecycleVersion}"
     ]
 
     appDependencies = [
