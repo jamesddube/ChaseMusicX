@@ -36,9 +36,10 @@ fun Cursor.toSong(): Song {
     val duration = getLongOrNull(MediaStore.Audio.AudioColumns.DURATION) ?: 0L
     val title = getStringOrNull(MediaStore.Audio.AudioColumns.TITLE) ?: ""
     val trackNumber = getIntOrNull(MediaStore.Audio.AudioColumns.TRACK) ?: 0
+    val albumId = getLongOrNull(MediaStore.Audio.AudioColumns.ALBUM_ID) ?: 0L
 
     return Song(
-        id, albumName, artistId, artistName, duration, title, trackNumber
+        id, albumName, artistId, artistName, duration, title, trackNumber, albumId
     )
 }
 
