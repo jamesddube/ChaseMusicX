@@ -56,6 +56,7 @@ class AlbumsFragment : Fragment() {
     }
 
     private fun initViewModels() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AlbumViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(AlbumViewModel::class.java)
     }
 }
