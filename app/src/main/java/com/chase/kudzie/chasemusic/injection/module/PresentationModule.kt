@@ -4,6 +4,7 @@ import android.view.View
 import androidx.lifecycle.ViewModel
 import com.chase.kudzie.chasemusic.domain.model.Album
 import com.chase.kudzie.chasemusic.viewmodel.AlbumViewModel
+import com.chase.kudzie.chasemusic.viewmodel.SongViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -17,6 +18,11 @@ abstract class PresentationModule {
     @IntoMap
     @ViewModelKey(AlbumViewModel::class)
     abstract fun bindAlbumViewModel(viewModel: AlbumViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SongViewModel::class)
+    abstract fun bindSongViewModel(viewModel: SongViewModel): ViewModel
 
 }
 

@@ -2,6 +2,7 @@ package com.chase.kudzie.chasemusic.injection.module
 
 import com.chase.kudzie.chasemusic.MainActivity
 import com.chase.kudzie.chasemusic.ui.albums.AlbumsFragment
+import com.chase.kudzie.chasemusic.ui.songs.SongsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -15,4 +16,7 @@ abstract class UIModule {
 abstract class FragmentScreenModule {
     @ContributesAndroidInjector
     abstract fun contributesAlbumsFragment(): AlbumsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributesSongsFragment(): SongsFragment
 }
