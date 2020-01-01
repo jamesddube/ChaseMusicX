@@ -7,10 +7,11 @@ import com.chase.kudzie.chasemusic.data.loaders.PlaylistLoader
 import com.chase.kudzie.chasemusic.data.mapper.toPlaylist
 import com.chase.kudzie.chasemusic.domain.model.Playlist
 import com.chase.kudzie.chasemusic.domain.repository.PlaylistRepository
+import com.chase.kudzie.chasemusic.domain.scope.ApplicationContext
 import javax.inject.Inject
 
 class PlaylistRepositoryImpl @Inject constructor(
-    context: Context
+   @ApplicationContext context: Context
 ) : PlaylistRepository {
 
     private val contentResolver: ContentResolver = context.contentResolver

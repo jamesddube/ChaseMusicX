@@ -8,10 +8,11 @@ import com.chase.kudzie.chasemusic.data.loaders.ArtistLoader
 import com.chase.kudzie.chasemusic.data.mapper.toArtist
 import com.chase.kudzie.chasemusic.domain.model.Artist
 import com.chase.kudzie.chasemusic.domain.repository.ArtistRepository
+import com.chase.kudzie.chasemusic.domain.scope.ApplicationContext
 import javax.inject.Inject
 
 class ArtistRepositoryImpl @Inject constructor(
-    context: Context
+    @ApplicationContext context: Context
 ) : ArtistRepository {
 
     private val contentResolver: ContentResolver = context.contentResolver

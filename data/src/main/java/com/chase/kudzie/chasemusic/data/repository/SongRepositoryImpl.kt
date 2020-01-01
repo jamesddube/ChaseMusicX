@@ -8,10 +8,11 @@ import com.chase.kudzie.chasemusic.data.loaders.SongLoader
 import com.chase.kudzie.chasemusic.data.mapper.toSong
 import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.domain.repository.SongRepository
+import com.chase.kudzie.chasemusic.domain.scope.ApplicationContext
 import javax.inject.Inject
 
 class SongRepositoryImpl @Inject constructor(
-    context: Context
+    @ApplicationContext context: Context
 ) : SongRepository {
     private val contentResolver: ContentResolver = context.contentResolver
 
