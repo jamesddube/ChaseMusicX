@@ -2,18 +2,21 @@ package com.kudziechase.chasemusic.service.music.data
 
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
+import androidx.lifecycle.DefaultLifecycleObserver
+import com.kudziechase.chasemusic.service.music.injection.scope.PerService
 import com.kudziechase.chasemusic.service.music.model.MediaItem
 import javax.inject.Inject
 
+@PerService
 class MediaMetadata @Inject constructor(
     private val mediaSession: MediaSessionCompat
-) : MediaMetadataListener {
+) : MediaMetadataListener, DefaultLifecycleObserver {
 
     override fun onMetadataChanged(mediaItem: MediaItem) {
         updateMediaSessionMetadata(mediaItem)
     }
 
-    fun updateMediaSessionMetadata(entity: MediaItem) {
+    private fun updateMediaSessionMetadata(entity: MediaItem) {
         val metadataBuilder = MediaMetadataCompat.Builder()
 
         metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, entity.artist)

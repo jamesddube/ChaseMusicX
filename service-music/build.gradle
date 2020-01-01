@@ -36,6 +36,7 @@ dependencies {
     def serviceMusicDependencies = rootProject.ext.serviceMusicDependencies
 
     implementation project(':domain')
+    implementation project(':shared')
 
     implementation serviceMusicDependencies.javaxAnnotation
     implementation serviceMusicDependencies.javaxInject
@@ -47,7 +48,9 @@ dependencies {
     implementation serviceMusicDependencies.lifecycleRuntime
     implementation serviceMusicDependencies.lifecycleExtensions
     implementation serviceMusicDependencies.lifecycleJava8
+    implementation serviceMusicDependencies.dagger
 
+    kapt serviceMusicDependencies.daggerCompiler
     kapt serviceMusicDependencies.lifecycleCompiler
 
 }

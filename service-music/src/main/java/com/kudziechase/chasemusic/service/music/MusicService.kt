@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ServiceLifecycleDispatcher
 import androidx.media.MediaBrowserServiceCompat
+import com.kudziechase.chasemusic.service.music.data.MediaMetadata
 import com.kudziechase.chasemusic.service.music.repository.ServiceController
 import javax.inject.Inject
 
@@ -26,7 +27,11 @@ class MusicService : MediaBrowserServiceCompat(), LifecycleOwner, ServiceControl
     @Inject
     internal lateinit var callback: MediaSessionCallback
 
-    private lateinit var mediaSession: MediaSessionCompat
+    @Inject
+    internal lateinit var mediaSession: MediaSessionCompat
+
+    @Inject
+    internal lateinit var metadata: MediaMetadata
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -38,9 +43,15 @@ class MusicService : MediaBrowserServiceCompat(), LifecycleOwner, ServiceControl
 
     override fun onCreate() {
         super.onCreate()
+        setupMediaSession()
+        lifecycle.run {
+            addObserver(metadata)
+        }
+    }
 
+    private fun setupMediaSession() {
         //Setup Media Session and retrieve a session token
-        mediaSession = MediaSessionCompat(this, "SESSION")
+//        mediaSession = MediaSessionCompat(this, "SESSION") //done by injection
         mediaSession.setMediaButtonReceiver(makeMediaButtonReceiver())
         mediaSession.setCallback(callback)
         mediaSession.isActive = true

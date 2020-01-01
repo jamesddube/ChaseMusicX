@@ -16,13 +16,14 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.kudziechase.chasemusic.service.music.data.MediaMetadataListener
+import com.kudziechase.chasemusic.service.music.injection.scope.ServiceContext
 
 /**
  * @author Kudzai Chasinda
  */
 
 class PlayerRepositoryImpl @Inject constructor(
-    private val context: Context,
+    @ServiceContext private val context: Context,
     private val metadataListener: MediaMetadataListener
 ) : PlayerRepository, DefaultLifecycleObserver {
 

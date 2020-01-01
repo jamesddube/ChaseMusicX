@@ -1,6 +1,10 @@
 package com.kudziechase.chasemusic.service.music.repository
 
-interface QueueRepositoryImpl {
+import android.content.Context
+import javax.inject.Inject
 
+class QueueRepositoryImpl @Inject constructor(
+    private val context: Context
+) : QueueRepository {
 
 }
