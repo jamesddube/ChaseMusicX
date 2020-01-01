@@ -8,6 +8,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.chase.kudzie.chasemusic.databinding.ActivityMainBinding
 import com.chase.kudzie.chasemusic.extensions.hide
 import com.chase.kudzie.chasemusic.extensions.show
+import com.chase.kudzie.chasemusic.injection.scope.PerActivity
+import com.chase.kudzie.chasemusic.injection.scope.PerApplication
 import com.chase.kudzie.chasemusic.util.contentView
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector

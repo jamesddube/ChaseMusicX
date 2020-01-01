@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.chase.kudzie.chasemusic.R
 import com.chase.kudzie.chasemusic.domain.model.Song
+import com.chase.kudzie.chasemusic.injection.scope.PerFragment
 import com.chase.kudzie.chasemusic.model.SongDiff
 import com.chase.kudzie.chasemusic.util.getAlbumArtUri
 
