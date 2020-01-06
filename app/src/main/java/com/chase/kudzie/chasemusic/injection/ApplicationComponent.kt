@@ -5,7 +5,7 @@ import com.chase.kudzie.chasemusic.injection.module.FragmentScreenModule
 import com.chase.kudzie.chasemusic.injection.module.PresentationModule
 import com.chase.kudzie.chasemusic.injection.module.UIModule
 import com.chase.kudzie.chasemusic.injection.scope.PerApplication
-import com.kudziechase.chasemusic.shared.injection.SharedComponent
+import com.chase.kudzie.chasemusic.shared.injection.SharedComponent
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 
