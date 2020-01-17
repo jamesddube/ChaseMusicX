@@ -58,6 +58,7 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
     implementation project(':shared')
+    implementation project(":service-music")
 
     implementation appDependencies.materialDesign
     implementation appDependencies.kotlin
