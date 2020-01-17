@@ -16,6 +16,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.chase.kudzie.chasemusic.service.music.data.MediaMetadataListener
+import com.chase.kudzie.chasemusic.service.music.data.MediaPlaybackState
 import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
 
 /**
@@ -24,7 +25,8 @@ import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
 
 class PlayerRepositoryImpl @Inject constructor(
     @ServiceContext private val context: Context,
-    private val metadataListener: MediaMetadataListener
+    private val metadataListener: MediaMetadataListener,
+    private val playbackState: MediaPlaybackState
 ) : PlayerRepository, DefaultLifecycleObserver {
 
     private val trackSelector = DefaultTrackSelector()
@@ -47,6 +49,7 @@ class PlayerRepositoryImpl @Inject constructor(
                 mediaSource.createMediaSource(getSongUri(mediaItem.id))
             )
         metadataListener.onMetadataChanged(mediaItem)
+        playbackState.prepare()
         player.prepare(media, true, true)
     }
 
@@ -70,6 +73,7 @@ class PlayerRepositoryImpl @Inject constructor(
                 mediaSource.createMediaSource(getSongUri(mediaItem.id))
             )
         metadataListener.onMetadataChanged(mediaItem)
+        playbackState.prepare()
         player.prepare(media)
         player.playWhenReady = false
         player.seekTo(0L)
