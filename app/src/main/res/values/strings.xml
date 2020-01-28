@@ -5,4 +5,8 @@
     <string name="artists">Artists</string>
     <string name="playlists">Playlists</string>
     <string name="album_artwork">album artwork</string>
+
+    <string name="permissions_denied_message">Permissions were denied bla bla</string>
+    <string name="grant_permission">Grant</string>
+    <string name="action_settings">Settings</string>
 </resources>
