@@ -1,5 +1,6 @@
 package com.chase.kudzie.chasemusic.extensions
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -16,8 +17,8 @@ fun isMarshmallow(): Boolean {
 /**
  * Allows user to navigate to Settings for current Application.
  */
-fun Intent.goToSettings(activity: AppCompatActivity) {
-    this.action = Settings.ACTION_APPLICATION_SETTINGS
+fun Intent.goToSettings(activity: Context) {
+    this.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
     val uri: Uri = Uri.fromParts(
         "package",
         activity.packageName,
