@@ -13,6 +13,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ServiceLifecycleDispatcher
 import androidx.media.MediaBrowserServiceCompat
 import com.chase.kudzie.chasemusic.service.music.data.MediaMetadata
+import com.chase.kudzie.chasemusic.service.music.injection.inject
 import com.chase.kudzie.chasemusic.service.music.repository.ServiceController
 import javax.inject.Inject
 
@@ -44,6 +45,7 @@ class MusicService : MediaBrowserServiceCompat(), LifecycleOwner,
 
     override fun onCreate() {
         super.onCreate()
+        inject()
         setupMediaSession()
         lifecycle.run {
             addObserver(metadata)
@@ -52,13 +54,11 @@ class MusicService : MediaBrowserServiceCompat(), LifecycleOwner,
 
     private fun setupMediaSession() {
         //Setup Media Session and retrieve a session token
-//        mediaSession = MediaSessionCompat(this, "SESSION") //done by injection
         mediaSession.setMediaButtonReceiver(makeMediaButtonReceiver())
         mediaSession.setCallback(callback)
         mediaSession.isActive = true
 
         sessionToken = mediaSession.sessionToken
-        callback.onPrepare()
     }
 
     override fun onDestroy() {

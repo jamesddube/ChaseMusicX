@@ -25,7 +25,6 @@ class MediaSessionCallback @Inject constructor(
 
     override fun onPrepare() {
         super.onPrepare()
-        TODO("implement")
     }
 
     override fun onPlay() {
