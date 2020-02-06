@@ -1,7 +1,6 @@
 package com.chase.kudzie.chasemusic.injection.module
 
 import androidx.lifecycle.ViewModel
-import com.chase.kudzie.chasemusic.injection.scope.PerFragment
 import com.chase.kudzie.chasemusic.injection.scope.ViewModelKey
 import com.chase.kudzie.chasemusic.viewmodel.AlbumViewModel
 import com.chase.kudzie.chasemusic.viewmodel.SongViewModel

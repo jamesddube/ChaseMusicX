@@ -14,7 +14,8 @@ import com.chase.kudzie.chasemusic.injection.scope.PerFragment
 import com.chase.kudzie.chasemusic.model.SongDiff
 import com.chase.kudzie.chasemusic.util.getAlbumArtUri
 
-class SongAdapter : ListAdapter<Song, SongAdapter.ItemHolder>(SongDiff) {
+class SongAdapter(val listener: OnSongClickListener) :
+    ListAdapter<Song, SongAdapter.ItemHolder>(SongDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(
@@ -24,7 +25,10 @@ class SongAdapter : ListAdapter<Song, SongAdapter.ItemHolder>(SongDiff) {
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        holder.bind(getItem(position))
+        val song = getItem(position)
+        holder.bind(song)
+
+        holder.click(song)
     }
 
 
@@ -40,6 +44,12 @@ class SongAdapter : ListAdapter<Song, SongAdapter.ItemHolder>(SongDiff) {
             Glide.with(itemView)
                 .load(getAlbumArtUri(song.albumId))
                 .into(ivAlbumArt)
+        }
+
+        fun click(song: Song) {
+            itemView.setOnClickListener {
+                listener.onSongClicked(song)
+            }
         }
     }
 

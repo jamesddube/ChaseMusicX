@@ -135,7 +135,9 @@ ext {
             androidxLifecycleViewmodelKtx: "androidx.lifecycle:lifecycle-viewmodel-ktx:${androidXLifecycleVersion}",
             multiDex                     : "androidx.multidex:multidex:${multiDexVersion}",
             navigationFragment           : "androidx.navigation:navigation-fragment-ktx:${navigationVersion}",
-            navigationUI                 : "androidx.navigation:navigation-ui-ktx:${navigationVersion}"
+            navigationUI                 : "androidx.navigation:navigation-ui-ktx:${navigationVersion}",
+            media                        : "androidx.media:media:${mediaVersion}"
+
     ]
 
     appTestDependencies = [

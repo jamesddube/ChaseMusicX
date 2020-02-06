@@ -3,9 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_album"
-    android:layout_margin="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical">
     <!--TODO: Activate Databinding on this layout-->
     <androidx.cardview.widget.CardView
@@ -23,8 +26,8 @@
             android:id="@+id/album_artwork"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
             android:contentDescription="@string/album_artwork"
+            android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/avatars[4]" />
     </androidx.cardview.widget.CardView>
 
@@ -33,6 +36,7 @@
         android:id="@+id/album_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:paddingStart="4dp"
         android:paddingTop="4dp"
         android:paddingEnd="4dp"
@@ -49,11 +53,12 @@
         android:layout_height="wrap_content"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
+        android:maxLines="1"
         android:paddingBottom="8dp"
         android:textAppearance="?attr/textAppearanceOverline"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/album_name"
-        android:textColor="@color/colorPrimary"
         tools:text="Bastille" />
 </androidx.constraintlayout.widget.ConstraintLayout>

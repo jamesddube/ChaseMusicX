@@ -9,15 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.chase.kudzie.chasemusic.databinding.FragmentSongsBinding
+import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
+import com.chase.kudzie.chasemusic.media.IMediaProvider
 import com.chase.kudzie.chasemusic.viewmodel.SongViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class SongsFragment : Fragment() {
+class SongsFragment : Fragment(), OnSongClickListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
+    private lateinit var mediaProvider: IMediaProvider
 
     private lateinit var viewModel: SongViewModel
 
@@ -30,6 +34,7 @@ class SongsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewModels()
+        mediaProvider = this.activity as IMediaProvider
     }
 
     private fun initViewModels() {
@@ -49,7 +54,7 @@ class SongsFragment : Fragment() {
                 viewLifecycleOwner, Observer { songs ->
                     run {
                         songsList.apply {
-                            adapter = SongAdapter().apply {
+                            adapter = SongAdapter(this@SongsFragment).apply {
                                 submitList(songs)
                             }
                         }
@@ -59,5 +64,9 @@ class SongsFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onSongClicked(song: Song) {
+        mediaProvider.playMediaFromId(song.id.toString())
     }
 }

@@ -81,6 +81,7 @@ dependencies {
     implementation appDependencies.multiDex
     implementation appDependencies.navigationFragment
     implementation appDependencies.navigationUI
+    implementation appDependencies.media
 
     kapt appDependencies.daggerCompiler
     kapt appDependencies.daggerProcessor
