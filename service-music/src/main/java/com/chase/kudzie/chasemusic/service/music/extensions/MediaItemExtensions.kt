@@ -9,6 +9,7 @@ internal fun Song.toMediaItem(): MediaItem {
         this.title,
         this.artistName,
         this.albumName,
-        this.duration
+        this.duration,
+        this.albumId
     )
 }

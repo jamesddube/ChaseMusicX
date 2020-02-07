@@ -14,6 +14,7 @@ import androidx.lifecycle.ServiceLifecycleDispatcher
 import androidx.media.MediaBrowserServiceCompat
 import com.chase.kudzie.chasemusic.service.music.data.MediaMetadata
 import com.chase.kudzie.chasemusic.service.music.injection.inject
+import com.chase.kudzie.chasemusic.service.music.notification.MediaNotificationManager
 import com.chase.kudzie.chasemusic.service.music.repository.ServiceController
 import javax.inject.Inject
 
@@ -33,6 +34,9 @@ class MusicService : MediaBrowserServiceCompat(), LifecycleOwner,
     internal lateinit var mediaSession: MediaSessionCompat
 
     @Inject
+    internal lateinit var mediaNotification: MediaNotificationManager
+
+    @Inject
     internal lateinit var metadata: MediaMetadata
 
 
@@ -49,6 +53,7 @@ class MusicService : MediaBrowserServiceCompat(), LifecycleOwner,
         setupMediaSession()
         lifecycle.run {
             addObserver(metadata)
+            addObserver(mediaNotification)
         }
     }
 

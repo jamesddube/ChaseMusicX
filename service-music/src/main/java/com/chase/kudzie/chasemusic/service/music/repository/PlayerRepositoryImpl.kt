@@ -10,6 +10,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.chase.kudzie.chasemusic.service.music.data.MediaMetadataListener
 import com.chase.kudzie.chasemusic.service.music.data.MediaPlaybackState
+import com.chase.kudzie.chasemusic.service.music.data.NotificationListener
 import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
 import com.chase.kudzie.chasemusic.service.music.model.MediaItem
 import com.google.android.exoplayer2.ExoPlaybackException
@@ -29,13 +30,14 @@ import javax.inject.Inject
 class PlayerRepositoryImpl @Inject constructor(
     @ServiceContext private val context: Context,
     private val metadataListener: MediaMetadataListener,
+    private val notificationListener: NotificationListener,
     private val playbackState: MediaPlaybackState
 ) : PlayerRepository,
     Player.EventListener,
     DefaultLifecycleObserver {
 
     private val trackSelector = DefaultTrackSelector()
-    private var player = ExoPlayerFactory.newSimpleInstance(context,trackSelector)
+    private var player = ExoPlayerFactory.newSimpleInstance(context, trackSelector)
     private val userAgent: String = Util.getUserAgent(context, "ChaseMusic")
     private val dataSourceFactory = DefaultDataSourceFactory(context, userAgent)
     private val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
@@ -57,6 +59,7 @@ class PlayerRepositoryImpl @Inject constructor(
         playbackState.prepare()
         player.prepare(media, true, true)
         player.playWhenReady = true
+        notificationListener.notifyReady() // ?? rough implementation ??
     }
 
     override fun pause(isServiceAlive: Boolean) {

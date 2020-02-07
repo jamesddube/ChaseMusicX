@@ -6,6 +6,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import com.chase.kudzie.chasemusic.domain.repository.SongRepository
 import com.chase.kudzie.chasemusic.service.music.extensions.toMediaItem
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerRepository
+import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -18,10 +19,7 @@ import kotlin.coroutines.CoroutineContext
 class MediaSessionCallback @Inject constructor(
     private val player: PlayerRepository,
     private val songRepository: SongRepository
-) : MediaSessionCompat.Callback(), CoroutineScope {
-
-    private val job: Job = Job()
-    override val coroutineContext: CoroutineContext = job + Dispatchers.Default
+) : MediaSessionCompat.Callback(), CoroutineScope by DefaultScope() {
 
     override fun onPrepare() {
         super.onPrepare()
