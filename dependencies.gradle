@@ -60,7 +60,7 @@ ext {
 
     dataDependencies = [
             kotlinCoroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
-            androidCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion",
+            androidCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutinesVersion}",
             javaxAnnotation      : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
             javaxInject          : "javax.inject:javax.inject:${javaxInjectVersion}",
             rxJava               : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
@@ -93,7 +93,9 @@ ext {
             lifecycleCompiler  : "androidx.lifecycle:lifecycle-compiler:${lifecycleVersion}",
             lifecycleJava8     : "androidx.lifecycle:lifecycle-common-java8:${lifecycleVersion}",
             daggerCompiler     : "com.google.dagger:dagger-compiler:${daggerVersion}",
-            dagger             : "com.google.dagger:dagger:${daggerVersion}"
+            dagger             : "com.google.dagger:dagger:${daggerVersion}",
+            glide              : "com.github.bumptech.glide:glide:${glideVersion}",
+            glideAnnotation    : "com.github.bumptech.glide:compiler:${glideVersion}"
     ]
 
 
@@ -104,7 +106,9 @@ ext {
             dagger              : "com.google.dagger:dagger:${daggerVersion}",
             javaxAnnotation     : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
             javaxInject         : "javax.inject:javax.inject:${javaxInjectVersion}",
-            kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
+            kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}",
+            kotlinCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
+            androidCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     ]
 
