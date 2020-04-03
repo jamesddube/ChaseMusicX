@@ -1,143 +1,137 @@
 package com.chase.kudzie.chasemusic.service.music.notification
 
 import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Build
-import android.support.v4.media.session.MediaControllerCompat
-import android.support.v4.media.session.MediaSessionCompat
-import android.util.Log
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.media.app.NotificationCompat.MediaStyle
+import androidx.lifecycle.LifecycleOwner
 import com.chase.kudzie.chasemusic.service.music.MusicService
-import com.chase.kudzie.chasemusic.service.music.data.MediaMetadataListener
-import com.chase.kudzie.chasemusic.service.music.data.NotificationListener
-import com.chase.kudzie.chasemusic.service.music.extensions.isPlaying
-import com.chase.kudzie.chasemusic.service.music.extensions.isSkipToNextEnabled
-import com.chase.kudzie.chasemusic.service.music.extensions.isSkipToPreviousEnabled
+import com.chase.kudzie.chasemusic.service.music.data.Event
+import com.chase.kudzie.chasemusic.service.music.data.NotificationState
+import com.chase.kudzie.chasemusic.service.music.extensions.isOreo
 import com.chase.kudzie.chasemusic.service.music.injection.scope.PerService
 import com.chase.kudzie.chasemusic.service.music.model.MediaItem
-import com.chase.kudzie.chasemusic.service.music.repository.ServiceController
+import com.chase.kudzie.chasemusic.service.music.repository.PlayerPlaybackState
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
-import com.kudziechase.chasemusic.service.music.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
 
 @PerService
-class MediaNotificationManager @Inject constructor(
+internal class MediaNotificationManager @Inject constructor(
     private val context: MusicService,
-    private val controller: ServiceController,
-    private val mediaSession: MediaSessionCompat
+    private val mediaNotification: INotificationManager,
+    playerPlaybackState: PlayerPlaybackState
 ) : CoroutineScope by DefaultScope(),
-    NotificationListener,
     DefaultLifecycleObserver {
 
-    private val platformNotificationManager: NotificationManager =
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
     companion object {
-        const val NOTIFICATION_ID: Int = 0x15F70BB
-        const val CHANNEL_ID: String = "com.chase.kudzie.chasemusic.NOW_PLAYING"
-        const val MODE_READ_ONLY = "r"
+        private const val METADATA_PUBLISH_DELAY = 350L
+        private const val STATE_PUBLISH_DELAY = 100L
     }
 
-    private suspend fun buildNotification(): Notification {
-        if (shouldCreateNowPlayingChannel()) {
-            createNowPlayingChannel()
+    private var isForeground: Boolean = false
+
+    private val publisher = Channel<Event>(Channel.UNLIMITED)
+    private val currState = NotificationState()
+    private var job: Job? = null
+
+    private val playerListener = object : PlayerPlaybackState.Listener {
+        override fun onPrepare(mediaItem: MediaItem) {
+            onNextMetadata(mediaItem)
         }
 
-        val controller = MediaControllerCompat(context, mediaSession.sessionToken)
-        val description = controller.metadata.description
-
-        val playbackState = controller.playbackState
-
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-
-        var playPauseIndex = 0
-        if (playbackState.isSkipToPreviousEnabled) {
-            builder.addAction(Actions.skipToPreviousAction(context))
-            ++playPauseIndex
+        override fun onMetadataChanged(mediaItem: MediaItem) {
+            onNextMetadata(mediaItem)
         }
 
-        builder.addAction(Actions.playPauseAction(context, playbackState.isPlaying))
-
-        if (playbackState.isSkipToNextEnabled) {
-            builder.addAction(Actions.skipToNextAction(context))
-        }
-
-        val mediaStyle = MediaStyle()
-            .setCancelButtonIntent(Actions.stopAction(context))
-            .setMediaSession(mediaSession.sessionToken)
-            .setShowActionsInCompactView(playPauseIndex)
-            .setShowCancelButton(true)
-
-        val largeIconBitmap = description.iconUri?.let {
-            resolveUriAsBitmap(it)
-        }
-
-        return builder.setContentIntent(controller.sessionActivity)
-            .setContentText(description.subtitle)
-            .setContentTitle(description.title)
-            .setDeleteIntent(Actions.stopAction(context))
-            .setLargeIcon(largeIconBitmap)
-            .setOnlyAlertOnce(true)
-            .setSmallIcon(R.drawable.ic_skip_next)
-            .setStyle(mediaStyle)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .build()
-    }
-
-    private suspend fun resolveUriAsBitmap(uri: Uri): Bitmap? {
-        return withContext(Dispatchers.IO) {
-            val parcelFileDescriptor =
-                context.contentResolver.openFileDescriptor(uri, MODE_READ_ONLY)
-                    ?: return@withContext null
-            val fileDescriptor = parcelFileDescriptor.fileDescriptor
-            BitmapFactory.decodeFileDescriptor(fileDescriptor).apply {
-                parcelFileDescriptor.close()
-            }
+        override fun onPlaybackStateChanged(state: PlaybackStateCompat) {
+            onNextState(state)
         }
     }
 
+    init {
+        playerPlaybackState.addListener(playerListener)
 
-    private fun shouldCreateNowPlayingChannel() =
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !nowPlayingChannelExists()
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun nowPlayingChannelExists() =
-        platformNotificationManager.getNotificationChannel(CHANNEL_ID) != null
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNowPlayingChannel() {
-        val notificationChannel = NotificationChannel(
-            CHANNEL_ID,
-            "ChaseMusicX",
-            NotificationManager.IMPORTANCE_LOW
-        )
-            .apply {
-                description = "Chase Music"
-            }
-
-        platformNotificationManager.createNotificationChannel(notificationChannel)
-    }
-
-    override fun notifyReady() {
-        Log.e("LAUNCH", "NOTIFICATION")
         launch {
-            val notification = buildNotification()
-            controller.start()
-            platformNotificationManager.notify(NOTIFICATION_ID, notification)
+            publisher.consumeAsFlow()
+                .filter { event ->
+                    when (event) {
+                        is Event.Metadata -> currState.isDifferentMetadata(event.mediaItem)
+                        is Event.State -> currState.isDifferentState(event.state)
+                    }
+                }.collect { consumeEvent(it) }
         }
     }
 
+    private suspend fun consumeEvent(event: Event) {
+        job?.cancel()
+        when (event) {
+            is Event.Metadata -> {
+                if (currState.updateMetadata(event.mediaItem)) {
+                    publishNotification(currState.copy(), METADATA_PUBLISH_DELAY)
+                }
+            }
+            is Event.State -> {
+                if (currState.updateState(event.state)) {
+                    publishNotification(currState.copy(), STATE_PUBLISH_DELAY)
+                }
+            }
+        }
+    }
 
+    private suspend fun publishNotification(state: NotificationState, delay: Long) {
+        require(currState !== state)
+
+        if (!isForeground && isOreo()) {
+            issueNotification(state)
+        } else {
+            job = GlobalScope.launch {
+                delay(delay)
+                issueNotification(state)
+            }
+        }
+    }
+
+    private suspend fun issueNotification(state: NotificationState) {
+        val notification = mediaNotification.update(state)
+        if (state.isPlaying) {
+            startForeground(notification)
+        } else {
+            pauseForeground()
+        }
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        stopForeground()
+        job?.cancel()
+        cancel()
+    }
+
+    private fun stopForeground() {
+        context.stopForeground(true)
+        mediaNotification.cancel()
+        isForeground = false
+    }
+
+    private fun pauseForeground() {
+        context.stopForeground(false)
+        isForeground = false
+    }
+
+    private fun startForeground(notification: Notification) {
+        context.startForeground(INotificationManager.NOTIFICATION_ID, notification)
+        isForeground = true
+    }
+
+
+    private fun onNextMetadata(mediaItem: MediaItem) {
+        publisher.offer(Event.Metadata(mediaItem))
+    }
+
+    private fun onNextState(playbackState: PlaybackStateCompat) {
+        publisher.offer(Event.State(playbackState))
+    }
 }

@@ -5,12 +5,8 @@ import android.content.Context
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.session.MediaButtonReceiver
 import com.chase.kudzie.chasemusic.service.music.MusicService
-import com.chase.kudzie.chasemusic.service.music.data.MediaMetadata
-import com.chase.kudzie.chasemusic.service.music.data.MediaMetadataListener
-import com.chase.kudzie.chasemusic.service.music.data.NotificationListener
 import com.chase.kudzie.chasemusic.service.music.injection.scope.PerService
 import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
-import com.chase.kudzie.chasemusic.service.music.notification.MediaNotificationManager
 import com.chase.kudzie.chasemusic.service.music.repository.*
 import dagger.Binds
 import dagger.Module
@@ -43,15 +39,11 @@ abstract class MusicServiceModule {
 
     @Binds
     @PerService
-    abstract fun bindsMediaMetadata(metadata: MediaMetadata): MediaMetadataListener
+    abstract fun bindsPlayerPlaybackState(player: PlayerRepository): PlayerPlaybackState
 
     @Binds
     @PerService
-    abstract fun bindsNotification(notif: MediaNotificationManager): NotificationListener // Rough implementation ??
-
-    @Binds
-    @PerService
-    abstract fun bindsQueueReepository(repository: QueueRepositoryImpl): QueueRepository
+    abstract fun bindsQueueRepository(repository: QueueRepositoryImpl): QueueRepository
 
     @Binds
     @PerService

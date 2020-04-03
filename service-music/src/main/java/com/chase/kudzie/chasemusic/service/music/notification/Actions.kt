@@ -11,7 +11,7 @@ import com.kudziechase.chasemusic.service.music.R
 object Actions {
 
     fun playPauseAction(context: Context, isPlaying: Boolean): NotificationCompat.Action {
-        val resId = if (isPlaying) R.drawable.ic_play_arrow_big else R.drawable.ic_pause_big
+        val resId = if (isPlaying) R.drawable.ic_pause_big else R.drawable.ic_play_arrow_big
         return NotificationCompat.Action.Builder(
             resId,
             "Toggle Play Pause",
