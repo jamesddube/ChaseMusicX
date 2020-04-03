@@ -28,6 +28,10 @@ android {
         enabled true
     }
 
+    viewBinding {
+        enabled =  true
+    }
+
     dexOptions {
         preDexLibraries = false
         dexInProcess = false

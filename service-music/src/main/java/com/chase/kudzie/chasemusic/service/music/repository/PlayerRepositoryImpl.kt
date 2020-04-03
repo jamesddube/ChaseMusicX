@@ -4,13 +4,12 @@ import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.annotation.CallSuper
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.chase.kudzie.chasemusic.service.music.data.MediaMetadataListener
 import com.chase.kudzie.chasemusic.service.music.data.MediaPlaybackState
-import com.chase.kudzie.chasemusic.service.music.data.NotificationListener
 import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
 import com.chase.kudzie.chasemusic.service.music.model.MediaItem
 import com.google.android.exoplayer2.ExoPlaybackException
@@ -29,13 +28,16 @@ import javax.inject.Inject
 
 class PlayerRepositoryImpl @Inject constructor(
     @ServiceContext private val context: Context,
-    private val metadataListener: MediaMetadataListener,
-    private val notificationListener: NotificationListener,
-    private val playbackState: MediaPlaybackState
+    private val playbackState: MediaPlaybackState,
+    private val serviceController: ServiceController
 ) : PlayerRepository,
     Player.EventListener,
     DefaultLifecycleObserver {
 
+    //We may have more than one listener working in different places
+    private val listeners = mutableListOf<PlayerPlaybackState.Listener>()
+
+    //Init All exoplayer stuff
     private val trackSelector = DefaultTrackSelector()
     private var player = ExoPlayerFactory.newSimpleInstance(context, trackSelector)
     private val userAgent: String = Util.getUserAgent(context, "ChaseMusic")
@@ -48,6 +50,12 @@ class PlayerRepositoryImpl @Inject constructor(
 
     override fun resume() {
         player.playWhenReady = true
+        val playerPlaybackState =
+            playbackState.update(PlaybackStateCompat.STATE_PLAYING, getCurrentSeekPos())
+        listeners.forEach {
+            it.onPlaybackStateChanged(playerPlaybackState)
+        }
+        serviceController.start()
     }
 
     override fun play(mediaItem: MediaItem, hasTrackEnded: Boolean) {
@@ -55,21 +63,49 @@ class PlayerRepositoryImpl @Inject constructor(
             ConcatenatingMediaSource(
                 mediaSource.createMediaSource(getSongUri(mediaItem.id))
             )
-        metadataListener.onMetadataChanged(mediaItem)
         playbackState.prepare()
         player.prepare(media, true, true)
         player.playWhenReady = true
-        notificationListener.notifyReady() // ?? rough implementation ??
+        val playerPlaybackState =
+            playbackState.update(PlaybackStateCompat.STATE_PLAYING, getCurrentSeekPos())
+        listeners.forEach {
+            it.onPlaybackStateChanged(playerPlaybackState)
+            it.onMetadataChanged(mediaItem)
+        }
+
     }
 
     override fun pause(isServiceAlive: Boolean) {
-        if (isServiceAlive) {
-            player.playWhenReady = false
+        player.playWhenReady = false
+        val currState =
+            if (isPlaying()) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+        val playerPlaybackState =
+            playbackState.update(PlaybackStateCompat.STATE_PAUSED, getCurrentSeekPos())
+
+        listeners.forEach {
+            it.onPlaybackStateChanged(playerPlaybackState)
+        }
+
+        if (!isServiceAlive) {
+            serviceController.stop()
         }
     }
 
     override fun seekTo(milliseconds: Long) {
+        val currState =
+            if (isPlaying()) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+        val playerPlaybackState = playbackState.update(currState, milliseconds)
+        listeners.forEach {
+            it.onPlaybackStateChanged(playerPlaybackState)
+            it.onSeek(milliseconds)
+        }
         player.seekTo(milliseconds)
+
+        if (isPlaying()) {
+            serviceController.start()
+        } else {
+            serviceController.stop()
+        }
     }
 
     override fun likeTrack() {
@@ -81,16 +117,19 @@ class PlayerRepositoryImpl @Inject constructor(
             ConcatenatingMediaSource(
                 mediaSource.createMediaSource(getSongUri(mediaItem.id))
             )
-        metadataListener.onMetadataChanged(mediaItem)
         playbackState.prepare()
         player.prepare(media)
         player.playWhenReady = false
         player.seekTo(0L)
-
+        playbackState.updatePlaybackState(getCurrentSeekPos())
+        listeners.forEach {
+            it.onPrepare(mediaItem)
+        }
     }
 
     override fun getDuration(): Long = player.duration
 
+    private fun getCurrentSeekPos(): Long = player.currentPosition
 
     private fun getSongUri(id: Long): Uri {
         return ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
@@ -99,6 +138,14 @@ class PlayerRepositoryImpl @Inject constructor(
     @CallSuper
     override fun onDestroy(owner: LifecycleOwner) {
         player.release()
+    }
+
+    override fun addListener(listener: PlayerPlaybackState.Listener) {
+        listeners.add(listener)
+    }
+
+    override fun removeListener(listener: PlayerPlaybackState.Listener) {
+        listeners.remove(listener)
     }
 
     override fun onPlayerError(error: ExoPlaybackException?) {

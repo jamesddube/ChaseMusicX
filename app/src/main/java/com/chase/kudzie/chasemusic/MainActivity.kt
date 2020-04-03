@@ -11,11 +11,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.chase.kudzie.chasemusic.base.BaseActivity
 import com.chase.kudzie.chasemusic.databinding.ActivityMainBinding
 import com.chase.kudzie.chasemusic.extensions.hide
-import com.chase.kudzie.chasemusic.extensions.show
 import com.chase.kudzie.chasemusic.media.IMediaProvider
 import com.chase.kudzie.chasemusic.media.MediaGateway
 import com.chase.kudzie.chasemusic.media.connection.OnConnectionChangedListener
-import com.chase.kudzie.chasemusic.media.playPause
+import com.chase.kudzie.chasemusic.extensions.playPause
+import com.chase.kudzie.chasemusic.extensions.show
 import com.chase.kudzie.chasemusic.util.contentView
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector

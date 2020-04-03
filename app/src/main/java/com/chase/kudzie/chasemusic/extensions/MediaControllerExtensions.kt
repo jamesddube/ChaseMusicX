@@ -1,4 +1,4 @@
-package com.chase.kudzie.chasemusic.media
+package com.chase.kudzie.chasemusic.extensions
 
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
