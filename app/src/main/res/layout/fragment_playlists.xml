@@ -9,7 +9,11 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:paddingLeftSystemWindowInsets="@{true}"
+        app:paddingRightSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}"
+        tools:context=".ui.playlists.Playlists">
 
         <TextView
             android:id="@+id/textView"
