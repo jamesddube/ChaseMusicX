@@ -2,6 +2,7 @@ package com.chase.kudzie.chasemusic.service.music.notification
 
 import android.app.Notification
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.chase.kudzie.chasemusic.service.music.MusicService
@@ -111,6 +112,7 @@ internal class MediaNotificationManager @Inject constructor(
     }
 
     private fun stopForeground() {
+        Log.e("SERVICE","SERVICE STOPPED")
         context.stopForeground(true)
         mediaNotification.cancel()
         isForeground = false

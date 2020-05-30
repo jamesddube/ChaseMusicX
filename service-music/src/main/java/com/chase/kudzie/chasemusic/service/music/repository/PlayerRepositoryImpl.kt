@@ -13,7 +13,6 @@ import com.chase.kudzie.chasemusic.service.music.data.MediaPlaybackState
 import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
 import com.chase.kudzie.chasemusic.service.music.model.MediaItem
 import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
@@ -75,6 +74,7 @@ class PlayerRepositoryImpl @Inject constructor(
             it.onPlaybackStateChanged(playerPlaybackState)
             it.onMetadataChanged(mediaItem)
         }
+        serviceController.start()
 
     }
 

@@ -34,7 +34,7 @@ class MediaSessionCallback @Inject constructor(
         super.onPause()
         launch(Dispatchers.Main) {
             if (player.isPlaying())
-                player.pause(false)
+                player.pause(true)
         }
     }
 
@@ -57,8 +57,11 @@ class MediaSessionCallback @Inject constructor(
 
     override fun onSeekTo(pos: Long) {
         super.onSeekTo(pos)
-        TODO("implement")
-
+        launch {
+            withContext(Dispatchers.Main){
+                player.seekTo(pos)
+            }
+        }
     }
 
     override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
