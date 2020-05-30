@@ -15,6 +15,7 @@ import com.chase.kudzie.chasemusic.service.music.model.MediaItem
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -38,8 +39,10 @@ class PlayerRepositoryImpl @Inject constructor(
     private val listeners = mutableListOf<PlayerPlaybackState.Listener>()
 
     //Init All exoplayer stuff
-    private val trackSelector = DefaultTrackSelector()
-    private var player = ExoPlayerFactory.newSimpleInstance(context, trackSelector)
+    private val trackSelector = DefaultTrackSelector(context)
+    private var player = SimpleExoPlayer.Builder(context)
+        .setTrackSelector(trackSelector)
+        .build();
     private val userAgent: String = Util.getUserAgent(context, "ChaseMusic")
     private val dataSourceFactory = DefaultDataSourceFactory(context, userAgent)
     private val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
@@ -148,9 +151,9 @@ class PlayerRepositoryImpl @Inject constructor(
         listeners.remove(listener)
     }
 
-    override fun onPlayerError(error: ExoPlaybackException?) {
+    override fun onPlayerError(error: ExoPlaybackException) {
         super.onPlayerError(error)
-        when (error!!.type) {
+        when (error.type) {
             ExoPlaybackException.TYPE_SOURCE -> Log.e(
                 "EXO",
                 "TYPE_SOURCE: " + error.sourceException.message
