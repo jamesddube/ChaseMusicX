@@ -51,14 +51,18 @@ class MediaSessionCallback @Inject constructor(
 
     override fun onStop() {
         super.onStop()
-        TODO("implement")
-
+        launch {
+            withContext(Dispatchers.Main) {
+                //Release the player
+                player.pause(false)
+            }
+        }
     }
 
     override fun onSeekTo(pos: Long) {
         super.onSeekTo(pos)
         launch {
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 player.seekTo(pos)
             }
         }

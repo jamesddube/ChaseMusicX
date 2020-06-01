@@ -41,7 +41,7 @@ class PlayerRepositoryImpl @Inject constructor(
     private val trackSelector = DefaultTrackSelector(context)
     private var player = SimpleExoPlayer.Builder(context)
         .setTrackSelector(trackSelector)
-        .build();
+        .build()
     private val userAgent: String = Util.getUserAgent(context, "ChaseMusic")
     private val dataSourceFactory = DefaultDataSourceFactory(context, userAgent)
     private val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
@@ -95,6 +95,8 @@ class PlayerRepositoryImpl @Inject constructor(
     }
 
     override fun seekTo(milliseconds: Long) {
+        player.seekTo(milliseconds)
+
         val currState =
             if (isPlaying()) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
         val playerPlaybackState = playbackState.update(currState, milliseconds)
@@ -102,7 +104,6 @@ class PlayerRepositoryImpl @Inject constructor(
             it.onPlaybackStateChanged(playerPlaybackState)
             it.onSeek(milliseconds)
         }
-        player.seekTo(milliseconds)
 
         if (isPlaying()) {
             serviceController.start()
