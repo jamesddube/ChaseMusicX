@@ -14,6 +14,9 @@ import com.chase.kudzie.chasemusic.domain.model.Artist
 import com.chase.kudzie.chasemusic.domain.model.Playlist
 import com.chase.kudzie.chasemusic.domain.model.Song
 
+/**
+ * @author Kudzai A Chasinda
+ * */
 
 fun Cursor.toAlbum(): Album {
     val id = getLong(BaseColumns._ID)
@@ -24,7 +27,12 @@ fun Cursor.toAlbum(): Album {
     val songCount = 0
 
     return Album(
-        id, artistId, artistName, songCount, title, year
+        id = id,
+        artistId = artistId,
+        artistName = artistName,
+        songCount = songCount,
+        title = title,
+        year = year
     )
 }
 
@@ -39,7 +47,15 @@ fun Cursor.toSong(): Song {
     val albumId = getLongOrNull(MediaStore.Audio.AudioColumns.ALBUM_ID) ?: 0L
 
     return Song(
-        id, albumName, artistId, artistName, duration, title, trackNumber, albumId
+        id = id,
+        albumName = albumName,
+        artistId = artistId,
+        artistName = artistName,
+        duration = duration,
+        title = title,
+        trackNumber = trackNumber,
+        albumId = albumId,
+        positionInQueue = -1
     )
 }
 
@@ -49,7 +65,12 @@ fun Cursor.toArtist(): Artist {
     val name = getStringOrNull(MediaStore.Audio.ArtistColumns.ARTIST) ?: ""
     val songCount = 0
 
-    return Artist(id, albumCount, name, songCount)
+    return Artist(
+        id = id,
+        albumCount = albumCount,
+        name = name,
+        songCount = songCount
+    )
 }
 
 fun Cursor.toPlaylist(): Playlist {
@@ -57,5 +78,9 @@ fun Cursor.toPlaylist(): Playlist {
     val songCount = 0
     val name = getStringOrNull(MediaStore.Audio.PlaylistsColumns.NAME) ?: ""
 
-    return Playlist(id, name, songCount)
+    return Playlist(
+        id = id,
+        name = name,
+        songCount = songCount
+    )
 }
