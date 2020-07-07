@@ -37,6 +37,7 @@ ext {
     exoPlayerVersion = '2.11.4'
     mediaVersion = '1.1.0'
     lifecycleVersion = '2.1.0'
+    roomVersion = '2.2.5'
 
     //Testing Version
     jUnitVersion = '4.12'
@@ -69,7 +70,11 @@ ext {
             moshiConverterFactory: "com.squareup.retrofit2:converter-moshi:${retrofitVersion}",
             rxJavaAdapter        : "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
             okHttp               : "com.squareup.okhttp3:okhttp:${okHttpVersion}",
-            sqlBrite             : "com.squareup.sqlbrite3:sqlbrite-kotlin:${sqlBriteVersion}"
+            room                 : "androidx.room:room-runtime:${roomVersion}",
+            roomCompiler         : "androidx.room:room-compiler:${roomVersion}",
+            roomKtx              : "androidx.room:room-ktx:${roomVersion}",
+            daggerCompiler     : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger             : "com.google.dagger:dagger:${daggerVersion}"
     ]
 
     dataTestDependencies = [
@@ -108,7 +113,7 @@ ext {
             javaxInject         : "javax.inject:javax.inject:${javaxInjectVersion}",
             kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}",
             kotlinCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
-            androidCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+            androidCoroutines   : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     ]
 

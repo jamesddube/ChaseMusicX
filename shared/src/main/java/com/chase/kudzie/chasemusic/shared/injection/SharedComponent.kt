@@ -2,13 +2,12 @@ package com.chase.kudzie.chasemusic.shared.injection
 
 import android.app.Application
 import android.content.Context
-import com.chase.kudzie.chasemusic.domain.repository.AlbumRepository
-import com.chase.kudzie.chasemusic.domain.repository.ArtistRepository
-import com.chase.kudzie.chasemusic.domain.repository.PlaylistRepository
-import com.chase.kudzie.chasemusic.domain.repository.SongRepository
+import com.chase.kudzie.chasemusic.domain.repository.*
 import com.chase.kudzie.chasemusic.shared.injection.module.SharedModule
 import com.chase.kudzie.chasemusic.domain.scope.ApplicationContext
-import com.chase.kudzie.chasemusic.shared.injection.module.DataModule
+import com.chase.kudzie.chasemusic.data.injection.module.DataModule
+import com.chase.kudzie.chasemusic.data.injection.module.DbModule
+import com.chase.kudzie.chasemusic.data.injection.module.PreferenceModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -17,7 +16,9 @@ import javax.inject.Singleton
 @Component(
     modules = [
         SharedModule::class,
-        DataModule::class
+        DataModule::class,
+        PreferenceModule::class,
+        DbModule::class
     ]
 )
 interface SharedComponent {
@@ -30,6 +31,7 @@ interface SharedComponent {
     fun songRepository(): SongRepository
     fun artistRepository(): ArtistRepository
     fun playlistRepository(): PlaylistRepository
+    fun preferencesRepository(): PreferencesRepository
 
     @Component.Factory
     interface Factory {

@@ -14,6 +14,15 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation": "$projectDir/schemas".toString(),
+                        "room.incremental"   : "true"
+                ]
+            }
+        }
     }
 
     buildTypes {
@@ -38,7 +47,12 @@ dependencies {
     implementation dataDependencies.retrofit
     implementation dataDependencies.moshiConverterFactory
     implementation dataDependencies.okHttp
-    implementation dataDependencies.sqlBrite
+    implementation dataDependencies.room
+    implementation dataDependencies.roomKtx
+    implementation dataDependencies.dagger
+
+    kapt dataDependencies.daggerCompiler
+    kapt dataDependencies.roomCompiler
 
     implementation dataTestDependencies.junit
     implementation dataTestDependencies.mockito
