@@ -1,13 +1,7 @@
-package com.chase.kudzie.chasemusic.shared.injection.module
+package com.chase.kudzie.chasemusic.data.injection.module
 
-import com.chase.kudzie.chasemusic.data.repository.AlbumRepositoryImpl
-import com.chase.kudzie.chasemusic.data.repository.ArtistRepositoryImpl
-import com.chase.kudzie.chasemusic.data.repository.PlaylistRepositoryImpl
-import com.chase.kudzie.chasemusic.data.repository.SongRepositoryImpl
-import com.chase.kudzie.chasemusic.domain.repository.AlbumRepository
-import com.chase.kudzie.chasemusic.domain.repository.ArtistRepository
-import com.chase.kudzie.chasemusic.domain.repository.PlaylistRepository
-import com.chase.kudzie.chasemusic.domain.repository.SongRepository
+import com.chase.kudzie.chasemusic.data.repository.*
+import com.chase.kudzie.chasemusic.domain.repository.*
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
@@ -30,4 +24,8 @@ abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindsPlaylistRepository(playlistRepository: PlaylistRepositoryImpl): PlaylistRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsQueueRepository(queueRepository: SongQueueRepositoryImpl): SongQueueRepository
 }
