@@ -53,9 +53,10 @@ ext {
     ]
 
     domainTestDependencies = [
-            junit  : "junit:junit:${jUnitVersion}",
-            mockito: "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockitoKotlinVersion}",
-            assertj: "org.assertj:assertj-core:${assertJVersion}"
+            junit           : "junit:junit:${jUnitVersion}",
+            mockito         : "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockitoKotlinVersion}",
+            assertj         : "org.assertj:assertj-core:${assertJVersion}",
+            kotlinCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-test:${coroutinesVersion}"
     ]
 
 
@@ -73,15 +74,16 @@ ext {
             room                 : "androidx.room:room-runtime:${roomVersion}",
             roomCompiler         : "androidx.room:room-compiler:${roomVersion}",
             roomKtx              : "androidx.room:room-ktx:${roomVersion}",
-            daggerCompiler     : "com.google.dagger:dagger-compiler:${daggerVersion}",
-            dagger             : "com.google.dagger:dagger:${daggerVersion}"
+            daggerCompiler       : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger               : "com.google.dagger:dagger:${daggerVersion}"
     ]
 
     dataTestDependencies = [
             junit              : "junit:junit:${jUnitVersion}",
             mockito            : "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockitoKotlinVersion}",
             assertj            : "org.assertj:assertj-core:${assertJVersion}",
-            okHttpMockWebServer: "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
+            okHttpMockWebServer: "com.squareup.okhttp3:mockwebserver:${okHttpVersion}",
+            kotlinCoroutines   : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${coroutinesVersion}"
     ]
 
 
@@ -114,7 +116,6 @@ ext {
             kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}",
             kotlinCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
             androidCoroutines   : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-
     ]
 
     appDependencies = [
@@ -154,7 +155,8 @@ ext {
             mockito          : "com.nhaarman.mockitokotlin2:mockito-kotlin:${mockitoKotlinVersion}",
             assertj          : "org.assertj:assertj-core:${assertJVersion}",
             androidTestRunner: "androidx.test:runner:${androidTestRunnerVersion}",
-            espresso         : "androidx.test.espresso:espresso-core:${espressoVersion}"
+            espresso         : "androidx.test.espresso:espresso-core:${espressoVersion}",
+            kotlinCoroutines : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${coroutinesVersion}"
     ]
 
 }
