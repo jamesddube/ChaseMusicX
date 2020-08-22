@@ -54,9 +54,17 @@ dependencies {
     kapt dataDependencies.daggerCompiler
     kapt dataDependencies.roomCompiler
 
-    implementation dataTestDependencies.junit
+//    implementation dataTestDependencies.junit
     implementation dataTestDependencies.mockito
-    implementation dataTestDependencies.assertj
+//    implementation dataTestDependencies.assertj
     implementation dataTestDependencies.okHttpMockWebServer
+
+//    testImplementation dataTestDependencies.junit
+//    testImplementation "org.robolectric:robolectric:4.3.1"
+
+    androidTestImplementation dataTestDependencies.androidTestRunner
+    androidTestImplementation dataTestDependencies.jUnitExt
+    androidTestImplementation dataTestDependencies.testCore
+    androidTestImplementation dataTestDependencies.androidTestRules
 
 }
