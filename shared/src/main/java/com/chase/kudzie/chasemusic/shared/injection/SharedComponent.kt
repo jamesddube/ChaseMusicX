@@ -32,6 +32,7 @@ interface SharedComponent {
     fun artistRepository(): ArtistRepository
     fun playlistRepository(): PlaylistRepository
     fun preferencesRepository(): PreferencesRepository
+    fun songQueueRepository(): SongQueueRepository
 
     @Component.Factory
     interface Factory {
