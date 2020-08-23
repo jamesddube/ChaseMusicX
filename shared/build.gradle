@@ -47,6 +47,7 @@ dependencies {
     implementation sharedModuleDependencies.javaxAnnotation
     implementation sharedModuleDependencies.kotlinCoroutines
     implementation sharedModuleDependencies.androidCoroutines
+    implementation sharedModuleDependencies.room
 
     kapt sharedModuleDependencies.daggerCompiler
     kapt sharedModuleDependencies.daggerProcessor

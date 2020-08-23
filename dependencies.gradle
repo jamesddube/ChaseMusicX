@@ -122,7 +122,8 @@ ext {
             javaxInject         : "javax.inject:javax.inject:${javaxInjectVersion}",
             kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}",
             kotlinCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
-            androidCoroutines   : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+            androidCoroutines   : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion",
+            room                 : "androidx.room:room-runtime:${roomVersion}"
     ]
 
     appDependencies = [
