@@ -16,7 +16,7 @@ import com.chase.kudzie.chasemusic.viewmodel.SongViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class SongsFragment : Fragment(), OnSongClickListener {
+class SongsFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -54,7 +54,7 @@ class SongsFragment : Fragment(), OnSongClickListener {
                 viewLifecycleOwner, Observer { songs ->
                     run {
                         songsList.apply {
-                            adapter = SongAdapter(this@SongsFragment).apply {
+                            adapter = SongAdapter(::onSongClicked).apply {
                                 submitList(songs)
                             }
                         }
@@ -66,7 +66,7 @@ class SongsFragment : Fragment(), OnSongClickListener {
         return binding.root
     }
 
-    override fun onSongClicked(song: Song) {
+    private fun onSongClicked(song: Song) {
         mediaProvider.playMediaFromId(song.id.toString())
     }
 }
