@@ -6,6 +6,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -29,7 +30,7 @@ import javax.inject.Inject
 class PlayerRepositoryImpl @Inject constructor(
     @ServiceContext private val context: Context,
     private val playbackState: MediaPlaybackState,
-    private val serviceController: ServiceController
+    private val serviceController: ServiceController,
 ) : PlayerRepository,
     Player.EventListener,
     DefaultLifecycleObserver {
@@ -45,6 +46,10 @@ class PlayerRepositoryImpl @Inject constructor(
     private val userAgent: String = Util.getUserAgent(context, "ChaseMusic")
     private val dataSourceFactory = DefaultDataSourceFactory(context, userAgent)
     private val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+
+    init {
+        player.addListener(this)
+    }
 
     override fun isPlaying(): Boolean {
         return player.isPlaying
@@ -142,6 +147,7 @@ class PlayerRepositoryImpl @Inject constructor(
     @CallSuper
     override fun onDestroy(owner: LifecycleOwner) {
         player.release()
+        player.removeListener(this)
     }
 
     override fun addListener(listener: PlayerPlaybackState.Listener) {
@@ -150,6 +156,21 @@ class PlayerRepositoryImpl @Inject constructor(
 
     override fun removeListener(listener: PlayerPlaybackState.Listener) {
         listeners.remove(listener)
+    }
+
+    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+        Log.d("EXO_STATE", "new state: $playbackState")
+
+        when (playbackState) {
+            Player.STATE_ENDED -> {
+                //Go to next track somehow
+                serviceController.notifySongEnded(true)
+            }
+            else -> {
+                Log.e("STATE", "What!?")
+            }
+        }
+
     }
 
     override fun onPlayerError(error: ExoPlaybackException) {

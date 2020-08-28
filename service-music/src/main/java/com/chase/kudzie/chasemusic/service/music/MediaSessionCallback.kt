@@ -3,14 +3,14 @@ package com.chase.kudzie.chasemusic.service.music
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
-import com.chase.kudzie.chasemusic.domain.repository.SongRepository
-import com.chase.kudzie.chasemusic.service.music.extensions.toMediaItem
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerRepository
 import com.chase.kudzie.chasemusic.service.music.repository.QueueRepository
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 
 /**

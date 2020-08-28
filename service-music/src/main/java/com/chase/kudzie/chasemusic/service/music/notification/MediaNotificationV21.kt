@@ -54,6 +54,7 @@ internal open class MediaNotificationV21 @Inject constructor(
             .setDeleteIntent(
                 Actions.stopAction(service)
             )
+            .setShowWhen(false)
             .addAction(Actions.skipToPreviousAction(service))
             .addAction(Actions.playPauseAction(service, isPlaying = false))
             .addAction(Actions.skipToNextAction(service))

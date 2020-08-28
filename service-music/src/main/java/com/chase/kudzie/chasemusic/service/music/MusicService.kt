@@ -129,6 +129,10 @@ class MusicService : MediaBrowserServiceCompat(), LifecycleOwner,
         }
     }
 
+    override fun notifySongEnded(isTrackEnded: Boolean) {
+        callback.onSkipToNext() //TODO provide better implementation
+    }
+
 
 }
 
