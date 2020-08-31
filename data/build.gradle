@@ -2,6 +2,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdkVersion 29
 
@@ -26,6 +29,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "LAST_FM_API_KEY", "\"" + localProperties['LAST_FM_API_KEY'] + "\"")
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -42,7 +49,6 @@ dependencies {
 
     implementation dataDependencies.javaxAnnotation
     implementation dataDependencies.javaxInject
-    implementation dataDependencies.rxJava
     implementation dataDependencies.androidKtx
     implementation dataDependencies.retrofit
     implementation dataDependencies.moshiConverterFactory
@@ -50,17 +56,15 @@ dependencies {
     implementation dataDependencies.room
     implementation dataDependencies.roomKtx
     implementation dataDependencies.dagger
+    implementation dataDependencies.moshi
+    implementation dataDependencies.okHttpLogger
 
+    kapt dataDependencies.moshiCodegen
     kapt dataDependencies.daggerCompiler
     kapt dataDependencies.roomCompiler
 
-//    implementation dataTestDependencies.junit
     implementation dataTestDependencies.mockito
-//    implementation dataTestDependencies.assertj
     implementation dataTestDependencies.okHttpMockWebServer
-
-//    testImplementation dataTestDependencies.junit
-//    testImplementation "org.robolectric:robolectric:4.3.1"
 
     androidTestImplementation dataTestDependencies.androidTestRunner
     androidTestImplementation dataTestDependencies.jUnitExt

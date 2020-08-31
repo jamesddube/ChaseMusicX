@@ -1,13 +1,26 @@
 package com.chase.kudzie.chasemusic.data.injection.module
 
+import com.chase.kudzie.chasemusic.data.BuildConfig
+import com.chase.kudzie.chasemusic.data.remote.LastFMService
+import com.chase.kudzie.chasemusic.data.remote.RetrofitServiceFactory
 import com.chase.kudzie.chasemusic.data.repository.*
 import com.chase.kudzie.chasemusic.domain.repository.*
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import javax.inject.Singleton
 
 @Module
 abstract class DataModule {
+
+    @Module
+    companion object {
+        @Provides
+        @JvmStatic
+        fun providesLastFMService(): LastFMService {
+            return RetrofitServiceFactory.makeLastFMService(BuildConfig.DEBUG)
+        }
+    }
 
     @Binds
     @Singleton
@@ -28,4 +41,8 @@ abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindsQueueRepository(queueRepository: SongQueueRepositoryImpl): SongQueueRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsLastFMRepository(lastFMRepository: LastFMRepositoryImpl): LastFMRepository
 }
