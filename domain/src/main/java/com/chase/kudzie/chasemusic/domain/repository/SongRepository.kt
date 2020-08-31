@@ -13,4 +13,7 @@ interface SongRepository {
 
     suspend fun deleteSong(id: Long)
 
+    suspend fun getSongsByAlbum(albumId: Long): List<Song>
+
+    suspend fun getSongsByArtist(artistId: Long): List<Song>
 }

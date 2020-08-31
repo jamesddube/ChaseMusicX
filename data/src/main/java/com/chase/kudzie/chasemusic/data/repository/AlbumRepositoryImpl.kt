@@ -5,6 +5,7 @@ import android.content.Context
 import com.chase.kudzie.chasemusic.data.extensions.queryAll
 import com.chase.kudzie.chasemusic.data.extensions.queryOne
 import com.chase.kudzie.chasemusic.data.loaders.AlbumLoader
+import com.chase.kudzie.chasemusic.data.loaders.ArtistLoader
 import com.chase.kudzie.chasemusic.data.mapper.toAlbum
 import com.chase.kudzie.chasemusic.domain.model.Album
 import com.chase.kudzie.chasemusic.domain.repository.AlbumRepository
@@ -36,5 +37,11 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override suspend fun deleteAlbum(id: Long) {
         TODO("Research on multi and single deletes")
+    }
+
+    override suspend fun getAlbumsByArtist(artistId: Long): List<Album> {
+        return contentResolver.queryAll(
+            ArtistLoader(contentResolver).getArtistAlbums(artistId)
+        ) { it.toAlbum() }
     }
 }

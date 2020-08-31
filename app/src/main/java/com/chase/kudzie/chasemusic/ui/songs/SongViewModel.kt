@@ -1,4 +1,4 @@
-package com.chase.kudzie.chasemusic.viewmodel
+package com.chase.kudzie.chasemusic.ui.songs
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

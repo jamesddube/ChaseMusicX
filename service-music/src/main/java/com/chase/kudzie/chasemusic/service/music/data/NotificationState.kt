@@ -4,7 +4,7 @@ import android.support.v4.media.session.PlaybackStateCompat
 import com.chase.kudzie.chasemusic.service.music.model.MediaItem
 import java.util.concurrent.TimeUnit
 
-internal sealed class Event {
+sealed class Event {
     data class Metadata(
         val mediaItem: MediaItem
     ) : Event()

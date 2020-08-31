@@ -1,27 +1,27 @@
-package com.chase.kudzie.chasemusic.viewmodel
+package com.chase.kudzie.chasemusic.ui.playlists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chase.kudzie.chasemusic.domain.interactor.browse.album.GetAlbums
-import com.chase.kudzie.chasemusic.domain.model.Album
+import com.chase.kudzie.chasemusic.domain.interactor.browse.playlists.GetPlaylists
+import com.chase.kudzie.chasemusic.domain.model.Playlist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class AlbumViewModel @Inject constructor(
-    private val getAlbums: GetAlbums
+class PlaylistsViewModel @Inject constructor(
+    private val getPlaylists: GetPlaylists
 ) : ViewModel() {
 
-    private val _albums = MutableLiveData<List<Album>>()
-    val albums: LiveData<List<Album>> = _albums
+    private val _playlists = MutableLiveData<List<Playlist>>()
+    val playlist: LiveData<List<Playlist>> = _playlists
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main) {
-                _albums.value = getAlbums()
+                _playlists.value = getPlaylists()
             }
         }
     }

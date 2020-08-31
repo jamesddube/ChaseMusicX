@@ -12,4 +12,6 @@ interface AlbumRepository {
     suspend fun findAlbums(searchString: String): List<Album>
 
     suspend fun deleteAlbum(id: Long)
+
+    suspend fun getAlbumsByArtist(artistId: Long): List<Album>
 }

@@ -4,6 +4,8 @@ import android.content.ContentResolver
 import android.content.Context
 import com.chase.kudzie.chasemusic.data.extensions.queryAll
 import com.chase.kudzie.chasemusic.data.extensions.queryOne
+import com.chase.kudzie.chasemusic.data.loaders.AlbumLoader
+import com.chase.kudzie.chasemusic.data.loaders.ArtistLoader
 import com.chase.kudzie.chasemusic.data.loaders.SongLoader
 import com.chase.kudzie.chasemusic.data.mapper.toSong
 import com.chase.kudzie.chasemusic.domain.model.Song
@@ -36,5 +38,17 @@ class SongRepositoryImpl @Inject constructor(
 
     override suspend fun deleteSong(id: Long) {
         TODO("research song deletion via content provider?")
+    }
+
+    override suspend fun getSongsByAlbum(albumId: Long): List<Song> {
+        return contentResolver.queryAll(
+            AlbumLoader(contentResolver).getAlbumSongs(albumId)
+        ) { it.toSong() }
+    }
+
+    override suspend fun getSongsByArtist(artistId: Long): List<Song> {
+        return contentResolver.queryAll(
+            ArtistLoader(contentResolver).getArtistSongs(artistId)
+        ) { it.toSong() }
     }
 }

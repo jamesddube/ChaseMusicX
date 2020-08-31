@@ -12,7 +12,6 @@ import com.chase.kudzie.chasemusic.databinding.FragmentSongsBinding
 import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
 import com.chase.kudzie.chasemusic.media.IMediaProvider
-import com.chase.kudzie.chasemusic.viewmodel.SongViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
