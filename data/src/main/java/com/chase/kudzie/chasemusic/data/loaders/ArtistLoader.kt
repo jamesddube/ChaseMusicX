@@ -24,7 +24,7 @@ internal class ArtistLoader(
             NUMBER_OF_TRACKS
         )
 
-        val sortOrder = SortOrder.ArtistSortOrder.ARTIST_A_Z
+        const val sortOrder = SortOrder.ArtistSortOrder.ARTIST_A_Z
     }
 
     @SuppressLint("Recycle")
