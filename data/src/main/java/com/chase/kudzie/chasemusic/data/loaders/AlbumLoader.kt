@@ -25,7 +25,7 @@ internal class AlbumLoader(
             ARTIST,
             ARTIST_ID
         )
-        val sortOrder = SortOrder.AlbumSortOrder.ALBUM_A_Z
+        const val sortOrder = SortOrder.AlbumSortOrder.ALBUM_A_Z
     }
 
     @SuppressLint("Recycle")

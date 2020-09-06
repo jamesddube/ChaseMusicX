@@ -3,12 +3,14 @@ package com.chase.kudzie.chasemusic.service.music
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
-import com.chase.kudzie.chasemusic.domain.repository.SongRepository
-import com.chase.kudzie.chasemusic.service.music.extensions.toMediaItem
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerRepository
-import kotlinx.coroutines.*
+import com.chase.kudzie.chasemusic.service.music.repository.QueueRepository
+import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 
 /**
@@ -17,14 +19,16 @@ import kotlin.coroutines.CoroutineContext
 
 class MediaSessionCallback @Inject constructor(
     private val player: PlayerRepository,
-    private val songRepository: SongRepository
-) : MediaSessionCompat.Callback(), CoroutineScope {
-
-    private val job: Job = Job()
-    override val coroutineContext: CoroutineContext = job + Dispatchers.Default
+    private val queue: QueueRepository
+) : MediaSessionCompat.Callback(), CoroutineScope by DefaultScope() {
 
     override fun onPrepare() {
         super.onPrepare()
+        //TODO note:
+        /*
+        * I am thinking maybe on prepare I restore state from Shared Prefs and Db
+        * This is called first and would be best to query the db and do the things
+        * */
     }
 
     override fun onPlay() {
@@ -36,39 +40,70 @@ class MediaSessionCallback @Inject constructor(
         super.onPause()
         launch(Dispatchers.Main) {
             if (player.isPlaying())
-                player.pause(false)
+                player.pause(true)
         }
     }
 
     override fun onSkipToNext() {
         super.onSkipToNext()
-        TODO("implement")
+        launch {
+            val song = queue.skipToNext()
+            withContext(Dispatchers.Main) {
+                if (song != null) {
+                    player.play(song, false)
+                } else {
+                    //TODO maybe stop service at this point
+                }
+
+            }
+        }
     }
 
     override fun onSkipToPrevious() {
         super.onSkipToPrevious()
-        TODO("implement")
+        launch {
+            val song = queue.skipToPrevious()
+            withContext(Dispatchers.Main) {
+                if (song != null) {
+                    player.play(song, false)
+                } else {
+                    //TODO maybe stop service at this point
+                }
+            }
+        }
 
     }
 
     override fun onStop() {
         super.onStop()
-        TODO("implement")
-
+        launch {
+            withContext(Dispatchers.Main) {
+                //Release the player
+                player.pause(false)
+            }
+        }
     }
 
     override fun onSeekTo(pos: Long) {
         super.onSeekTo(pos)
-        TODO("implement")
-
+        launch {
+            withContext(Dispatchers.Main) {
+                player.seekTo(pos)
+            }
+        }
     }
 
     override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
         super.onPlayFromMediaId(mediaId, extras)
         launch {
-            val song = songRepository.getSong(mediaId!!.toLong())
+            //Get the song from queue and play
+            val song = queue.onPlayFromMediaId(mediaId!!)
             withContext(Dispatchers.Main) {
-                player.play(song.toMediaItem(), false)
+                if (song != null) {
+                    player.play(song, false)
+                } else {
+                    //TODO maybe stop service at this point
+                }
             }
         }
     }

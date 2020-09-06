@@ -10,8 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.chase.kudzie.chasemusic.databinding.FragmentAlbumsBinding
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
-import com.chase.kudzie.chasemusic.injection.scope.PerFragment
-import com.chase.kudzie.chasemusic.viewmodel.AlbumViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 

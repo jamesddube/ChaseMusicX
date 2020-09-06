@@ -8,7 +8,12 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:paddingTopSystemWindowInsets="@{true}"
+        app:paddingLeftSystemWindowInsets="@{true}"
+        app:paddingRightSystemWindowInsets="@{true}"
+        tools:context=".ui.albums.AlbumsFragment"
+        >
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -24,6 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:spanCount="2"
+            tools:listitem="@layout/item_album"
             tools:targetApi="o" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

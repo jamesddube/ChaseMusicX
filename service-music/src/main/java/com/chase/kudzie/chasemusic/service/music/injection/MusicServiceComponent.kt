@@ -9,7 +9,8 @@ import dagger.Component
 @PerService
 @Component(
     modules = [
-        MusicServiceModule::class
+        MusicServiceModule::class,
+        MusicNotificationModule::class
     ], dependencies = [SharedComponent::class]
 )
 interface MusicServiceComponent {
@@ -17,7 +18,10 @@ interface MusicServiceComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance service: MusicService, component: SharedComponent): MusicServiceComponent
+        fun create(
+            @BindsInstance service: MusicService,
+            component: SharedComponent
+        ): MusicServiceComponent
     }
 }
 

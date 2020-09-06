@@ -20,7 +20,7 @@ internal class PlaylistLoader(
             PlaylistsColumns.NAME
         )
 
-        val sortOrder = MediaStore.Audio.Playlists.DEFAULT_SORT_ORDER
+        const val sortOrder = MediaStore.Audio.Playlists.DEFAULT_SORT_ORDER
     }
 
     @SuppressLint("Recycle")

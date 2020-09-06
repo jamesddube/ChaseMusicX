@@ -4,17 +4,18 @@ import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.chase.kudzie.chasemusic.service.music.data.MediaMetadataListener
 import com.chase.kudzie.chasemusic.service.music.data.MediaPlaybackState
 import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
 import com.chase.kudzie.chasemusic.service.music.model.MediaItem
 import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -28,17 +29,27 @@ import javax.inject.Inject
 
 class PlayerRepositoryImpl @Inject constructor(
     @ServiceContext private val context: Context,
-    private val metadataListener: MediaMetadataListener,
-    private val playbackState: MediaPlaybackState
+    private val playbackState: MediaPlaybackState,
+    private val serviceController: ServiceController,
 ) : PlayerRepository,
     Player.EventListener,
     DefaultLifecycleObserver {
 
-    private val trackSelector = DefaultTrackSelector()
-    private var player = ExoPlayerFactory.newSimpleInstance(context,trackSelector)
+    //We may have more than one listener working in different places
+    private val listeners = mutableListOf<PlayerPlaybackState.Listener>()
+
+    //Init All exoplayer stuff
+    private val trackSelector = DefaultTrackSelector(context)
+    private var player = SimpleExoPlayer.Builder(context)
+        .setTrackSelector(trackSelector)
+        .build()
     private val userAgent: String = Util.getUserAgent(context, "ChaseMusic")
     private val dataSourceFactory = DefaultDataSourceFactory(context, userAgent)
     private val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+
+    init {
+        player.addListener(this)
+    }
 
     override fun isPlaying(): Boolean {
         return player.isPlaying
@@ -46,6 +57,12 @@ class PlayerRepositoryImpl @Inject constructor(
 
     override fun resume() {
         player.playWhenReady = true
+        val playerPlaybackState =
+            playbackState.update(PlaybackStateCompat.STATE_PLAYING, getCurrentSeekPos())
+        listeners.forEach {
+            it.onPlaybackStateChanged(playerPlaybackState)
+        }
+        serviceController.start()
     }
 
     override fun play(mediaItem: MediaItem, hasTrackEnded: Boolean) {
@@ -53,20 +70,51 @@ class PlayerRepositoryImpl @Inject constructor(
             ConcatenatingMediaSource(
                 mediaSource.createMediaSource(getSongUri(mediaItem.id))
             )
-        metadataListener.onMetadataChanged(mediaItem)
         playbackState.prepare()
         player.prepare(media, true, true)
         player.playWhenReady = true
+        val playerPlaybackState =
+            playbackState.update(PlaybackStateCompat.STATE_PLAYING, getCurrentSeekPos())
+        listeners.forEach {
+            it.onPlaybackStateChanged(playerPlaybackState)
+            it.onMetadataChanged(mediaItem)
+        }
+        serviceController.start()
+
     }
 
     override fun pause(isServiceAlive: Boolean) {
-        if (isServiceAlive) {
-            player.playWhenReady = false
+        player.playWhenReady = false
+        val currState =
+            if (isPlaying()) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+        val playerPlaybackState =
+            playbackState.update(PlaybackStateCompat.STATE_PAUSED, getCurrentSeekPos())
+
+        listeners.forEach {
+            it.onPlaybackStateChanged(playerPlaybackState)
+        }
+
+        if (!isServiceAlive) {
+            serviceController.stop()
         }
     }
 
     override fun seekTo(milliseconds: Long) {
         player.seekTo(milliseconds)
+
+        val currState =
+            if (isPlaying()) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+        val playerPlaybackState = playbackState.update(currState, milliseconds)
+        listeners.forEach {
+            it.onPlaybackStateChanged(playerPlaybackState)
+            it.onSeek(milliseconds)
+        }
+
+        if (isPlaying()) {
+            serviceController.start()
+        } else {
+            serviceController.stop()
+        }
     }
 
     override fun likeTrack() {
@@ -78,16 +126,19 @@ class PlayerRepositoryImpl @Inject constructor(
             ConcatenatingMediaSource(
                 mediaSource.createMediaSource(getSongUri(mediaItem.id))
             )
-        metadataListener.onMetadataChanged(mediaItem)
         playbackState.prepare()
         player.prepare(media)
         player.playWhenReady = false
         player.seekTo(0L)
-
+        playbackState.updatePlaybackState(getCurrentSeekPos())
+        listeners.forEach {
+            it.onPrepare(mediaItem)
+        }
     }
 
     override fun getDuration(): Long = player.duration
 
+    private fun getCurrentSeekPos(): Long = player.currentPosition
 
     private fun getSongUri(id: Long): Uri {
         return ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
@@ -96,11 +147,35 @@ class PlayerRepositoryImpl @Inject constructor(
     @CallSuper
     override fun onDestroy(owner: LifecycleOwner) {
         player.release()
+        player.removeListener(this)
     }
 
-    override fun onPlayerError(error: ExoPlaybackException?) {
+    override fun addListener(listener: PlayerPlaybackState.Listener) {
+        listeners.add(listener)
+    }
+
+    override fun removeListener(listener: PlayerPlaybackState.Listener) {
+        listeners.remove(listener)
+    }
+
+    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+        Log.d("EXO_STATE", "new state: $playbackState")
+
+        when (playbackState) {
+            Player.STATE_ENDED -> {
+                //Go to next track somehow
+                serviceController.notifySongEnded(true)
+            }
+            else -> {
+                Log.e("STATE", "What!?")
+            }
+        }
+
+    }
+
+    override fun onPlayerError(error: ExoPlaybackException) {
         super.onPlayerError(error)
-        when (error!!.type) {
+        when (error.type) {
             ExoPlaybackException.TYPE_SOURCE -> Log.e(
                 "EXO",
                 "TYPE_SOURCE: " + error.sourceException.message

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">service-music</string>
+    <string name="channel_id_notification">Chase Music Playback</string>
+    <string name="channel_id_notification_description">Playback Controls</string>
 </resources>

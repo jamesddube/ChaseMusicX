@@ -29,7 +29,7 @@ internal class SongLoader(
             ALBUM_ID,
             IS_MUSIC
         )
-        val sortOrder = SortOrder.SongSortOrder.SONG_A_Z
+        const val sortOrder = SortOrder.SongSortOrder.SONG_A_Z
     }
 
     @SuppressLint("Recycle")

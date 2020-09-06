@@ -8,7 +8,11 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:paddingLeftSystemWindowInsets="@{true}"
+        app:paddingRightSystemWindowInsets="@{true}"
+        app:paddingTopSystemWindowInsets="@{true}"
+        tools:context=".ui.songs.SongsFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/songs_list"
@@ -21,6 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_song"
             tools:targetApi="o" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

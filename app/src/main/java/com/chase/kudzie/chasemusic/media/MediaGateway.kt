@@ -7,6 +7,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.chase.kudzie.chasemusic.extensions.canReadStorage
 import com.chase.kudzie.chasemusic.media.connection.ConnectionState
 import com.chase.kudzie.chasemusic.media.connection.IMediaConnectionCallback
@@ -15,6 +16,7 @@ import com.chase.kudzie.chasemusic.media.connection.OnConnectionChangedListener
 import com.chase.kudzie.chasemusic.media.controller.IMediaControllerCallback
 import com.chase.kudzie.chasemusic.media.controller.MediaControllerCallback
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import java.lang.IllegalStateException
 
 
@@ -36,21 +38,39 @@ class MediaGateway(
 
     val callback: MediaControllerCompat.Callback = MediaControllerCallback(this)
     private var job: Job? = null
-    private var state: ConnectionState? = null
+
+    private val connectionPublisher = ConflatedBroadcastChannel<ConnectionState>()
 
     fun connect() {
         if (!canReadStorage(context)) {
             return
         }
+        job?.cancel()
+
+        job = launch {
+            for (state in connectionPublisher.openSubscription()) {
+                when (state) {
+                    ConnectionState.CONNECTED -> {
+                        onConnectionChanged.onConnectionSuccess(mediaBrowser, callback)
+                    }
+                    ConnectionState.FAILED -> {
+                        onConnectionChanged.onConnectionFailed(mediaBrowser, callback)
+                    }
+                }
+            }
+        }
+
         if (!mediaBrowser.isConnected) {
             try {
                 mediaBrowser.connect()
             } catch (ex: IllegalStateException) {
+                Log.e("MediaGateway", ex.message)
             }
         }
     }
 
     fun disconnect() {
+        job?.cancel()
         if (mediaBrowser.isConnected) {
             mediaBrowser.disconnect()
         }
@@ -75,17 +95,6 @@ class MediaGateway(
     }
 
     override fun onConnectionStateChanged(state: ConnectionState) {
-        state.let {
-            Log.e("CONNECTION", it.toString())
-            this.state = it
-            when (it) {
-                ConnectionState.CONNECTED -> {
-                    onConnectionChanged.onConnectionSuccess(mediaBrowser, callback)
-                }
-                ConnectionState.FAILED -> {
-                    onConnectionChanged.onConnectionFailed(mediaBrowser, callback)
-                }
-            }
-        }
+        connectionPublisher.offer(state)
     }
 }
