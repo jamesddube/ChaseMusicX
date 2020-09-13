@@ -104,6 +104,7 @@ dependencies {
     implementation composeDependencies.themeAdapter
     implementation composeDependencies.materialIconsExtended
     implementation composeDependencies.animation
+    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.2.0"
 
     kapt appDependencies.daggerCompiler
     kapt appDependencies.daggerProcessor

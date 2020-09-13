@@ -1,5 +1,6 @@
 package com.chase.kudzie.chasemusic.ui.albums
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ class AlbumAdapter : ListAdapter<Album, AlbumAdapter.ItemHolder>(AlbumDiff) {
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
+        Log.e("ALBUM","id ${getItem(position).id}")
         holder.bind(getItem(position))
     }
 
