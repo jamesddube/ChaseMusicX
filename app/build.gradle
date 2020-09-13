@@ -11,12 +11,12 @@ kapt {
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "com.chase.kudzie.chasemusic"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -28,6 +28,7 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
+        compose true
     }
 
     dexOptions {
@@ -49,13 +50,20 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = '1.8'
+        useIR = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerVersion '1.4.0'
     }
 }
 
 dependencies {
     def appDependencies = rootProject.ext.appDependencies
     def appTestDependencies = rootProject.ext.appTestDependencies
+    def composeDependencies = rootProject.ext.composeDependencies
 
     implementation project(':data')
     implementation project(':domain')
@@ -84,6 +92,18 @@ dependencies {
     implementation appDependencies.navigationFragment
     implementation appDependencies.navigationUI
     implementation appDependencies.media
+
+    //Jetpack Compose
+    implementation composeDependencies.runtime
+    implementation composeDependencies.ui
+    implementation composeDependencies.foundation
+    implementation composeDependencies.foundationLayout
+    implementation composeDependencies.material
+    implementation composeDependencies.livedata
+    implementation composeDependencies.uiTooling
+    implementation composeDependencies.themeAdapter
+    implementation composeDependencies.materialIconsExtended
+    implementation composeDependencies.animation
 
     kapt appDependencies.daggerCompiler
     kapt appDependencies.daggerProcessor

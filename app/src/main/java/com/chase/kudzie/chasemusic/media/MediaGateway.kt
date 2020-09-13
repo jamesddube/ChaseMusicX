@@ -64,7 +64,7 @@ class MediaGateway(
             try {
                 mediaBrowser.connect()
             } catch (ex: IllegalStateException) {
-                Log.e("MediaGateway", ex.message)
+                Log.e("MediaGateway", ex.message!!)
             }
         }
     }

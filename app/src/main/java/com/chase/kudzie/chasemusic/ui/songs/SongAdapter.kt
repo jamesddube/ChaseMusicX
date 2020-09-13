@@ -13,7 +13,7 @@ import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.model.SongDiff
 import com.chase.kudzie.chasemusic.util.getAlbumArtUri
 
-class SongAdapter(val onSongClick: (song: Song) -> Unit) :
+class SongAdapter(val onSongClick: (Song) -> Unit) :
     ListAdapter<Song, SongAdapter.ItemHolder>(SongDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
