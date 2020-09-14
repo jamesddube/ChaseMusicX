@@ -105,6 +105,7 @@ dependencies {
     implementation composeDependencies.materialIconsExtended
     implementation composeDependencies.animation
     implementation "dev.chrisbanes.accompanist:accompanist-coil:0.2.0"
+    implementation 'androidx.palette:palette-ktx:1.0.0'
 
     kapt appDependencies.daggerCompiler
     kapt appDependencies.daggerProcessor

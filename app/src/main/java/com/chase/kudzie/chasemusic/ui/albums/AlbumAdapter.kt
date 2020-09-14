@@ -1,6 +1,5 @@
 package com.chase.kudzie.chasemusic.ui.albums
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,8 @@ import com.chase.kudzie.chasemusic.domain.model.Album
 import com.chase.kudzie.chasemusic.model.AlbumDiff
 import com.chase.kudzie.chasemusic.util.getAlbumArtUri
 
-
-class AlbumAdapter : ListAdapter<Album, AlbumAdapter.ItemHolder>(AlbumDiff) {
+class AlbumAdapter(val albumClicked: (Album) -> Unit) :
+    ListAdapter<Album, AlbumAdapter.ItemHolder>(AlbumDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(
@@ -25,8 +24,10 @@ class AlbumAdapter : ListAdapter<Album, AlbumAdapter.ItemHolder>(AlbumDiff) {
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        Log.e("ALBUM","id ${getItem(position).id}")
-        holder.bind(getItem(position))
+        val album = getItem(position)
+        holder.bind(album)
+
+        holder.click(album)
     }
 
 
@@ -42,6 +43,12 @@ class AlbumAdapter : ListAdapter<Album, AlbumAdapter.ItemHolder>(AlbumDiff) {
             Glide.with(itemView)
                 .load(getAlbumArtUri(album.id))
                 .into(ivAlbumArtwork)
+        }
+
+        fun click(album: Album) {
+            itemView.setOnClickListener {
+                albumClicked(album)
+            }
         }
     }
 }

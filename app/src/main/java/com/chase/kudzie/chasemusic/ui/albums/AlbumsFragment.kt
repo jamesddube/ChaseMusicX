@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.chase.kudzie.chasemusic.databinding.FragmentAlbumsBinding
+import com.chase.kudzie.chasemusic.domain.model.Album
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -42,7 +43,7 @@ class AlbumsFragment : Fragment() {
                 viewLifecycleOwner, Observer { albums ->
                     run {
                         albumsGrid.apply {
-                            adapter = AlbumAdapter().apply {
+                            adapter = AlbumAdapter(::onAlbumClicked).apply {
                                 submitList(albums)
                             }
                         }
@@ -57,5 +58,9 @@ class AlbumsFragment : Fragment() {
     private fun initViewModels() {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(AlbumViewModel::class.java)
+    }
+
+    private fun onAlbumClicked(album: Album) {
+        //Todo navigate
     }
 }
