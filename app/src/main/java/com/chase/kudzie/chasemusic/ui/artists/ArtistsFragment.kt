@@ -72,13 +72,4 @@ class ArtistsFragment : Fragment(),
         //Todo handle click
     }
 
-    private fun onExtractBitmapAndApply(artist: Artist, background: View) {
-        launch(Dispatchers.Main) {
-            val bitmap = requireContext().retrieveGlideBitmap("")
-            yield()
-            bitmap?.let {
-                setGradientOnView(background, bitmap)
-            }
-        }
-    }
 }

@@ -34,6 +34,7 @@ interface SharedComponent {
     fun preferencesRepository(): PreferencesRepository
     fun songQueueRepository(): SongQueueRepository
     fun lastFMRepository(): LastFMRepository
+    fun deezerRepository(): DeezerRepository
 
     @Component.Factory
     interface Factory {

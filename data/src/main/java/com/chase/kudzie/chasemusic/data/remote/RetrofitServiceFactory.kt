@@ -52,7 +52,7 @@ object RetrofitServiceFactory {
         Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(MoshiConverterFactory.create(moshi).withNullSerialization())
             .build()
 
 

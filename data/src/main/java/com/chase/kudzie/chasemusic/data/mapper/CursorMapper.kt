@@ -63,13 +63,15 @@ fun Cursor.toArtist(): Artist {
     val id = getLong(BaseColumns._ID)
     val albumCount = 0
     val name = getStringOrNull(MediaStore.Audio.ArtistColumns.ARTIST) ?: ""
+    val albumArtist = getStringOrNull("album_artist") ?: name
     val songCount = 0
 
     return Artist(
         id = id,
         albumCount = albumCount,
         name = name,
-        songCount = songCount
+        songCount = songCount,
+        albumArtist = albumArtist
     )
 }
 
