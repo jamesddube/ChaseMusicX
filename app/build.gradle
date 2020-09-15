@@ -28,7 +28,6 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
-        compose true
     }
 
     dexOptions {
@@ -51,12 +50,6 @@ android {
 
     kotlinOptions {
         jvmTarget = '1.8'
-        useIR = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.4.0'
     }
 }
 
@@ -93,18 +86,6 @@ dependencies {
     implementation appDependencies.navigationUI
     implementation appDependencies.media
 
-    //Jetpack Compose
-    implementation composeDependencies.runtime
-    implementation composeDependencies.ui
-    implementation composeDependencies.foundation
-    implementation composeDependencies.foundationLayout
-    implementation composeDependencies.material
-    implementation composeDependencies.livedata
-    implementation composeDependencies.uiTooling
-    implementation composeDependencies.themeAdapter
-    implementation composeDependencies.materialIconsExtended
-    implementation composeDependencies.animation
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.2.0"
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
     kapt appDependencies.daggerCompiler
