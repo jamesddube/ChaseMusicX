@@ -2,14 +2,13 @@ package com.chase.kudzie.chasemusic.ui.artists
 
 import android.app.Activity
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -36,7 +35,7 @@ class ArtistsAdapter(
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         val artist = getItem(position)
         //Manually change for now
-        holder.bind(artist, true)
+        holder.bind(artist)
         holder.click(artist)
     }
 
@@ -47,10 +46,17 @@ class ArtistsAdapter(
         private val artistName: TextView = itemView.findViewById(R.id.artist_name)
 
 
-        fun bind(artist: Artist, isGradient: Boolean) {
+        fun bind(artist: Artist) {
             artistName.text = artist.name
 
-            Glide.with(itemView)
+            simulatePlaceholder()
+
+            loadArtistImageFromNetwork(artist)
+        }
+
+        private fun loadArtistImageFromNetwork(artist: Artist) {
+            //TODO Maybe make into some type of extension?
+            Glide.with(artistImage.context)
                 .asBitmap()
                 .load(artist)
                 .into(object : CustomTarget<Bitmap>() {
@@ -59,26 +65,39 @@ class ArtistsAdapter(
                         transition: Transition<in Bitmap>?
                     ) {
                         artistImage.setImageBitmap(resource)
-                        if (isGradient) {
-                            setGradientOnView(paletteView, resource)
-                        } else {
-                            //Setup Palette on Palette view
-                            Palette.from(resource).generate { palette ->
-                                paletteView.setBackgroundColor(
-                                    palette?.vibrantSwatch?.rgb ?: ContextCompat.getColor(
-                                        context, R.color.colorBackgroundFallback
-                                    )
-                                )
-                            }
-                        }
+                        setGradientOnView(paletteView, resource)
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {
+                    }
 
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        Glide.with(artistImage.context)
+                            .asBitmap()
+                            .load(R.drawable.placeholder)
+                            .into(object : CustomTarget<Bitmap>() {
+                                override fun onResourceReady(
+                                    resource: Bitmap,
+                                    transition: Transition<in Bitmap>?
+                                ) {
+                                    artistImage.setImageBitmap(resource)
+                                    setGradientOnView(paletteView, resource)
+                                }
+
+                                override fun onLoadCleared(placeholder: Drawable?) {
+                                }
+                            })
                     }
                 })
         }
 
+        private fun simulatePlaceholder() {
+            //I will simulate a placeholder for now
+            val bitmapFromFactory =
+                BitmapFactory.decodeResource(context.resources, R.drawable.placeholder)
+            artistImage.setImageBitmap(bitmapFromFactory)
+            setGradientOnView(paletteView, bitmapFromFactory)
+        }
 
         fun click(artist: Artist) {
             itemView.setOnClickListener {

@@ -9,7 +9,6 @@ import android.provider.MediaStore
 import android.provider.MediaStore.Audio.ArtistColumns.*
 import android.provider.MediaStore.Audio.AudioColumns
 import com.chase.kudzie.chasemusic.data.sorting.SortOrder
-import com.chase.kudzie.chasemusic.data.sorting.SortOrder.AlbumSortOrder.Companion.ALBUM_ARTIST
 
 internal class ArtistLoader(
     private val contentResolver: ContentResolver
@@ -22,7 +21,6 @@ internal class ArtistLoader(
             _ID,
             ARTIST,
             NUMBER_OF_ALBUMS,
-            "album_artist",
             NUMBER_OF_TRACKS
         )
 

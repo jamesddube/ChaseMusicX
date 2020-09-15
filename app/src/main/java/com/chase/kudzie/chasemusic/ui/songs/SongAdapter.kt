@@ -42,6 +42,7 @@ class SongAdapter(val onSongClick: (Song) -> Unit) :
             tvArtistName.text = song.artistName
             Glide.with(itemView)
                 .load(getAlbumArtUri(song.albumId))
+                .placeholder(R.drawable.placeholder)
                 .into(ivAlbumArt)
         }
 

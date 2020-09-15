@@ -42,6 +42,7 @@ class AlbumAdapter(val albumClicked: (Album) -> Unit) :
 
             Glide.with(itemView)
                 .load(getAlbumArtUri(album.id))
+                .placeholder(R.drawable.placeholder)
                 .into(ivAlbumArtwork)
         }
 
