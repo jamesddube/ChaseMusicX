@@ -10,4 +10,6 @@
     <string name="grant_permission">Grant</string>
     <string name="action_settings">Settings</string>
     <string name="artist_image">Image of the artist</string>
+    <string name="placeholder_mini">Mini Player Placeholder</string>
+    <string name="placeholder_content">Music Information Placeholder</string>
 </resources>
