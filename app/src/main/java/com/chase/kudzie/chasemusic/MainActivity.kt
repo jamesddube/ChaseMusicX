@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.view.View
+import android.view.ViewTreeObserver
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
@@ -17,12 +20,14 @@ import com.chase.kudzie.chasemusic.media.connection.OnConnectionChangedListener
 import com.chase.kudzie.chasemusic.extensions.playPause
 import com.chase.kudzie.chasemusic.extensions.show
 import com.chase.kudzie.chasemusic.util.contentView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity :
@@ -43,6 +48,34 @@ class MainActivity :
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
     private val binding: ActivityMainBinding by contentView(R.layout.activity_main)
+
+    private lateinit var behavior: BottomSheetBehavior<ConstraintLayout>
+
+    private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            when (newState) {
+                BottomSheetBehavior.STATE_EXPANDED -> {
+                    Timber.e("SHEET EXPANDED")
+                }
+                BottomSheetBehavior.STATE_COLLAPSED -> {
+                    Timber.e("SHEET COLLAPSED")
+                }
+            }
+        }
+
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            //TODO maybe handle issues to deal with showing and hiding of bottom bar as you slide up?
+            hideBottomNavOnDrag(slideOffset)
+        }
+
+    }
+
+    private fun hideBottomNavOnDrag(slideOffset: Float) {
+        val alpha = 1 - slideOffset
+
+        binding.bottomNav.translationY = slideOffset * 500
+        binding.bottomNav.alpha = alpha
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -68,6 +101,22 @@ class MainActivity :
                     else -> bottomNav.hide()
                 }
             }
+
+            //Init Bottom bar
+            behavior = BottomSheetBehavior.from(layoutBottomSheet.playerBottomSheet)
+            behavior.addBottomSheetCallback(bottomSheetCallback)
+
+            layoutBottomSheet.playerBottomSheet.viewTreeObserver.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    behavior.isHideable = false
+                    behavior.peekHeight = bottomNav.height * 2
+
+                    layoutBottomSheet.playerBottomSheet.viewTreeObserver.removeOnGlobalLayoutListener(
+                        this
+                    )
+                }
+            })
         }
     }
 
@@ -98,6 +147,11 @@ class MainActivity :
         super.onStop()
         mediaGateway.disconnect()
         unregisterMediaController()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
     }
 
     fun connect() {
