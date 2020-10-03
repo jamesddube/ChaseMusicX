@@ -12,7 +12,7 @@ import androidx.palette.graphics.Palette
 fun setGradientOnView(background: View, imageBitmap: Bitmap) {
     Palette.from(imageBitmap).generate { palette ->
         palette?.let {
-            background.background =  makeGradientDrawable(
+            background.background = makeGradientDrawable(
                 extractTopColor(palette), extractMiddleColor(palette),
                 extractBottomColor(palette)
             )
@@ -35,7 +35,7 @@ private fun extractTopColor(palette: Palette): Int {
         else
             palette.vibrantSwatch!!.rgb
     } else {
-        Color.RED
+        0x707d8b
     }
 
 }
@@ -47,7 +47,7 @@ private fun extractMiddleColor(palette: Palette): Int {
         else
             palette.lightVibrantSwatch!!.rgb
     } else {
-        Color.GREEN
+        0x07020e
     }
 
 }
@@ -59,6 +59,6 @@ private fun extractBottomColor(palette: Palette): Int {
         else
             palette.darkVibrantSwatch!!.rgb
     } else {
-        Color.BLUE
+        0x707d8b
     }
 }

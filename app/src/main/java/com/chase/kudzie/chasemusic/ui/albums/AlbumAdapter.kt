@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.chase.kudzie.chasemusic.R
+import com.chase.kudzie.chasemusic.databinding.ItemAlbumBinding
 import com.chase.kudzie.chasemusic.domain.model.Album
 import com.chase.kudzie.chasemusic.model.AlbumDiff
 import com.chase.kudzie.chasemusic.util.getAlbumArtUri
@@ -18,35 +19,33 @@ class AlbumAdapter(val albumClicked: (Album) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(
-            LayoutInflater.from(parent.context!!)
-                .inflate(R.layout.item_album, parent, false)
+            ItemAlbumBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         val album = getItem(position)
-        holder.bind(album)
 
-        holder.click(album)
+        holder.bind(album)
     }
 
 
-    inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvAlbumName: TextView = itemView.findViewById(R.id.album_name)
-        private val tvArtistName: TextView = itemView.findViewById(R.id.artist_name)
-        private val ivAlbumArtwork: ImageView = itemView.findViewById(R.id.album_artwork)
+    inner class ItemHolder(private val binding: ItemAlbumBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(album: Album) {
-            tvAlbumName.text = album.title
-            tvArtistName.text = album.artistName
+            binding.run {
+                this.album = album
 
-            Glide.with(itemView)
-                .load(getAlbumArtUri(album.id))
-                .placeholder(R.drawable.placeholder)
-                .into(ivAlbumArtwork)
+                click(album)
+            }
         }
 
-        fun click(album: Album) {
+        private fun click(album: Album) {
             itemView.setOnClickListener {
                 albumClicked(album)
             }

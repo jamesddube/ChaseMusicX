@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.chase.kudzie.chasemusic.R
+import com.chase.kudzie.chasemusic.databinding.ItemPlaylistBinding
 import com.chase.kudzie.chasemusic.domain.model.Playlist
 import com.chase.kudzie.chasemusic.model.PlaylistDiff
 
@@ -18,8 +19,11 @@ class PlaylistAdapter(val onPlaylistClick: (Playlist) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(
-            LayoutInflater.from(parent.context!!)
-                .inflate(R.layout.item_playlist, parent, false)
+            ItemPlaylistBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
     }
 
@@ -27,28 +31,21 @@ class PlaylistAdapter(val onPlaylistClick: (Playlist) -> Unit) :
         val playlist = getItem(position)
 
         holder.bind(playlist)
-
-        holder.click(playlist)
     }
 
-    inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvPlaylistName: TextView = itemView.findViewById(R.id.playlist_name)
-        private val tvSongCount: TextView = itemView.findViewById(R.id.song_count_label)
-        private val ivPlaylistIcon: ImageView = itemView.findViewById(R.id.playlist_icon)
-
+    inner class ItemHolder(private val binding: ItemPlaylistBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
         fun bind(playlist: Playlist) {
-            tvPlaylistName.text = playlist.name
-            tvSongCount.text = "${playlist.songCount} songs"
+            binding.run {
+                this.playlist = playlist
 
-            Glide.with(itemView)
-                .load("")
-                .placeholder(R.drawable.ic_playlist)
-                .into(ivPlaylistIcon)
+                click(playlist)
+            }
         }
 
-        fun click(playlist: Playlist) {
+        private fun click(playlist: Playlist) {
             itemView.setOnClickListener {
                 onPlaylistClick(playlist)
             }

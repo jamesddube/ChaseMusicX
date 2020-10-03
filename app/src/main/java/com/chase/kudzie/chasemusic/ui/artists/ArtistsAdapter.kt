@@ -15,9 +15,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.chase.kudzie.chasemusic.R
+import com.chase.kudzie.chasemusic.databinding.ItemArtistBinding
 import com.chase.kudzie.chasemusic.domain.model.Artist
 import com.chase.kudzie.chasemusic.model.ArtistDiff
 import com.chase.kudzie.chasemusic.util.setGradientOnView
+import kotlinx.android.synthetic.main.item_song.view.*
 
 class ArtistsAdapter(
     val artistClick: (Artist) -> Unit,
@@ -27,77 +29,39 @@ class ArtistsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(
-            LayoutInflater.from(parent.context!!)
-                .inflate(R.layout.item_artist, parent, false)
+            ItemArtistBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         val artist = getItem(position)
-        //Manually change for now
+
         holder.bind(artist)
-        holder.click(artist)
     }
 
 
-    inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val paletteView: View = itemView.findViewById(R.id.palette_view);
-        private val artistImage: ImageView = itemView.findViewById(R.id.artist_image)
-        private val artistName: TextView = itemView.findViewById(R.id.artist_name)
-
+    inner class ItemHolder(private val binding: ItemArtistBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(artist: Artist) {
-            artistName.text = artist.name
+            binding.run {
+                this.artist = artist
 
-            simulatePlaceholder()
-
-            loadArtistImageFromNetwork(artist)
+                click(artist)
+            }
         }
 
-        private fun loadArtistImageFromNetwork(artist: Artist) {
-            //TODO Maybe make into some type of extension?
-            Glide.with(artistImage.context)
-                .asBitmap()
-                .load(artist)
-                .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(
-                        resource: Bitmap,
-                        transition: Transition<in Bitmap>?
-                    ) {
-                        artistImage.setImageBitmap(resource)
-                        setGradientOnView(paletteView, resource)
-                    }
-
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                    }
-
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        Glide.with(artistImage.context)
-                            .asBitmap()
-                            .load(R.drawable.placeholder)
-                            .into(object : CustomTarget<Bitmap>() {
-                                override fun onResourceReady(
-                                    resource: Bitmap,
-                                    transition: Transition<in Bitmap>?
-                                ) {
-                                    artistImage.setImageBitmap(resource)
-                                    setGradientOnView(paletteView, resource)
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {
-                                }
-                            })
-                    }
-                })
-        }
-
-        private fun simulatePlaceholder() {
-            //I will simulate a placeholder for now
-            val bitmapFromFactory =
-                BitmapFactory.decodeResource(context.resources, R.drawable.placeholder)
-            artistImage.setImageBitmap(bitmapFromFactory)
-            setGradientOnView(paletteView, bitmapFromFactory)
-        }
+//        private fun simulatePlaceholder() {
+//            //I will simulate a placeholder for now
+//            val bitmapFromFactory =
+//                BitmapFactory.decodeResource(context.resources, R.drawable.placeholder)
+//            artistImage.setImageBitmap(bitmapFromFactory)
+//            setGradientOnView(paletteView, bitmapFromFactory)
+//        }
 
         fun click(artist: Artist) {
             itemView.setOnClickListener {

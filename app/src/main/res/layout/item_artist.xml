@@ -1,58 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_artist"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_artwork"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:cardBackgroundColor="#00000000"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="8dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-        <FrameLayout
-            android:id="@+id/palette_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <data>
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/artist_image"
+        <variable
+            name="artist"
+            type="com.chase.kudzie.chasemusic.domain.model.Artist" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_artist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_artwork"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="#00000000"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="8dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <FrameLayout
+                android:id="@+id/palette_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
-                android:contentDescription="@string/artist_image"
-                android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                tools:srcCompat="@tools:sample/avatars[4]" />
-        </FrameLayout>
-    </com.google.android.material.card.MaterialCardView>
+                app:palette_bg="@{artist}">
 
-    <TextView
-        android:id="@+id/artist_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:maxLines="1"
-        android:paddingStart="4dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="4dp"
-        android:paddingBottom="4dp"
-        android:textAppearance="?attr/textAppearanceSubtitle1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_artwork"
-        tools:text="Black Coffee" />
+                <!--TODO use binding util-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/artist_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp"
+                    android:contentDescription="@string/artist_image"
+                    android:scaleType="centerCrop"
+                    app:artist_artwork="@{artist}"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                    tools:srcCompat="@tools:sample/avatars[4]" />
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/artist_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingStart="4dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="4dp"
+            android:paddingBottom="4dp"
+            android:text="@{artist.name}"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_artwork"
+            tools:text="Black Coffee" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
