@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.chase.kudzie.chasemusic.databinding.FragmentAlbumsBinding
 import com.chase.kudzie.chasemusic.domain.model.Album
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
@@ -19,16 +18,16 @@ class AlbumsFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    lateinit var viewModel: AlbumViewModel
+    private val viewModel: AlbumViewModel by viewModels {
+        viewModelFactory
+    }
+
+    private var _binding: FragmentAlbumsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         AndroidSupportInjection.inject(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initViewModels()
     }
 
     override fun onCreateView(
@@ -36,28 +35,26 @@ class AlbumsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentAlbumsBinding.inflate(inflater, container, false)
-
-        binding.apply {
-            viewModel.albums.observe(
-                viewLifecycleOwner, Observer { albums ->
-                    run {
-                        albumsGrid.apply {
-                            adapter = AlbumAdapter(::onAlbumClicked).apply {
-                                submitList(albums)
-                            }
-                        }
-                    }
-                }
-            )
-        }
-
+        _binding = FragmentAlbumsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    private fun initViewModels() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(AlbumViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            viewModel.albums.observe(viewLifecycleOwner, { albums ->
+                albumsGrid.apply {
+                    adapter = AlbumAdapter(::onAlbumClicked).apply {
+                        submitList(albums)
+                    }
+                }
+            })
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun onAlbumClicked(album: Album) {

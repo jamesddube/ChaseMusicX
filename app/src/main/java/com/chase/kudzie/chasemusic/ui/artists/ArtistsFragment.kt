@@ -5,16 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.chase.kudzie.chasemusic.databinding.FragmentArtistsBinding
 import com.chase.kudzie.chasemusic.domain.model.Artist
-import com.chase.kudzie.chasemusic.extensions.retrieveGlideBitmap
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
-import com.chase.kudzie.chasemusic.util.setGradientOnView
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import javax.inject.Inject
 
 class ArtistsFragment : Fragment(),
@@ -23,17 +21,12 @@ class ArtistsFragment : Fragment(),
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    lateinit var viewModel: ArtistsViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initViewModels()
+    private val viewModel: ArtistsViewModel by viewModels {
+        viewModelFactory
     }
 
-    private fun initViewModels() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(ArtistsViewModel::class.java)
-    }
+    private var _binding: FragmentArtistsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -45,31 +38,33 @@ class ArtistsFragment : Fragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentArtistsBinding.inflate(inflater, container, false)
+        _binding = FragmentArtistsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.apply {
             viewModel.artists.observe(
                 viewLifecycleOwner, { artists ->
-                    run {
-                        artistsGrid.apply {
-                            adapter = ArtistsAdapter(
-                                ::onArtistClick,
-                                requireActivity()
-                            ).apply {
+                    artistsGrid.apply {
+                        adapter = ArtistsAdapter(::onArtistClick, requireActivity())
+                            .apply {
                                 submitList(artists)
                             }
-                        }
                     }
                 }
             )
         }
-
-
-        return binding.root
     }
 
     private fun onArtistClick(artist: Artist) {
         //Todo handle click
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

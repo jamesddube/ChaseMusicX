@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import com.chase.kudzie.chasemusic.databinding.FragmentPlaylistsBinding
 import com.chase.kudzie.chasemusic.domain.model.Playlist
@@ -18,7 +19,12 @@ class PlaylistsFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    lateinit var viewModel: PlaylistsViewModel
+    private val viewModel: PlaylistsViewModel by viewModels {
+        viewModelFactory
+    }
+
+    private var _binding: FragmentPlaylistsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -27,12 +33,6 @@ class PlaylistsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initViewModels()
-    }
-
-    private fun initViewModels() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(PlaylistsViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -40,26 +40,31 @@ class PlaylistsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
+        _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.apply {
             viewModel.playlists.observe(
                 viewLifecycleOwner, { playlists ->
-                    run {
-                        playlistList.apply {
-                            adapter = PlaylistAdapter(::onPlaylistClick).apply {
-                                submitList(playlists)
-                            }
+                    playlistList.apply {
+                        adapter = PlaylistAdapter(::onPlaylistClick).apply {
+                            submitList(playlists)
                         }
                     }
                 }
             )
         }
-
-        return binding.root
     }
 
     private fun onPlaylistClick(playlist: Playlist) {
         //Todo handle click
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.chase.kudzie.chasemusic.databinding.FragmentSongsBinding
@@ -22,7 +23,12 @@ class SongsFragment : Fragment() {
 
     private lateinit var mediaProvider: IMediaProvider
 
-    private lateinit var viewModel: SongViewModel
+    private val viewModel: SongViewModel by viewModels {
+        viewModelFactory
+    }
+
+    private var _binding: FragmentSongsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -32,13 +38,7 @@ class SongsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initViewModels()
         mediaProvider = this.activity as IMediaProvider
-    }
-
-    private fun initViewModels() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(SongViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -46,26 +46,32 @@ class SongsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentSongsBinding.inflate(inflater, container, false)
+        _binding = FragmentSongsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.apply {
             viewModel.songs.observe(
                 viewLifecycleOwner, Observer { songs ->
-                    run {
-                        songsList.apply {
-                            adapter = SongAdapter(::onSongClicked).apply {
-                                submitList(songs)
-                            }
+                    songsList.apply {
+                        adapter = SongAdapter(::onSongClicked).apply {
+                            submitList(songs)
                         }
                     }
                 }
             )
         }
 
-        return binding.root
     }
 
     private fun onSongClicked(song: Song) {
         mediaProvider.playMediaFromId(song.id.toString())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
