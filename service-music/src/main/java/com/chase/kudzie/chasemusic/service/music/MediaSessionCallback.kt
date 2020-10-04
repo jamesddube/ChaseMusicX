@@ -3,6 +3,7 @@ package com.chase.kudzie.chasemusic.service.music
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
+import android.util.Log
 import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerRepository
 import com.chase.kudzie.chasemusic.service.music.repository.QueueRepository
@@ -96,6 +97,7 @@ class MediaSessionCallback @Inject constructor(
 
     override fun onPlayFromMediaId(mediaId: String, extras: Bundle?) {
         super.onPlayFromMediaId(mediaId, extras)
+        Log.e("MEDIA_ID", mediaId)
         launch {
             //Get the song from queue and play
             val song = queue.onPlayFromMediaId(MediaIdCategory.fromString(mediaId))

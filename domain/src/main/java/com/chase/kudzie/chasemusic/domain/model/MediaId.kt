@@ -46,18 +46,12 @@ data class MediaIdCategory(
             //TODO maybe improve later??
             val splitValue = mediaIdCategory.split(TOKEN_CATEGORY)
 
-            if (splitValue.size < 2)
+            if (splitValue.size < 3)
                 throw IllegalArgumentException("Hmm What is this you try to convert from string")
 
             val mediaId = MediaId.valueOf(splitValue[0])
-
-            val songIdSplit = splitValue[1].split(TOKEN_SONG_ID)
-
-            if (songIdSplit.size < 2)
-                throw IllegalArgumentException("Hmm What is this you try to convert from string")
-
-            val idValue = songIdSplit[0].toLong()
-            val songIdValue = songIdSplit[1].toLong()
+            val idValue = splitValue[1].toLong()
+            val songIdValue = splitValue[2].toLong()
 
             return MediaIdCategory(mediaId, idValue, songIdValue)
         }
@@ -67,6 +61,6 @@ data class MediaIdCategory(
 
 
     override fun toString(): String {
-        return "$mediaId${TOKEN_CATEGORY}${idValue}${TOKEN_SONG_ID}${songId}"
+        return "$mediaId${TOKEN_CATEGORY}${idValue}${TOKEN_CATEGORY}${songId}"
     }
 }
