@@ -35,7 +35,7 @@ private fun extractTopColor(palette: Palette): Int {
         else
             palette.vibrantSwatch!!.rgb
     } else {
-        0x707d8b
+        Color.parseColor("#171B1E")
     }
 
 }
@@ -47,7 +47,7 @@ private fun extractMiddleColor(palette: Palette): Int {
         else
             palette.lightVibrantSwatch!!.rgb
     } else {
-        0x07020e
+        Color.parseColor("#07020e")
     }
 
 }
@@ -59,6 +59,6 @@ private fun extractBottomColor(palette: Palette): Int {
         else
             palette.darkVibrantSwatch!!.rgb
     } else {
-        0x707d8b
+        Color.parseColor("#171B1E")
     }
 }
