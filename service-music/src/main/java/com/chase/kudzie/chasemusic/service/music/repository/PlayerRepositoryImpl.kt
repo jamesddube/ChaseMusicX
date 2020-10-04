@@ -6,13 +6,13 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.chase.kudzie.chasemusic.service.music.data.MediaPlaybackState
 import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
-import com.chase.kudzie.chasemusic.service.music.model.MediaItem
+import com.chase.kudzie.chasemusic.domain.model.MediaItem
+import com.chase.kudzie.chasemusic.service.music.model.PlayableMediaItem
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -65,7 +65,8 @@ class PlayerRepositoryImpl @Inject constructor(
         serviceController.start()
     }
 
-    override fun play(mediaItem: MediaItem, hasTrackEnded: Boolean) {
+    override fun play(playableMediaItem: PlayableMediaItem, hasTrackEnded: Boolean) {
+        val mediaItem = playableMediaItem.mediaItem
         val media =
             ConcatenatingMediaSource(
                 mediaSource.createMediaSource(getSongUri(mediaItem.id))
@@ -121,7 +122,9 @@ class PlayerRepositoryImpl @Inject constructor(
         TODO("This supposed to make a database or playlist entry into favorites.")
     }
 
-    override fun prepare(mediaItem: MediaItem) {
+    override fun prepare(playableMediaItem: PlayableMediaItem) {
+        val mediaItem = playableMediaItem.mediaItem
+
         val media =
             ConcatenatingMediaSource(
                 mediaSource.createMediaSource(getSongUri(mediaItem.id))

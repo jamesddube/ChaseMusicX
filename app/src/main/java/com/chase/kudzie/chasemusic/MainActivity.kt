@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.chase.kudzie.chasemusic.base.BaseActivity
 import com.chase.kudzie.chasemusic.databinding.ActivityMainBinding
+import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
 import com.chase.kudzie.chasemusic.extensions.hide
 import com.chase.kudzie.chasemusic.media.IMediaProvider
 import com.chase.kudzie.chasemusic.media.MediaGateway
@@ -158,8 +159,8 @@ class MainActivity :
         mediaGateway.connect()
     }
 
-    override fun playMediaFromId(mediaId: String) {
-        transportControls()?.playFromMediaId(mediaId, null)
+    override fun playMediaFromId(mediaIdCategory: MediaIdCategory) {
+        transportControls()?.playFromMediaId(mediaIdCategory.toString(), null)
     }
 
     override fun playPause() {

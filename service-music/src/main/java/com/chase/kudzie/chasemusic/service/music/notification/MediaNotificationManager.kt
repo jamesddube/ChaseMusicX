@@ -10,7 +10,7 @@ import com.chase.kudzie.chasemusic.service.music.data.Event
 import com.chase.kudzie.chasemusic.service.music.data.NotificationState
 import com.chase.kudzie.chasemusic.service.music.extensions.isOreo
 import com.chase.kudzie.chasemusic.service.music.injection.scope.PerService
-import com.chase.kudzie.chasemusic.service.music.model.MediaItem
+import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerPlaybackState
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
 import kotlinx.coroutines.*

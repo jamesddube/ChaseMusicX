@@ -51,4 +51,8 @@ class SongRepositoryImpl @Inject constructor(
             ArtistLoader(contentResolver).getArtistSongs(artistId)
         ) { it.toSong() }
     }
+
+    override suspend fun getSongsByPlaylist(playlistId: Long): List<Song> {
+        TODO("Not yet implemented")
+    }
 }

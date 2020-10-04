@@ -2,21 +2,15 @@ package com.chase.kudzie.chasemusic.service.music.data
 
 import android.content.ContentUris
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.chase.kudzie.chasemusic.domain.scope.ApplicationContext
 import com.chase.kudzie.chasemusic.service.music.extensions.retrieveGlideBitmap
 import com.chase.kudzie.chasemusic.service.music.injection.scope.PerService
-import com.chase.kudzie.chasemusic.service.music.model.MediaItem
+import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerPlaybackState
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
 import kotlinx.coroutines.CoroutineScope
@@ -24,9 +18,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import javax.inject.Inject
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 @PerService
@@ -53,7 +44,9 @@ class MediaMetadata @Inject constructor(
     private fun updateMediaSessionMetadata(entity: MediaItem) {
         launch {
             val metadataBuilder = MediaMetadataCompat.Builder()
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, entity.artist)
+            metadataBuilder
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, entity.mediaId.toString())
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, entity.artist)
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, entity.album)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, entity.title)
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, entity.duration)

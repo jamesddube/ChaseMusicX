@@ -2,6 +2,7 @@ package com.chase.kudzie.chasemusic.data.database.dao
 
 import androidx.room.*
 import com.chase.kudzie.chasemusic.data.database.entities.QueueSongEntity
+import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.domain.model.Song
 
 @Dao
@@ -17,7 +18,7 @@ abstract class QueueDao {
     abstract suspend fun clearAll()
 
     @Transaction
-    open suspend fun insertIntoQueue(list: List<Song>) {
+    open suspend fun insertIntoQueue(list: List<MediaItem>) {
         //Clear all songs first
         clearAll()
         val queueEntities = list.map {
@@ -29,18 +30,18 @@ abstract class QueueDao {
         insertSongs(queueEntities)
     }
 
-    suspend fun getQueuedSongs(songList: List<Song>): List<Song> {
+    suspend fun getQueuedSongs(songList: List<MediaItem>): List<MediaItem> {
         val queueList = getAll()
         return createSongQueue(queueList, songList)
     }
 
     private fun createSongQueue(
         queueList: List<QueueSongEntity>,
-        songList: List<Song>
-    ): List<Song> {
+        songList: List<MediaItem>
+    ): List<MediaItem> {
         val songArr = songList.groupBy { it.id } // [1,2,4,77]
 
-        val filteredSongsList = mutableListOf<Song>()
+        val filteredSongsList = mutableListOf<MediaItem>()
 
         for (item in queueList) {
             val id = item.songId

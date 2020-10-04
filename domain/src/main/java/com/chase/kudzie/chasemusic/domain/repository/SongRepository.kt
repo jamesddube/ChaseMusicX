@@ -16,4 +16,6 @@ interface SongRepository {
     suspend fun getSongsByAlbum(albumId: Long): List<Song>
 
     suspend fun getSongsByArtist(artistId: Long): List<Song>
+
+    suspend fun getSongsByPlaylist(playlistId: Long): List<Song>
 }

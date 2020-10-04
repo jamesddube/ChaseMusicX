@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.chase.kudzie.chasemusic.databinding.FragmentSongsBinding
+import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
 import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
 import com.chase.kudzie.chasemusic.media.IMediaProvider
@@ -67,7 +68,7 @@ class SongsFragment : Fragment() {
     }
 
     private fun onSongClicked(song: Song) {
-        mediaProvider.playMediaFromId(song.id.toString())
+        mediaProvider.playMediaFromId(MediaIdCategory.makeSongsCategory(song.id))
     }
 
     override fun onDestroy() {
