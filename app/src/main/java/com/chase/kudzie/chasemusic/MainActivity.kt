@@ -9,10 +9,12 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.chase.kudzie.chasemusic.base.BaseActivity
 import com.chase.kudzie.chasemusic.databinding.ActivityMainBinding
+import com.chase.kudzie.chasemusic.databinding.FragmentPlayerMiniBinding
 import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
 import com.chase.kudzie.chasemusic.extensions.hide
 import com.chase.kudzie.chasemusic.media.IMediaProvider
@@ -20,6 +22,9 @@ import com.chase.kudzie.chasemusic.media.MediaGateway
 import com.chase.kudzie.chasemusic.media.connection.OnConnectionChangedListener
 import com.chase.kudzie.chasemusic.extensions.playPause
 import com.chase.kudzie.chasemusic.extensions.show
+import com.chase.kudzie.chasemusic.media.model.MediaMetadata
+import com.chase.kudzie.chasemusic.media.model.MediaPlaybackState
+import com.chase.kudzie.chasemusic.ui.nowplaying.PlayerMiniFragment
 import com.chase.kudzie.chasemusic.util.contentView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.AndroidInjection
@@ -28,6 +33,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -52,6 +58,8 @@ class MainActivity :
 
     private lateinit var behavior: BottomSheetBehavior<ConstraintLayout>
 
+    private lateinit var fragmentMiniPlayer: PlayerMiniFragment
+
     private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onStateChanged(bottomSheet: View, newState: Int) {
             when (newState) {
@@ -65,7 +73,6 @@ class MainActivity :
         }
 
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            //TODO maybe handle issues to deal with showing and hiding of bottom bar as you slide up?
             hideBottomNavOnDrag(slideOffset)
         }
 
@@ -73,6 +80,10 @@ class MainActivity :
 
     private fun hideBottomNavOnDrag(slideOffset: Float) {
         val alpha = 1 - slideOffset
+
+        //TODO Maybe create a listener and do this inside the fragment instead?
+        fragmentMiniPlayer.view?.alpha = alpha
+        fragmentMiniPlayer.view?.visibility = if (alpha == 0f) View.GONE else View.VISIBLE
 
         binding.bottomNav.translationY = slideOffset * 500
         binding.bottomNav.alpha = alpha
@@ -118,6 +129,14 @@ class MainActivity :
                     )
                 }
             })
+
+            //TODO unsafe call, maybe null
+            fragmentMiniPlayer =
+                supportFragmentManager.findFragmentById(R.id.player_mini_fragment) as PlayerMiniFragment
+
+            fragmentMiniPlayer.view?.setOnClickListener {
+                behavior.state =  BottomSheetBehavior.STATE_EXPANDED
+            }
         }
     }
 
@@ -210,6 +229,44 @@ class MainActivity :
 
     private fun transportControls(): MediaControllerCompat.TransportControls? {
         return mediaController()?.transportControls
+    }
+
+    override fun prepare() {
+        transportControls()?.prepare()
+    }
+
+    override fun stop() {
+        transportControls()?.stop()
+    }
+
+    override fun seekTo(pos: Long) {
+        transportControls()?.seekTo(pos)
+    }
+
+    override fun skipToNext() {
+        transportControls()?.skipToNext()
+    }
+
+    override fun skipToPrevious() {
+        transportControls()?.skipToPrevious()
+    }
+
+    override fun skipToQueueItem(id: Long) {
+        //TODO implement core functionality
+        transportControls()?.skipToQueueItem(id)
+    }
+
+    override fun favouriteSong(songId: Long) {
+        TODO("Needs a custom action to be set in Transport controls and handled")
+
+    }
+
+    override fun observeMetadata(): LiveData<MediaMetadata> {
+        return mediaGateway.observeMetadata()
+    }
+
+    override fun observePlaybackState(): LiveData<MediaPlaybackState> {
+        return mediaGateway.observePlaybackState()
     }
 
 

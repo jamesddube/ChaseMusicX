@@ -8,4 +8,10 @@
         <item name="backgroundColor">?attr/colorSurface</item>
     </style>
 
+    <style name="Widget.ChaseMusicX.SeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressBackgroundTint">?attr/colorPrimaryDark</item>
+        <item name="android:progressTint">?attr/colorPrimary</item>
+        <item name="android:colorControlActivated">?attr/colorPrimary</item>
+    </style>
+
 </resources>

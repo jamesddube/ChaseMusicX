@@ -7,6 +7,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.chase.kudzie.chasemusic.domain.model.MediaConstants.METADATA_KEY_ALBUM_ID
 import com.chase.kudzie.chasemusic.domain.scope.ApplicationContext
 import com.chase.kudzie.chasemusic.service.music.extensions.retrieveGlideBitmap
 import com.chase.kudzie.chasemusic.service.music.injection.scope.PerService
@@ -50,6 +51,7 @@ class MediaMetadata @Inject constructor(
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, entity.album)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, entity.title)
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, entity.duration)
+                .putLong(METADATA_KEY_ALBUM_ID, entity.albumId)
                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, entity.title)
                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, entity.artist)
                 .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, entity.album)

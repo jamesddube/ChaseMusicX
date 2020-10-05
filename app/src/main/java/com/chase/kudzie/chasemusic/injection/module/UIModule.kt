@@ -5,7 +5,8 @@ import com.chase.kudzie.chasemusic.ui.albums.AlbumsFragment
 import com.chase.kudzie.chasemusic.ui.albumsongs.AlbumSongsFragment
 import com.chase.kudzie.chasemusic.ui.artistdetails.ArtistDetailsFragment
 import com.chase.kudzie.chasemusic.ui.artists.ArtistsFragment
-import com.chase.kudzie.chasemusic.ui.nowplaying.NowPlayingFragment
+import com.chase.kudzie.chasemusic.ui.nowplaying.PlayerFragment
+import com.chase.kudzie.chasemusic.ui.nowplaying.PlayerMiniFragment
 import com.chase.kudzie.chasemusic.ui.playlists.PlaylistsFragment
 import com.chase.kudzie.chasemusic.ui.playlistsongs.PlaylistSongsFragment
 import com.chase.kudzie.chasemusic.ui.songs.SongsFragment
@@ -30,7 +31,10 @@ abstract class FragmentScreenModule {
     abstract fun contributesArtistsFragment(): ArtistsFragment
 
     @ContributesAndroidInjector
-    abstract fun contributesNowPlayingFragment(): NowPlayingFragment
+    abstract fun contributesPlayerFragment(): PlayerFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributesMiniPlayerFragment(): PlayerMiniFragment
 
     @ContributesAndroidInjector
     abstract fun contributesPlaylistsFragment(): PlaylistsFragment

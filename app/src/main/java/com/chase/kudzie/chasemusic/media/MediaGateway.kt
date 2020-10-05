@@ -7,7 +7,9 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.extensions.canReadStorage
 import com.chase.kudzie.chasemusic.media.connection.ConnectionState
 import com.chase.kudzie.chasemusic.media.connection.IMediaConnectionCallback
@@ -15,8 +17,11 @@ import com.chase.kudzie.chasemusic.media.connection.MusicServiceConnection
 import com.chase.kudzie.chasemusic.media.connection.OnConnectionChangedListener
 import com.chase.kudzie.chasemusic.media.controller.IMediaControllerCallback
 import com.chase.kudzie.chasemusic.media.controller.MediaControllerCallback
+import com.chase.kudzie.chasemusic.media.model.MediaMetadata
+import com.chase.kudzie.chasemusic.media.model.MediaPlaybackState
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.lang.IllegalStateException
 
 
@@ -40,6 +45,10 @@ class MediaGateway(
     private var job: Job? = null
 
     private val connectionPublisher = ConflatedBroadcastChannel<ConnectionState>()
+
+    private val metadataLiveData = MutableLiveData<MediaMetadata>()
+    private val playbackStateLiveData = MutableLiveData<MediaPlaybackState>()
+    private val someFlow = MutableStateFlow<Song?>(null)
 
     fun connect() {
         if (!canReadStorage(context)) {
@@ -84,17 +93,20 @@ class MediaGateway(
 
     override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
         if (metadata != null) {
-            Log.e("CHASEMUSIC", metadata.mediaMetadata.toString())
+            metadataLiveData.value = MediaMetadata(metadata)
         }
     }
 
     override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
         state?.let {
-            Log.e("PLAYBACK", state.toString())
+            playbackStateLiveData.value = MediaPlaybackState(state)
         }
     }
 
     override fun onConnectionStateChanged(state: ConnectionState) {
         connectionPublisher.offer(state)
     }
+
+    fun observeMetadata(): LiveData<MediaMetadata> = metadataLiveData
+    fun observePlaybackState(): LiveData<MediaPlaybackState> = playbackStateLiveData
 }

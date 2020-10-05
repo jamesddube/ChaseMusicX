@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/player_bottom_sheet"
@@ -11,55 +12,30 @@
         android:focusable="true"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-        >
-
-        <TextView
-            android:id="@+id/alpha_text_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/placeholder_mini"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_artwork"
+        <fragment
+            android:id="@+id/player_fragment"
+            android:name="com.chase.kudzie.chasemusic.ui.nowplaying.PlayerFragment"
+            android:tag="player"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="32dp"
-            android:elevation="8dp"
-            app:cardBackgroundColor="@color/colorBackgroundFallback"
-            app:cardCornerRadius="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout="@layout/fragment_player" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.60" />
-
-        <TextView
-            android:id="@+id/textView2"
+        <fragment
+            android:id="@+id/player_mini_fragment"
+            android:name="com.chase.kudzie.chasemusic.ui.nowplaying.PlayerMiniFragment"
+            android:tag="mini_player"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center_horizontal"
-            android:text="@string/placeholder_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline2" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout="@layout/fragment_player_mini" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

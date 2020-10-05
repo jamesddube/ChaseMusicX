@@ -68,9 +68,4 @@ class MediaPlaybackState @Inject constructor(
 
         return playbackState
     }
-
-    fun toggleSkip() {
-        TODO("Implement after queue")
-    }
-
 }
