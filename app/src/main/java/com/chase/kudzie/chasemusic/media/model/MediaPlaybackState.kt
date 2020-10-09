@@ -6,5 +6,8 @@ class MediaPlaybackState(private val playbackState: PlaybackStateCompat) {
     val isPlaying = playbackState.state == PlaybackStateCompat.STATE_PLAYING
     val isPaused = playbackState.state == PlaybackStateCompat.STATE_PAUSED
 
+    val lastPositionUpdateTime = playbackState.lastPositionUpdateTime
+    val playbackSpeed = playbackState.playbackSpeed
+
     val currentSeekPos = playbackState.position
 }
