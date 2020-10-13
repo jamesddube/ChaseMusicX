@@ -24,19 +24,23 @@ class App : Application(), HasActivityInjector {
 
     override fun onCreate() {
         super.onCreate()
-        // for enabling night mode in auto mode
 
+        initNightModeConfiguration()
+
+        initTimber()
+
+        initDagger()
+
+        MultiDex.install(this)
+    }
+
+    private fun initNightModeConfiguration(){
         val nightMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         } else {
             AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
         }
         AppCompatDelegate.setDefaultNightMode(nightMode)
-
-
-        initTimber()
-        initDagger()
-        MultiDex.install(this)
     }
 
     private fun initTimber() {
