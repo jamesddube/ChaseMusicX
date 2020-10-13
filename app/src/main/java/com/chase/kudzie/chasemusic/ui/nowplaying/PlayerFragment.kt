@@ -93,8 +93,6 @@ class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
 
                 }
             })
-
-
         }
     }
 

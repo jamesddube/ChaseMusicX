@@ -38,8 +38,6 @@
                 android:layout_height="match_parent"
                 app:palette_bg="@{artist}">
 
-                <!--TODO use binding util-->
-
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/artist_image"
                     android:layout_width="match_parent"
