@@ -31,6 +31,24 @@ fun TextView.bindDurationText(duration: Long) {
     this.text = makeReadableDuration(duration)
 }
 
+
+@BindingAdapter("track_number")
+fun TextView.bindTrackNumber(trackNum: Int) {
+    if (trackNum == 0) {
+        this.text = "-"
+    } else {
+        val trackText = trackNum.toString()
+        var trackNumber = 0
+        trackNumber = if (trackText.length == 4) {
+            trackText.substring(1).toInt()
+        } else {
+            trackText.toInt()
+        }
+        this.text = "$trackNumber"
+    }
+
+}
+
 @BindingAdapter("play_pause_icon")
 fun FloatingActionButton.bindPlayPauseIcon(isPlaying: Boolean) {
     if (isPlaying) {
