@@ -154,6 +154,17 @@ class MainActivity :
             })
     }
 
+    override fun onBackPressed() {
+        when (behavior.state) {
+            BottomSheetBehavior.STATE_EXPANDED -> {
+                behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+            BottomSheetBehavior.STATE_COLLAPSED -> {
+                super.onBackPressed()
+            }
+        }
+    }
+
     override fun onHasPermissionsChanged(hasPermissions: Boolean) {
         super.onHasPermissionsChanged(hasPermissions)
         if (hasPermissions) {
