@@ -109,7 +109,7 @@ class AlbumDetailsFragment : Fragment() {
                 findNavController().navigateUp()
             }
 
-//            postponeEnterTransition(1000L, TimeUnit.MILLISECONDS)
+            postponeEnterTransition(1000L, TimeUnit.MILLISECONDS)
             val interp = AnimationUtils.loadInterpolator(
                 context,
                 android.R.interpolator.fast_out_slow_in
@@ -117,6 +117,13 @@ class AlbumDetailsFragment : Fragment() {
 
             sharedElementEnterTransition = MaterialContainerTransform().apply {
                 duration = resources.getInteger(R.integer.motion_duration_large).toLong()
+                interpolator = interp
+                scrimColor = Color.TRANSPARENT
+                setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
+            }
+
+            sharedElementReturnTransition = MaterialContainerTransform().apply {
+                duration = 300L
                 interpolator = interp
                 scrimColor = Color.TRANSPARENT
                 setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
