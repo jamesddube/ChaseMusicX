@@ -4,6 +4,7 @@ import androidx.room.*
 import com.chase.kudzie.chasemusic.data.database.entities.QueueSongEntity
 import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.domain.model.Song
+import kotlinx.coroutines.yield
 
 @Dao
 abstract class QueueDao {
@@ -21,6 +22,7 @@ abstract class QueueDao {
     open suspend fun insertIntoQueue(list: List<MediaItem>) {
         //Clear all songs first
         clearAll()
+        yield()
         val queueEntities = list.map {
             QueueSongEntity(
                 songId = it.id,

@@ -71,6 +71,7 @@ class QueueRepositoryImpl @Inject constructor(
             song.toIndexedSong(index).toMediaItem(mediaIdCategory)
         }
 
+        songQueue.clear()
         songQueue.addAll(queueSongs)
 
         val currentTrackIndex = queueSongs.indexOfFirst { song -> song.id == songId }

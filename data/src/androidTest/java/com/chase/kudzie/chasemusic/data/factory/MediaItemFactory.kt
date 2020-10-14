@@ -2,7 +2,7 @@ package com.chase.kudzie.chasemusic.data.factory
 
 import com.chase.kudzie.chasemusic.domain.model.Song
 
-object SongFactory {
+object MediaItemFactory {
 
     fun makeFakeSongs(): List<Song> {
         return listOf(
@@ -62,5 +62,13 @@ object SongFactory {
                 albumId = 4
             )
         )
+    }
+
+    fun makeFakeAlbum1() {
+
+    }
+
+    fun makeFakeAlbum2() {
+
     }
 }
