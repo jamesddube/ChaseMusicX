@@ -3,7 +3,7 @@ package com.chase.kudzie.chasemusic.injection.module
 import androidx.lifecycle.ViewModel
 import com.chase.kudzie.chasemusic.injection.scope.ViewModelKey
 import com.chase.kudzie.chasemusic.ui.albums.AlbumViewModel
-import com.chase.kudzie.chasemusic.ui.albumsongs.AlbumSongsViewModel
+import com.chase.kudzie.chasemusic.ui.albumdetails.AlbumDetailsViewModel
 import com.chase.kudzie.chasemusic.ui.artistdetails.ArtistDetailsViewModel
 import com.chase.kudzie.chasemusic.ui.artists.ArtistsViewModel
 import com.chase.kudzie.chasemusic.ui.playlists.PlaylistsViewModel
@@ -37,8 +37,8 @@ abstract class PresentationModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(AlbumSongsViewModel::class)
-    abstract fun bindAlbumSongsViewModel(viewModel: AlbumSongsViewModel): ViewModel
+    @ViewModelKey(AlbumDetailsViewModel::class)
+    abstract fun bindAlbumSongsViewModel(viewModel: AlbumDetailsViewModel): ViewModel
 
     @Binds
     @IntoMap

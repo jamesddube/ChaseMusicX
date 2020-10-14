@@ -1,10 +1,10 @@
-package com.chase.kudzie.chasemusic.ui.playlistsongs
+package com.chase.kudzie.chasemusic.ui.playlistdetails
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
 
-class PlaylistSongsFragment : Fragment() {
+class PlaylistDetailsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

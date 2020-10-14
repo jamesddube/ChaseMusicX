@@ -14,7 +14,7 @@ import com.chase.kudzie.chasemusic.domain.model.Album
 import com.chase.kudzie.chasemusic.model.AlbumDiff
 import com.chase.kudzie.chasemusic.util.getAlbumArtUri
 
-class AlbumAdapter(val albumClicked: (Album) -> Unit) :
+class AlbumAdapter(val albumClicked: (View, Album) -> Unit) :
     ListAdapter<Album, AlbumAdapter.ItemHolder>(AlbumDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
@@ -41,13 +41,14 @@ class AlbumAdapter(val albumClicked: (Album) -> Unit) :
             binding.run {
                 this.album = album
 
+                executePendingBindings()
                 click(album)
             }
         }
 
         private fun click(album: Album) {
             itemView.setOnClickListener {
-                albumClicked(album)
+                albumClicked(itemView, album)
             }
         }
     }

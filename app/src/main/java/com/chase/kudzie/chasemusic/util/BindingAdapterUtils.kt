@@ -16,7 +16,6 @@ import com.bumptech.glide.request.transition.Transition
 import com.chase.kudzie.chasemusic.R
 import com.chase.kudzie.chasemusic.domain.model.Artist
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.slider.Slider
 
 /**
  * File for handling all issues to do with binding.
@@ -56,12 +55,17 @@ fun SeekBar.bindSeekBar(currentSongPos: Long) {
     this.progress = seekProgress
 }
 
-@BindingAdapter("album_artwork")
-fun ImageView.bindAlbumArt(albumId: Long) {
-    Glide.with(this.context)
+@BindingAdapter("album_artwork", "placeholder", "load_listener", requireAll = false)
+fun ImageView.bindAlbumArt(
+    albumId: Long,
+    placeholder: Drawable?,
+    loadListener: GlideDrawableLoadListener?
+) {
+    val request = Glide.with(this)
         .load(getAlbumArtUri(albumId))
-        .placeholder(R.drawable.placeholder)
-        .into(this)
+    if (placeholder != null) request.placeholder(placeholder)
+    if (loadListener != null) request.listener(loadListener)
+    request.into(this)
 }
 
 @BindingAdapter("playlist_icon")
@@ -80,8 +84,8 @@ fun TextView.setPlaylistCount(count: Int) {
 }
 
 @BindingAdapter("artist_artwork")
-fun ImageView.bindArtistArtwork(artist: Artist) {
-    Glide.with(this.context)
+fun ImageView.bindArtistArtwork(artist: Artist?) {
+    Glide.with(this)
         .asBitmap()
         .load(artist)
         .diskCacheStrategy(DiskCacheStrategy.ALL)

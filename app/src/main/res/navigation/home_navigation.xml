@@ -9,20 +9,34 @@
         android:id="@+id/albums"
         android:name="com.chase.kudzie.chasemusic.ui.albums.AlbumsFragment"
         android:label="AlbumsFragment"
-        tools:layout="@layout/fragment_albums" />
+        tools:layout="@layout/fragment_albums">
+        <action
+            android:id="@+id/action_albums_to_albumDetails"
+            app:destination="@id/albumDetails" />
+    </fragment>
     <fragment
         android:id="@+id/artists"
         android:name="com.chase.kudzie.chasemusic.ui.artists.ArtistsFragment"
         android:label="ArtistsFragment"
-        tools:layout="@layout/fragment_artists" />
+        tools:layout="@layout/fragment_artists"/>
     <fragment
         android:id="@+id/playlists"
         android:name="com.chase.kudzie.chasemusic.ui.playlists.PlaylistsFragment"
         android:label="PlaylistsFragment"
-        tools:layout="@layout/fragment_playlists" />
+        tools:layout="@layout/fragment_playlists"/>
     <fragment
         android:id="@+id/songs"
         android:name="com.chase.kudzie.chasemusic.ui.songs.SongsFragment"
         android:label="SongsFragment"
         tools:layout="@layout/fragment_songs" />
+    <fragment
+        android:id="@+id/albumDetails"
+        android:name="com.chase.kudzie.chasemusic.ui.albumdetails.AlbumDetailsFragment"
+        android:label="AlbumSongsFragment"
+        tools:layout="@layout/fragment_album_details" >
+        <argument
+            android:name="album_id"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
 </navigation>

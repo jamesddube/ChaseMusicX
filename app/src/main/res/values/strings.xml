@@ -12,4 +12,5 @@
     <string name="artist_image">Image of the artist</string>
     <string name="placeholder_mini">Mini Player Placeholder</string>
     <string name="placeholder_content">Music Information Placeholder</string>
+    <string name="shuffle_play">Shuffle Play</string>
 </resources>

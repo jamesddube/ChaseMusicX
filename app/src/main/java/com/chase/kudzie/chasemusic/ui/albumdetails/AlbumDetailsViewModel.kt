@@ -1,4 +1,4 @@
-package com.chase.kudzie.chasemusic.ui.albumsongs
+package com.chase.kudzie.chasemusic.ui.albumdetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,12 +11,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class AlbumSongsViewModel @Inject constructor(
+class AlbumDetailsViewModel @Inject constructor(
     private val retrieveSongsByAlbum: GetSongsByAlbum
 ) : ViewModel() {
 
     private val _songs = MutableLiveData<List<Song>>()
-    val song: LiveData<List<Song>> = _songs
+    val songs: LiveData<List<Song>> = _songs
 
     fun getSongsByAlbum(albumId: Long) {
         viewModelScope.launch(Dispatchers.IO) {

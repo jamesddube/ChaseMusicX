@@ -109,8 +109,14 @@ class MainActivity :
                     R.id.songs,
                     R.id.playlists,
                     R.id.albums,
-                    R.id.artists -> bottomNav.show()
-                    else -> bottomNav.hide()
+                    R.id.artists -> {
+                        bottomNav.show()
+                        recalculateLayout(true)
+                    }
+                    else -> {
+                        bottomNav.hide()
+                        recalculateLayout(false)
+                    }
                 }
             }
 
@@ -118,26 +124,34 @@ class MainActivity :
             behavior = BottomSheetBehavior.from(layoutBottomSheet.playerBottomSheet)
             behavior.addBottomSheetCallback(bottomSheetCallback)
 
-            layoutBottomSheet.playerBottomSheet.viewTreeObserver.addOnGlobalLayoutListener(object :
-                ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    behavior.isHideable = false
-                    behavior.peekHeight = bottomNav.height * 2
-
-                    layoutBottomSheet.playerBottomSheet.viewTreeObserver.removeOnGlobalLayoutListener(
-                        this
-                    )
-                }
-            })
-
             //TODO unsafe call, maybe null
             fragmentMiniPlayer =
                 supportFragmentManager.findFragmentById(R.id.player_mini_fragment) as PlayerMiniFragment
 
             fragmentMiniPlayer.view?.setOnClickListener {
-                behavior.state =  BottomSheetBehavior.STATE_EXPANDED
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
+    }
+
+    private fun recalculateLayout(isShowing: Boolean) {
+        binding.layoutBottomSheet.playerBottomSheet.viewTreeObserver.addOnGlobalLayoutListener(
+            object :
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+
+                    behavior.isHideable = false
+                    if (isShowing) {
+                        behavior.peekHeight = binding.bottomNav.height * 2
+                    } else {
+                        behavior.peekHeight = binding.bottomNav.height
+                    }
+
+                    binding.layoutBottomSheet.playerBottomSheet.viewTreeObserver.removeOnGlobalLayoutListener(
+                        this
+                    )
+                }
+            })
     }
 
     override fun onHasPermissionsChanged(hasPermissions: Boolean) {
