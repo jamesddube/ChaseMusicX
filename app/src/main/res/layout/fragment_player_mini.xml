@@ -34,22 +34,33 @@
             app:placeholder="@{@drawable/placeholder}"
             tools:srcCompat="@tools:sample/avatars[4]" />
 
-        <TextView
-            android:id="@+id/song_name"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:singleLine="true"
-            android:text="@{metadata.title}"
-            android:textAppearance="?attr/textAppearanceSubtitle2"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="@+id/album_artwork"
             app:layout_constraintEnd_toStartOf="@+id/play_pause_btn"
             app:layout_constraintStart_toEndOf="@+id/album_artwork"
-            app:layout_constraintTop_toTopOf="@+id/album_artwork"
-            tools:text="Take Care(feat. Rihanna)" />
+            app:layout_constraintTop_toTopOf="@+id/album_artwork">
+
+            <TextView
+                android:id="@+id/song_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@{metadata.title}"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                tools:text="Take Care(feat. Rihanna)" />
+        </LinearLayout>
+
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/play_pause_btn"

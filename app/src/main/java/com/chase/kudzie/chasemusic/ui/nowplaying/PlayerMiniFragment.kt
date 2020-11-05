@@ -63,6 +63,8 @@ class PlayerMiniFragment : Fragment() {
                 mediaProvider.playPause()
             }
 
+            songName.isSelected = true
+
         }
     }
 

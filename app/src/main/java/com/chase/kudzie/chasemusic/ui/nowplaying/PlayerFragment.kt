@@ -74,6 +74,8 @@ class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
                 mediaProvider.playPause()
             }
 
+            songName.isSelected = true
+
 
             musicSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(

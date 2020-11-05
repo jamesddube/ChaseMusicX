@@ -21,10 +21,8 @@ import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.extensions.themeColor
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
 import com.chase.kudzie.chasemusic.media.IMediaProvider
-import com.chase.kudzie.chasemusic.ui.albumdetails.AlbumDetailsFragmentArgs
 import com.chase.kudzie.chasemusic.ui.albumdetails.adapters.DetailSongsAdapter
 import com.chase.kudzie.chasemusic.ui.albums.AlbumViewModel
-import com.chase.kudzie.chasemusic.ui.albums.AlbumsFragmentDirections
 import com.chase.kudzie.chasemusic.ui.artistdetails.adapters.DetailAlbumsAdapter
 import com.chase.kudzie.chasemusic.ui.artists.ArtistsViewModel
 import com.chase.kudzie.chasemusic.util.loadListener
