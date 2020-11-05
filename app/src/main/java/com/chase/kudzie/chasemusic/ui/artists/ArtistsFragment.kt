@@ -5,11 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import com.chase.kudzie.chasemusic.R
 import com.chase.kudzie.chasemusic.databinding.FragmentArtistsBinding
 import com.chase.kudzie.chasemusic.domain.model.Artist
+import com.chase.kudzie.chasemusic.extensions.themeColor
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
+import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialElevationScale
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -53,13 +60,28 @@ class ArtistsFragment : Fragment(),
                                 submitList(artists)
                             }
                     }
-                }
-            )
+                })
+
+           postponeEnterTransition()
+           view.doOnPreDraw { startPostponedEnterTransition() }
         }
     }
 
-    private fun onArtistClick(artist: Artist) {
-        //Todo handle click
+    private fun onArtistClick(view: View, artist: Artist) {
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = resources.getInteger(R.integer.motion_duration_large).toLong()
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = resources.getInteger(R.integer.motion_duration_large).toLong()
+        }
+
+        val extras = FragmentNavigatorExtras(
+            view to "artist_shared_element"
+        )
+
+        val action = ArtistsFragmentDirections.actionArtistsToArtistDetails(artist.id)
+        view.findNavController().navigate(action, extras)
+
     }
 
     override fun onDestroy() {

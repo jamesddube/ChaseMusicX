@@ -8,8 +8,8 @@ import com.chase.kudzie.chasemusic.databinding.ItemSongDetailBinding
 import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.model.SongDiff
 
-class AlbumSongsAdapter(val onSongClick: (Song) -> Unit) :
-    ListAdapter<Song, AlbumSongsAdapter.ItemHolder>(SongDiff) {
+class DetailSongsAdapter(val onSongClick: (Song) -> Unit) :
+    ListAdapter<Song, DetailSongsAdapter.ItemHolder>(SongDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(

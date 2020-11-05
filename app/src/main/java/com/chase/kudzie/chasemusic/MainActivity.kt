@@ -14,14 +14,13 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.chase.kudzie.chasemusic.base.BaseActivity
 import com.chase.kudzie.chasemusic.databinding.ActivityMainBinding
-import com.chase.kudzie.chasemusic.databinding.FragmentPlayerMiniBinding
 import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
 import com.chase.kudzie.chasemusic.extensions.hide
+import com.chase.kudzie.chasemusic.extensions.playPause
+import com.chase.kudzie.chasemusic.extensions.show
 import com.chase.kudzie.chasemusic.media.IMediaProvider
 import com.chase.kudzie.chasemusic.media.MediaGateway
 import com.chase.kudzie.chasemusic.media.connection.OnConnectionChangedListener
-import com.chase.kudzie.chasemusic.extensions.playPause
-import com.chase.kudzie.chasemusic.extensions.show
 import com.chase.kudzie.chasemusic.media.model.MediaMetadata
 import com.chase.kudzie.chasemusic.media.model.MediaPlaybackState
 import com.chase.kudzie.chasemusic.ui.nowplaying.PlayerMiniFragment
@@ -33,7 +32,6 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 

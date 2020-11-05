@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -18,7 +19,7 @@ import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.extensions.themeColor
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
 import com.chase.kudzie.chasemusic.media.IMediaProvider
-import com.chase.kudzie.chasemusic.ui.albumdetails.adapters.AlbumSongsAdapter
+import com.chase.kudzie.chasemusic.ui.albumdetails.adapters.DetailSongsAdapter
 import com.chase.kudzie.chasemusic.ui.albums.AlbumViewModel
 import com.chase.kudzie.chasemusic.ui.artists.ArtistsViewModel
 import com.chase.kudzie.chasemusic.util.loadListener
@@ -95,7 +96,7 @@ class AlbumDetailsFragment : Fragment() {
 
             albumDetailViewModel.songs.observe(viewLifecycleOwner, { songs ->
                 songsList.apply {
-                    adapter = AlbumSongsAdapter(::onSongClick).apply {
+                    adapter = DetailSongsAdapter(::onSongClick).apply {
                         submitList(songs)
                     }
                 }
@@ -128,6 +129,8 @@ class AlbumDetailsFragment : Fragment() {
                 scrimColor = Color.TRANSPARENT
                 setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
             }
+
+            view.doOnPreDraw { startPostponedEnterTransition() }
 
         }
     }

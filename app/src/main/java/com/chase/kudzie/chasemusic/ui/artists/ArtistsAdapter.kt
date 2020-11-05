@@ -22,7 +22,7 @@ import com.chase.kudzie.chasemusic.util.setGradientOnView
 import kotlinx.android.synthetic.main.item_song.view.*
 
 class ArtistsAdapter(
-    val artistClick: (Artist) -> Unit,
+    val artistClick: (View, Artist) -> Unit,
     val context: Activity
 ) :
     ListAdapter<Artist, ArtistsAdapter.ItemHolder>(ArtistDiff) {
@@ -65,7 +65,7 @@ class ArtistsAdapter(
 
         fun click(artist: Artist) {
             itemView.setOnClickListener {
-                artistClick(artist)
+                artistClick(itemView, artist)
             }
         }
     }

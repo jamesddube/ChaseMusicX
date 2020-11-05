@@ -18,7 +18,11 @@
         android:id="@+id/artists"
         android:name="com.chase.kudzie.chasemusic.ui.artists.ArtistsFragment"
         android:label="ArtistsFragment"
-        tools:layout="@layout/fragment_artists"/>
+        tools:layout="@layout/fragment_artists">
+        <action
+            android:id="@+id/action_artists_to_artistDetails"
+            app:destination="@id/artistDetails" />
+    </fragment>
     <fragment
         android:id="@+id/playlists"
         android:name="com.chase.kudzie.chasemusic.ui.playlists.PlaylistsFragment"
@@ -38,5 +42,19 @@
             android:name="album_id"
             app:argType="long"
             android:defaultValue="-1L" />
+    </fragment>
+    <fragment
+        android:id="@+id/artistDetails"
+        android:name="com.chase.kudzie.chasemusic.ui.artistdetails.ArtistDetailsFragment"
+        android:label="ArtistDetailsFragment"
+        tools:layout="@layout/fragment_artist_details"
+        >
+        <argument
+            android:name="artist_id"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_artistDetails_to_albumDetails"
+            app:destination="@id/albumDetails" />
     </fragment>
 </navigation>

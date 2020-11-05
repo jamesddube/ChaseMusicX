@@ -11,7 +11,6 @@ import com.chase.kudzie.chasemusic.domain.repository.DeezerRepository
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
 import kotlinx.coroutines.*
 import java.io.InputStream
-import java.lang.RuntimeException
 
 class ArtistDataFetcher(
     val artist: Artist,
@@ -37,7 +36,11 @@ class ArtistDataFetcher(
                     }
 
                 val deezerArtist =
-                    async { deezerRepository.getArtistInformation(artistName = cleanArtist) }.await()
+                    withContext(Dispatchers.Default) {
+                        deezerRepository.getArtistInformation(
+                            artistName = cleanArtist
+                        )
+                    }
                 yield()
                 val image = retrieveBestQuality(deezerArtist)
                 yield()

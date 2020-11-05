@@ -59,7 +59,7 @@ fun FloatingActionButton.bindPlayPauseIcon(isPlaying: Boolean) {
 }
 
 @BindingAdapter("play_pause_btn")
-fun ImageButton.bindPlayPlauseIcon(isPlaying: Boolean) {
+fun ImageButton.bindPlayPauseIcon(isPlaying: Boolean) {
     if (isPlaying) {
         this.setImageResource(R.drawable.ic_pause_24)
     } else {
@@ -100,6 +100,19 @@ fun ImageView.bindPlaylistIcon(name: String) {
 fun TextView.setPlaylistCount(count: Int) {
     this.text = "$count songs"
 }
+
+@SuppressLint("SetTextI18n")
+@BindingAdapter("song_count")
+fun TextView.setSongCount(count: Int) {
+    this.text = "$count songs"
+}
+
+@SuppressLint("SetTextI18n")
+@BindingAdapter("album_count")
+fun TextView.setAlbumCount(count: Int) {
+    this.text = "$count albums"
+}
+
 
 @BindingAdapter("artist_artwork")
 fun ImageView.bindArtistArtwork(artist: Artist?) {
