@@ -19,7 +19,7 @@ import com.chase.kudzie.chasemusic.domain.model.Song
  * */
 
 fun Cursor.toAlbum(): Album {
-    val id = getLong(BaseColumns._ID)
+    val id = getLong(0)
     val artistId = getLong(ARTIST_ID)
     val artistName = getStringOrNull(ARTIST) ?: ""
     val title = getStringOrNull(ALBUM) ?: ""

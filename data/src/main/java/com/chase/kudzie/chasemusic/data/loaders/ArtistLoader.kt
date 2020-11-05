@@ -58,13 +58,20 @@ internal class ArtistLoader(
 
     @SuppressLint("Recycle")
     fun getArtistAlbums(id: Long): Cursor {
-        val uri = MediaStore.Audio.Artists.Albums.getContentUri("external", id)
-        val projection = AlbumLoader.projection
-        val sortOrder = AlbumLoader.sortOrder
+        val albumsUri = MediaStore.Audio.Artists.Albums.getContentUri("external", id)
+        val projection = arrayOf(
+            MediaStore.Audio.AlbumColumns.ALBUM_ID,
+            MediaStore.Audio.AlbumColumns.ALBUM,
+            MediaStore.Audio.AlbumColumns.NUMBER_OF_SONGS,
+            MediaStore.Audio.AlbumColumns.FIRST_YEAR,
+            MediaStore.Audio.AlbumColumns.ARTIST,
+            MediaStore.Audio.AlbumColumns.ARTIST_ID
+        )
+        val sortOrder = MediaStore.Audio.Albums.DEFAULT_SORT_ORDER
         val selection = null
         val selectionArgs = null
 
-        return contentResolver.query(uri, projection, selection, selectionArgs, sortOrder)!!
+        return contentResolver.query(albumsUri, projection, selection, selectionArgs, sortOrder)!!
     }
 
     @SuppressLint("Recycle")
