@@ -78,6 +78,6 @@ class QueueSongEntityTest {
         //I've picked a random song I know exists.
         val single = queuedSongs.first { song -> song.id == 3.toLong() }
 
-        assert(single.artistName == "Galantis")
+        assert(single.artist == "Galantis")
     }
 }

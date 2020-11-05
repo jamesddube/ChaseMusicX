@@ -1,10 +1,12 @@
 package com.chase.kudzie.chasemusic.data.factory
 
+import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
+import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.domain.model.Song
 
 object MediaItemFactory {
 
-    fun makeFakeSongs(): List<Song> {
+    fun makeFakeSongs(): List<MediaItem> {
         return listOf(
             Song(
                 id = 1,
@@ -61,7 +63,7 @@ object MediaItemFactory {
                 positionInQueue = 5,
                 albumId = 4
             )
-        )
+        ).map { song -> song.toMediaItem() }
     }
 
     fun makeFakeAlbum1() {
@@ -70,5 +72,18 @@ object MediaItemFactory {
 
     fun makeFakeAlbum2() {
 
+    }
+
+    private fun Song.toMediaItem(): MediaItem {
+        return MediaItem(
+            MediaIdCategory.makeSongsCategory(this.id),
+            this.id,
+            this.title,
+            this.artistName,
+            this.albumName,
+            this.duration,
+            this.albumId,
+            this.positionInQueue
+        )
     }
 }

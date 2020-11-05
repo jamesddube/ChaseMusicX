@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.chase.kudzie.chasemusic.databinding.ItemAlbumsSongDetailBinding
+import com.chase.kudzie.chasemusic.databinding.ItemSongDetailBinding
 import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.model.SongDiff
 
@@ -13,7 +13,7 @@ class AlbumSongsAdapter(val onSongClick: (Song) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         return ItemHolder(
-            ItemAlbumsSongDetailBinding.inflate(
+            ItemSongDetailBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -27,7 +27,7 @@ class AlbumSongsAdapter(val onSongClick: (Song) -> Unit) :
     }
 
 
-    inner class ItemHolder(private val binding: ItemAlbumsSongDetailBinding) :
+    inner class ItemHolder(private val binding: ItemSongDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(song: Song) {
