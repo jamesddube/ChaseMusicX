@@ -10,9 +10,7 @@
             name="artist"
             type="com.chase.kudzie.chasemusic.domain.model.Artist" />
 
-        <variable
-            name="loadListener"
-            type="com.chase.kudzie.chasemusic.util.GlideDrawableLoadListener" />
+
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -60,7 +58,6 @@
                     android:contentDescription="@string/artist_image"
                     android:scaleType="centerCrop"
                     app:artist_artwork="@{artist}"
-                    app:load_listener="@{loadListener}"
                     tools:srcCompat="@tools:sample/avatars[4]" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -106,8 +103,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="4dp"
                 android:gravity="end"
-                app:album_count="@{artist.albumCount}"
                 android:textAppearance="?attr/textAppearanceBody1"
+                app:album_count="@{artist.albumCount}"
                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/artist_name"
@@ -118,12 +115,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                app:song_count="@{artist.songCount}"
                 android:textAppearance="?attr/textAppearanceBody1"
                 app:layout_constraintBottom_toBottomOf="@+id/album_count"
                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
                 app:layout_constraintStart_toStartOf="@+id/guideline8"
                 app:layout_constraintTop_toTopOf="@+id/album_count"
+                app:song_count="@{artist.songCount}"
                 tools:text="30 Songs" />
 
             <TextView
@@ -133,6 +130,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/albums"
                 android:textAppearance="?attr/textAppearanceBody1"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/album_count" />
@@ -140,10 +138,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/album_list"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginTop="8dp"
                 android:clipToPadding="false"
                 android:orientation="horizontal"
+                android:transitionGroup="true"
                 app:hasFixedSize="@{true}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -170,6 +169,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/songs"
                 android:textAppearance="?attr/textAppearanceBody1"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/album_list" />

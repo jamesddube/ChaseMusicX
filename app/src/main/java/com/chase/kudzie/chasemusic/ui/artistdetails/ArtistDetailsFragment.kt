@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -25,6 +26,7 @@ import com.chase.kudzie.chasemusic.ui.albumdetails.adapters.DetailSongsAdapter
 import com.chase.kudzie.chasemusic.ui.albums.AlbumViewModel
 import com.chase.kudzie.chasemusic.ui.artistdetails.adapters.DetailAlbumsAdapter
 import com.chase.kudzie.chasemusic.ui.artists.ArtistsViewModel
+import com.chase.kudzie.chasemusic.util.artistLoadListener
 import com.chase.kudzie.chasemusic.util.loadListener
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialElevationScale
@@ -83,14 +85,14 @@ class ArtistDetailsFragment : Fragment() {
         binding.apply {
 
             artistViewModel.artist.observe(viewLifecycleOwner, { artist ->
+                artistLoadListener {
+
+                }
+                startPostponedEnterTransition()
                 this.artist = artist
                 //Fetch our data
                 artistDetailsViewModel.getAlbumsByArtist(artist.id)
                 artistDetailsViewModel.getSongsByArtist(artist.id)
-
-                this.loadListener = loadListener {
-                    startPostponedEnterTransition()
-                }
 
             })
 
@@ -138,13 +140,17 @@ class ArtistDetailsFragment : Fragment() {
                 setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
             }
 
+            view.doOnPreDraw { startPostponedEnterTransition() }
+
         }
     }
 
     private fun onAlbumClick(view: View, album: Album) {
+
         exitTransition = MaterialElevationScale(false).apply {
             duration = resources.getInteger(R.integer.motion_duration_large).toLong()
         }
+
         reenterTransition = MaterialElevationScale(true).apply {
             duration = resources.getInteger(R.integer.motion_duration_large).toLong()
         }

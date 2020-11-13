@@ -114,13 +114,16 @@ fun TextView.setAlbumCount(count: Int) {
 }
 
 
-@BindingAdapter("artist_artwork")
-fun ImageView.bindArtistArtwork(artist: Artist?) {
-    Glide.with(this)
+@BindingAdapter("artist_artwork","artist_load_listener", requireAll = false)
+fun ImageView.bindArtistArtwork(artist: Artist?, loadListener: GlideBitmapLoadListener?) {
+    val request = Glide.with(this)
         .asBitmap()
         .load(artist)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .into(object : CustomTarget<Bitmap>() {
+        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+        .onlyRetrieveFromCache(true)
+        if (loadListener != null) request.listener(loadListener)
+
+        request.into(object : CustomTarget<Bitmap>() {
             override fun onResourceReady(
                 resource: Bitmap,
                 transition: Transition<in Bitmap>?
@@ -134,7 +137,7 @@ fun ImageView.bindArtistArtwork(artist: Artist?) {
             override fun onLoadFailed(errorDrawable: Drawable?) {
                 Glide.with(this@bindArtistArtwork.context)
                     .asBitmap()
-                    .load(R.drawable.placeholder)
+                    .load(R.drawable.artists_placeholder)
                     .into(object : CustomTarget<Bitmap>() {
                         override fun onResourceReady(
                             resource: Bitmap,
@@ -155,6 +158,7 @@ fun View.setGradient(artist: Artist) {
     Glide.with(this.context)
         .asBitmap()
         .load(artist)
+        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
         .onlyRetrieveFromCache(true)
         .into(object : CustomTarget<Bitmap>() {
             override fun onResourceReady(
@@ -170,7 +174,7 @@ fun View.setGradient(artist: Artist) {
             override fun onLoadFailed(errorDrawable: Drawable?) {
                 Glide.with(this@setGradient.context)
                     .asBitmap()
-                    .load(R.drawable.placeholder)
+                    .load(R.drawable.artists_placeholder)
                     .into(object : CustomTarget<Bitmap>() {
                         override fun onResourceReady(
                             resource: Bitmap,
