@@ -23,7 +23,6 @@ import javax.inject.Singleton
 )
 interface SharedComponent {
     //A bit hacky
-
     @ApplicationContext
     fun context(): Context
 
