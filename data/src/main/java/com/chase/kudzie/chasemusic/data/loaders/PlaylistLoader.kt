@@ -30,4 +30,13 @@ internal class PlaylistLoader(
 
         return contentResolver.query(uri, projection, selection, selectionArgs, sortOrder)!!
     }
+
+    @SuppressLint("Recycle")
+    fun getPlaylistCount(playlistId: Long): Cursor {
+        val uri: Uri = MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId)
+        val selection = "${MediaStore.Audio.AudioColumns.IS_MUSIC} = 1 " +
+                "AND ${MediaStore.Audio.AudioColumns.TITLE} != '' "
+
+        return contentResolver.query(uri, arrayOf(_ID), selection, null, null)!!
+    }
 }
