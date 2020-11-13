@@ -20,28 +20,40 @@
         android:layout_height="56dp"
         android:background="?attr/colorSurface">
 
-        <ImageView
-            android:id="@+id/album_artwork"
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_artwork"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:album_artwork="@{metadata.albumId}"
+            app:cardBackgroundColor="@color/colorBackgroundFallback"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:placeholder="@{@drawable/placeholder}"
-            tools:srcCompat="@tools:sample/avatars[4]" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/album_artwork"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:album_artwork="@{metadata.albumId}"
+                app:placeholder="@{@drawable/song_placeholder}"
+                tools:srcCompat="@tools:sample/avatars[4]" />
+        </com.google.android.material.card.MaterialCardView>
+
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/album_artwork"
+            app:layout_constraintBottom_toBottomOf="@+id/card_artwork"
             app:layout_constraintEnd_toStartOf="@+id/play_pause_btn"
-            app:layout_constraintStart_toEndOf="@+id/album_artwork"
-            app:layout_constraintTop_toTopOf="@+id/album_artwork">
+            app:layout_constraintStart_toEndOf="@+id/card_artwork"
+            app:layout_constraintTop_toTopOf="@+id/card_artwork">
 
             <TextView
                 android:id="@+id/song_name"
@@ -69,9 +81,9 @@
             android:layout_marginEnd="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/album_artwork"
+            app:layout_constraintBottom_toBottomOf="@+id/card_artwork"
             app:layout_constraintEnd_toStartOf="@+id/skip_to_next_btn"
-            app:layout_constraintTop_toTopOf="@+id/album_artwork"
+            app:layout_constraintTop_toTopOf="@+id/card_artwork"
             app:play_pause_btn="@{playbackState.playing}"
             app:srcCompat="@drawable/ic_pause_24" />
 
@@ -82,9 +94,9 @@
             android:layout_marginEnd="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/album_artwork"
+            app:layout_constraintBottom_toBottomOf="@+id/card_artwork"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/album_artwork"
+            app:layout_constraintTop_toTopOf="@+id/card_artwork"
             app:srcCompat="@drawable/ic_skip_next_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

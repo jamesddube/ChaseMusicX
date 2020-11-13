@@ -65,6 +65,7 @@
                     android:scaleType="centerCrop"
                     app:album_artwork="@{album.id}"
                     app:load_listener="@{loadListener}"
+                    app:placeholder="@{@drawable/album_placeholder}"
                     tools:srcCompat="@tools:sample/avatars[4]" />
 
             </com.google.android.material.card.MaterialCardView>
