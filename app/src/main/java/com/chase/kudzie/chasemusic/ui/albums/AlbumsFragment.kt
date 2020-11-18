@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,9 +13,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.chase.kudzie.chasemusic.R
 import com.chase.kudzie.chasemusic.databinding.FragmentAlbumsBinding
 import com.chase.kudzie.chasemusic.domain.model.Album
-import com.chase.kudzie.chasemusic.extensions.themeColor
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
-import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialElevationScale
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject

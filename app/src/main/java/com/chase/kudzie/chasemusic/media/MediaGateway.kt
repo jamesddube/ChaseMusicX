@@ -20,8 +20,9 @@ import com.chase.kudzie.chasemusic.media.controller.MediaControllerCallback
 import com.chase.kudzie.chasemusic.media.model.MediaMetadata
 import com.chase.kudzie.chasemusic.media.model.MediaPlaybackState
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import java.lang.IllegalStateException
 
 
@@ -44,11 +45,10 @@ class MediaGateway(
     val callback: MediaControllerCompat.Callback = MediaControllerCallback(this)
     private var job: Job? = null
 
-    private val connectionPublisher = ConflatedBroadcastChannel<ConnectionState>()
+    private val connectionFlow = MutableSharedFlow<ConnectionState>()
 
     private val metadataLiveData = MutableLiveData<MediaMetadata>()
     private val playbackStateLiveData = MutableLiveData<MediaPlaybackState>()
-    private val someFlow = MutableStateFlow<Song?>(null)
 
     fun connect() {
         if (!canReadStorage(context)) {
@@ -57,8 +57,8 @@ class MediaGateway(
         job?.cancel()
 
         job = launch {
-            for (state in connectionPublisher.openSubscription()) {
-                when (state) {
+            connectionFlow.collect { state ->
+                when(state){
                     ConnectionState.CONNECTED -> {
                         onConnectionChanged.onConnectionSuccess(mediaBrowser, callback)
                     }
@@ -104,7 +104,9 @@ class MediaGateway(
     }
 
     override fun onConnectionStateChanged(state: ConnectionState) {
-        connectionPublisher.offer(state)
+        launch(Dispatchers.IO){
+            connectionFlow.emit(state)
+        }
     }
 
     fun observeMetadata(): LiveData<MediaMetadata> = metadataLiveData
