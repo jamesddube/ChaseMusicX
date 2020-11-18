@@ -10,6 +10,7 @@ import android.view.ViewTreeObserver
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.chase.kudzie.chasemusic.base.BaseActivity
@@ -102,18 +103,20 @@ class MainActivity :
                 Navigation.findNavController(this@MainActivity, R.id.nav_host)
             bottomNav.setupWithNavController(navigationController)
 
-            navigationController.addOnDestinationChangedListener { _, destination, _ ->
-                when (destination.id) {
-                    R.id.songs,
-                    R.id.playlists,
-                    R.id.albums,
-                    R.id.artists -> {
-                        bottomNav.show()
-                        recalculateLayout(true)
-                    }
-                    else -> {
-                        bottomNav.hide()
-                        recalculateLayout(false)
+            lifecycleScope.launchWhenResumed {
+                navigationController.addOnDestinationChangedListener { _, destination, _ ->
+                    when (destination.id) {
+                        R.id.songs,
+                        R.id.playlists,
+                        R.id.albums,
+                        R.id.artists -> {
+                            bottomNav.show()
+                            recalculateLayout(true)
+                        }
+                        else -> {
+                            bottomNav.hide()
+                            recalculateLayout(false)
+                        }
                     }
                 }
             }
