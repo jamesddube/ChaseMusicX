@@ -31,7 +31,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:cardBackgroundColor="@color/colorBackgroundFallback"
+            app:cardBackgroundColor="?colorSurface"
             app:cardCornerRadius="4dp"
             app:cardElevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:album_artwork="@{song.albumId}"
-                app:placeholder="@{@drawable/placeholder}"
+                app:placeholder="@{@drawable/song_placeholder}"
                 tools:srcCompat="@tools:sample/avatars[4]" />
         </com.google.android.material.card.MaterialCardView>
 
