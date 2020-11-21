@@ -14,7 +14,7 @@ import com.chase.kudzie.chasemusic.databinding.ItemPlaylistBinding
 import com.chase.kudzie.chasemusic.domain.model.Playlist
 import com.chase.kudzie.chasemusic.model.PlaylistDiff
 
-class PlaylistAdapter(val onPlaylistClick: (Playlist) -> Unit) :
+class PlaylistAdapter(val onPlaylistClick: (View, Playlist) -> Unit) :
     ListAdapter<Playlist, PlaylistAdapter.ItemHolder>(PlaylistDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
@@ -47,7 +47,7 @@ class PlaylistAdapter(val onPlaylistClick: (Playlist) -> Unit) :
 
         private fun click(playlist: Playlist) {
             itemView.setOnClickListener {
-                onPlaylistClick(playlist)
+                onPlaylistClick(itemView, playlist)
             }
         }
     }

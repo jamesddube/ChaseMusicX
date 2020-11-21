@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import com.chase.kudzie.chasemusic.databinding.FragmentPlaylistsBinding
 import com.chase.kudzie.chasemusic.domain.model.Playlist
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
+import com.chase.kudzie.chasemusic.ui.albums.AlbumsFragmentDirections
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -59,8 +61,14 @@ class PlaylistsFragment : Fragment() {
         }
     }
 
-    private fun onPlaylistClick(playlist: Playlist) {
-        //Todo handle click
+    private fun onPlaylistClick(view: View, playlist: Playlist) {
+        val directions =
+            PlaylistsFragmentDirections.actionPlaylistsToPlaylistDetailsFragment(
+                playlist.id,
+                playlist.name
+            )
+
+        view.findNavController().navigate(directions)
     }
 
     override fun onDestroy() {

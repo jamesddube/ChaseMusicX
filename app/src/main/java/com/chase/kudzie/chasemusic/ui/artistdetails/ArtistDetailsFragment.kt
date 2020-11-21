@@ -23,11 +23,9 @@ import com.chase.kudzie.chasemusic.extensions.themeColor
 import com.chase.kudzie.chasemusic.injection.ViewModelFactory
 import com.chase.kudzie.chasemusic.media.IMediaProvider
 import com.chase.kudzie.chasemusic.ui.albumdetails.adapters.DetailSongsAdapter
-import com.chase.kudzie.chasemusic.ui.albums.AlbumViewModel
 import com.chase.kudzie.chasemusic.ui.artistdetails.adapters.DetailAlbumsAdapter
 import com.chase.kudzie.chasemusic.ui.artists.ArtistsViewModel
 import com.chase.kudzie.chasemusic.util.artistLoadListener
-import com.chase.kudzie.chasemusic.util.loadListener
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialElevationScale
 import dagger.android.support.AndroidSupportInjection
@@ -158,8 +156,8 @@ class ArtistDetailsFragment : Fragment() {
         val extras = FragmentNavigatorExtras(
             view to "album_shared_element"
         )
-        val action = ArtistDetailsFragmentDirections.actionArtistDetailsToAlbumDetails(album.id)
-        view.findNavController().navigate(action, extras)
+        val directions = ArtistDetailsFragmentDirections.actionArtistDetailsToAlbumDetails(album.id)
+        view.findNavController().navigate(directions, extras)
     }
 
     private fun onSongClick(song: Song) {

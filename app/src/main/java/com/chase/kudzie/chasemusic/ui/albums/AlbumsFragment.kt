@@ -77,7 +77,7 @@ class AlbumsFragment : Fragment() {
         val extras = FragmentNavigatorExtras(
             view to "album_shared_element"
         )
-        val action = AlbumsFragmentDirections.actionAlbumsToAlbumDetails(album.id)
-        view.findNavController().navigate(action, extras)
+        val directions = AlbumsFragmentDirections.actionAlbumsToAlbumDetails(album.id)
+        view.findNavController().navigate(directions, extras)
     }
 }

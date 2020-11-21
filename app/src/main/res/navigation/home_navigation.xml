@@ -27,7 +27,11 @@
         android:id="@+id/playlists"
         android:name="com.chase.kudzie.chasemusic.ui.playlists.PlaylistsFragment"
         android:label="PlaylistsFragment"
-        tools:layout="@layout/fragment_playlists"/>
+        tools:layout="@layout/fragment_playlists">
+        <action
+            android:id="@+id/action_playlists_to_playlistDetailsFragment"
+            app:destination="@id/playlistDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/songs"
         android:name="com.chase.kudzie.chasemusic.ui.songs.SongsFragment"
@@ -37,24 +41,37 @@
         android:id="@+id/albumDetails"
         android:name="com.chase.kudzie.chasemusic.ui.albumdetails.AlbumDetailsFragment"
         android:label="AlbumSongsFragment"
-        tools:layout="@layout/fragment_album_details" >
+        tools:layout="@layout/fragment_album_details">
         <argument
             android:name="album_id"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/artistDetails"
         android:name="com.chase.kudzie.chasemusic.ui.artistdetails.ArtistDetailsFragment"
         android:label="ArtistDetailsFragment"
-        tools:layout="@layout/fragment_artist_details"
-        >
+        tools:layout="@layout/fragment_artist_details">
         <argument
             android:name="artist_id"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <action
             android:id="@+id/action_artistDetails_to_albumDetails"
             app:destination="@id/albumDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/playlistDetailsFragment"
+        android:name="com.chase.kudzie.chasemusic.ui.playlistdetails.PlaylistDetailsFragment"
+        android:label="PlaylistDetailsFragment"
+        tools:layout="@layout/fragment_playlist_details">
+        <argument
+            android:name="playlistId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="playlistTitle"
+            app:argType="string"
+            android:defaultValue="Playlist" />
     </fragment>
 </navigation>
