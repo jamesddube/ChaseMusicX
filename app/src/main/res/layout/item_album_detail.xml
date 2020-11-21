@@ -21,7 +21,7 @@
             android:id="@+id/card_artwork"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            app:cardBackgroundColor="@color/colorBackgroundFallback"
+            app:cardBackgroundColor="?colorSurface"
             app:cardCornerRadius="4dp"
             app:cardElevation="8dp"
             app:layout_constraintDimensionRatio="1:1"
