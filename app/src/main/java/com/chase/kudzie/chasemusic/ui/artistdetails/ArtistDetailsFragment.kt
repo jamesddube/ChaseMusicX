@@ -47,10 +47,6 @@ class ArtistDetailsFragment : Fragment() {
         viewModelFactory
     }
 
-    private val albumViewModel: AlbumViewModel by viewModels {
-        viewModelFactory
-    }
-
     private val args: ArtistDetailsFragmentArgs by navArgs()
 
     private lateinit var mediaProvider: IMediaProvider
@@ -102,6 +98,8 @@ class ArtistDetailsFragment : Fragment() {
                         submitList(albums)
                     }
                 }
+
+                this.albumSize = albums.size
             })
 
             artistDetailsViewModel.songs.observe(viewLifecycleOwner, { songs ->
@@ -110,6 +108,8 @@ class ArtistDetailsFragment : Fragment() {
                         submitList(songs)
                     }
                 }
+
+                this.songSize = songs.size
             })
 
             btnShuffle.setOnClickListener {

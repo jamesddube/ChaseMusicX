@@ -104,53 +104,53 @@ fun TextView.setPlaylistCount(count: Int) {
 @SuppressLint("SetTextI18n")
 @BindingAdapter("song_count")
 fun TextView.setSongCount(count: Int) {
-    this.text = "$count songs"
+    this.text = if (count > 1) "$count songs" else "$count song"
 }
 
 @SuppressLint("SetTextI18n")
 @BindingAdapter("album_count")
 fun TextView.setAlbumCount(count: Int) {
-    this.text = "$count albums"
+    this.text = if (count > 1) "$count albums" else "$count album"
 }
 
 
-@BindingAdapter("artist_artwork","artist_load_listener", requireAll = false)
+@BindingAdapter("artist_artwork", "artist_load_listener", requireAll = false)
 fun ImageView.bindArtistArtwork(artist: Artist?, loadListener: GlideBitmapLoadListener?) {
     val request = Glide.with(this)
         .asBitmap()
         .load(artist)
         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
         .onlyRetrieveFromCache(true)
-        if (loadListener != null) request.listener(loadListener)
+    if (loadListener != null) request.listener(loadListener)
 
-        request.into(object : CustomTarget<Bitmap>() {
-            override fun onResourceReady(
-                resource: Bitmap,
-                transition: Transition<in Bitmap>?
-            ) {
-                this@bindArtistArtwork.setImageBitmap(resource)
-            }
+    request.into(object : CustomTarget<Bitmap>() {
+        override fun onResourceReady(
+            resource: Bitmap,
+            transition: Transition<in Bitmap>?
+        ) {
+            this@bindArtistArtwork.setImageBitmap(resource)
+        }
 
-            override fun onLoadCleared(placeholder: Drawable?) {
-            }
+        override fun onLoadCleared(placeholder: Drawable?) {
+        }
 
-            override fun onLoadFailed(errorDrawable: Drawable?) {
-                Glide.with(this@bindArtistArtwork.context)
-                    .asBitmap()
-                    .load(R.drawable.artists_placeholder)
-                    .into(object : CustomTarget<Bitmap>() {
-                        override fun onResourceReady(
-                            resource: Bitmap,
-                            transition: Transition<in Bitmap>?
-                        ) {
-                            this@bindArtistArtwork.setImageBitmap(resource)
-                        }
+        override fun onLoadFailed(errorDrawable: Drawable?) {
+            Glide.with(this@bindArtistArtwork.context)
+                .asBitmap()
+                .load(R.drawable.artists_placeholder)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        this@bindArtistArtwork.setImageBitmap(resource)
+                    }
 
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                        }
-                    })
-            }
-        })
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+                })
+        }
+    })
 }
 
 @BindingAdapter("palette_bg")

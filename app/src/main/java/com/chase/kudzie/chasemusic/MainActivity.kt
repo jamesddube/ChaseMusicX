@@ -137,8 +137,7 @@ class MainActivity :
 
     private fun recalculateLayout(isShowing: Boolean) {
         binding.layoutBottomSheet.playerBottomSheet.viewTreeObserver.addOnGlobalLayoutListener(
-            object :
-                ViewTreeObserver.OnGlobalLayoutListener {
+            object : ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
 
                     behavior.isHideable = false
