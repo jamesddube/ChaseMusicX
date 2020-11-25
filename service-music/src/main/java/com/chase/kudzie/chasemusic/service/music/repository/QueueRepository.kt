@@ -3,7 +3,7 @@ package com.chase.kudzie.chasemusic.service.music.repository
 import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
 import com.chase.kudzie.chasemusic.service.music.model.PlayableMediaItem
 
-interface QueueRepository {
+internal interface QueueRepository {
 
     fun sortSongs()
 
@@ -11,11 +11,13 @@ interface QueueRepository {
 
     fun isQueueEmpty(): Boolean
 
+    fun onSetRepeatMode()
+
     suspend fun skipToNext(): PlayableMediaItem?
 
     suspend fun skipToPrevious(): PlayableMediaItem?
 
-    fun prepare()
+    suspend fun prepare(): PlayableMediaItem?
 
     suspend fun onPlayFromMediaId(mediaIdCategory: MediaIdCategory): PlayableMediaItem?
 

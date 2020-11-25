@@ -13,6 +13,8 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 
 /**
  * Method checks if device OS is Android 6.0 or greater.
@@ -55,4 +57,8 @@ fun Context.themeColor(
     ).use {
         it.getColor(0, Color.MAGENTA)
     }
+}
+
+inline fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> {
+    return Transformations.distinctUntilChanged(this)
 }

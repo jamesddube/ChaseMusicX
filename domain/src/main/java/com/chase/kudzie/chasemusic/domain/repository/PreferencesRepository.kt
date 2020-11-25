@@ -2,24 +2,24 @@ package com.chase.kudzie.chasemusic.domain.repository
 
 interface PreferencesRepository {
 
-    suspend fun setShuffleMode(shuffleMode: Int)
+    fun setShuffleMode(shuffleMode: Int)
 
-    suspend fun setRepeatMode(repeatMode: Int)
+    fun setRepeatMode(repeatMode: Int)
 
-    suspend fun setCurrentQueuePosition(positionInQueue: Int)
+    fun setCurrentQueuePosition(positionInQueue: Int)
 
-    suspend fun setCurrentPlayMode(playMode: Int)
+    fun setCurrentPlayMode(playMode: Int)
 
-    suspend fun setCurrentSongDurationPos(currentDuration: Long)
+    fun setCurrentSongDurationPos(currentDuration: Long)
 
-    suspend fun getShuffleMode(): Int
+    fun getShuffleMode(): Int
 
-    suspend fun getRepeatMode(): Int
+    fun getRepeatMode(): Int
 
-    suspend fun getCurrentQueuePosition(): Int
+    fun getCurrentQueuePosition(): Int
 
-    suspend fun getCurrentPlayMode(): Int
+    fun getCurrentPlayMode(): Int
 
-    suspend fun getCurrentSongDurationPos(): Long
+    fun getCurrentSongDurationPos(): Long
 
 }

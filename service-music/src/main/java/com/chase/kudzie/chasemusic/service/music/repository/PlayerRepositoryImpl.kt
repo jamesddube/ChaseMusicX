@@ -27,7 +27,7 @@ import javax.inject.Inject
  * @author Kudzai Chasinda
  */
 
-class PlayerRepositoryImpl @Inject constructor(
+internal class PlayerRepositoryImpl @Inject constructor(
     @ServiceContext private val context: Context,
     private val playbackState: MediaPlaybackState,
     private val serviceController: ServiceController,

@@ -3,8 +3,10 @@ package com.chase.kudzie.chasemusic.service.music.injection
 import android.content.ComponentName
 import android.content.Context
 import android.support.v4.media.session.MediaSessionCompat
+import androidx.lifecycle.Lifecycle
 import androidx.media.session.MediaButtonReceiver
 import com.chase.kudzie.chasemusic.service.music.MusicService
+import com.chase.kudzie.chasemusic.service.music.injection.scope.LifecycleService
 import com.chase.kudzie.chasemusic.service.music.injection.scope.PerService
 import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
 import com.chase.kudzie.chasemusic.service.music.repository.*
@@ -13,10 +15,15 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-abstract class MusicServiceModule {
+internal abstract class MusicServiceModule {
 
     @Module
     companion object {
+        @Provides
+        @JvmStatic
+        @LifecycleService
+        internal fun provideLifecycle(instance: MusicService): Lifecycle = instance.lifecycle
+
         @Provides
         @JvmStatic
         @PerService

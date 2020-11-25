@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 
 @PerService
-class MediaMetadata @Inject constructor(
+internal class MediaMetadata @Inject constructor(
     @ApplicationContext private val context: Context,
     private val mediaSession: MediaSessionCompat,
     playerPlaybackState: PlayerPlaybackState

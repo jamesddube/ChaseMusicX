@@ -2,7 +2,7 @@ package com.chase.kudzie.chasemusic.media.model
 
 import android.support.v4.media.session.PlaybackStateCompat
 
-class MediaPlaybackState(private val playbackState: PlaybackStateCompat) {
+class MediaPlaybackState(playbackState: PlaybackStateCompat) {
     val isPlaying = playbackState.state == PlaybackStateCompat.STATE_PLAYING
     val isPaused = playbackState.state == PlaybackStateCompat.STATE_PAUSED
 

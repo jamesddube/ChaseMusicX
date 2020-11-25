@@ -5,24 +5,24 @@ import android.content.Context
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
+import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.extensions.canReadStorage
+import com.chase.kudzie.chasemusic.extensions.distinctUntilChanged
 import com.chase.kudzie.chasemusic.media.connection.ConnectionState
 import com.chase.kudzie.chasemusic.media.connection.IMediaConnectionCallback
 import com.chase.kudzie.chasemusic.media.connection.MusicServiceConnection
 import com.chase.kudzie.chasemusic.media.connection.OnConnectionChangedListener
 import com.chase.kudzie.chasemusic.media.controller.IMediaControllerCallback
 import com.chase.kudzie.chasemusic.media.controller.MediaControllerCallback
-import com.chase.kudzie.chasemusic.media.model.MediaMetadata
-import com.chase.kudzie.chasemusic.media.model.MediaPlaybackState
+import com.chase.kudzie.chasemusic.media.extensions.toPlayableItem
+import com.chase.kudzie.chasemusic.media.model.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import java.lang.IllegalStateException
 
 
@@ -46,9 +46,12 @@ class MediaGateway(
     private var job: Job? = null
 
     private val connectionFlow = MutableSharedFlow<ConnectionState>()
+    private val queueFlow = MutableSharedFlow<List<PlayableMediaItem>>()
 
     private val metadataLiveData = MutableLiveData<MediaMetadata>()
     private val playbackStateLiveData = MutableLiveData<MediaPlaybackState>()
+    private val shuffleModeLiveData = MutableLiveData<MediaShuffleMode>()
+    private val repeatModeLiveData = MutableLiveData<MediaRepeatMode>()
 
     fun connect() {
         if (!canReadStorage(context)) {
@@ -58,7 +61,7 @@ class MediaGateway(
 
         job = launch {
             connectionFlow.collect { state ->
-                when(state){
+                when (state) {
                     ConnectionState.CONNECTED -> {
                         onConnectionChanged.onConnectionSuccess(mediaBrowser, callback)
                     }
@@ -103,12 +106,45 @@ class MediaGateway(
         }
     }
 
+    override fun onShuffleModeChanged(shuffleMode: Int) {
+        if (shuffleMode != -1) {
+            shuffleModeLiveData.value = MediaShuffleMode(shuffleMode)
+        }
+    }
+
+    override fun onRepeatModeChanged(repeatMode: Int) {
+        if (repeatMode != -1) {
+            repeatModeLiveData.value = MediaRepeatMode(repeatMode)
+        }
+    }
+
+    override fun onQueueChanged(queue: MutableList<MediaSessionCompat.QueueItem>?) {
+        if (queue == null)
+            return
+
+        launch(Dispatchers.Default) {
+            val result = queue.map { it.toPlayableItem() }
+            queueFlow.emit(result)
+        }
+    }
+
     override fun onConnectionStateChanged(state: ConnectionState) {
-        launch(Dispatchers.IO){
+        launch(Dispatchers.IO) {
             connectionFlow.emit(state)
         }
     }
 
     fun observeMetadata(): LiveData<MediaMetadata> = metadataLiveData
+        .distinctUntilChanged()
+
     fun observePlaybackState(): LiveData<MediaPlaybackState> = playbackStateLiveData
+        .distinctUntilChanged()
+
+    fun observeShuffleMode(): LiveData<MediaShuffleMode> =
+        shuffleModeLiveData.distinctUntilChanged()
+
+    fun observeRepeatMode(): LiveData<MediaRepeatMode> =
+        repeatModeLiveData.distinctUntilChanged()
+
+    fun observePlayingQueue(): Flow<List<PlayableMediaItem>> = queueFlow.distinctUntilChanged()
 }

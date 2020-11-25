@@ -13,6 +13,14 @@
             name="playbackState"
             type="com.chase.kudzie.chasemusic.media.model.MediaPlaybackState" />
 
+        <variable
+            name="repeatMode"
+            type="com.chase.kudzie.chasemusic.media.model.MediaRepeatMode" />
+
+        <variable
+            name="shuffleMode"
+            type="com.chase.kudzie.chasemusic.media.model.MediaShuffleMode" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,8 +73,8 @@
             android:id="@+id/song_details"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="16dp"
+            android:orientation="vertical"
             app:layout_constraintEnd_toStartOf="@+id/menu_btn"
             app:layout_constraintStart_toStartOf="@+id/guideline12"
             app:layout_constraintTop_toTopOf="@+id/guideline3">
@@ -238,6 +246,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/toggle_repeat_mode_description"
             android:padding="8dp"
+            app:cycle_repeat="@{repeatMode}"
             app:layout_constraintBottom_toBottomOf="@+id/play_pause_btn"
             app:layout_constraintStart_toStartOf="@+id/guideline12"
             app:layout_constraintTop_toTopOf="@+id/play_pause_btn"
@@ -250,6 +259,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/toggle_shuffle_mode"
             android:padding="8dp"
+            app:cycle_shuffle="@{shuffleMode}"
             app:layout_constraintBottom_toBottomOf="@+id/play_pause_btn"
             app:layout_constraintEnd_toStartOf="@+id/guideline13"
             app:layout_constraintTop_toTopOf="@+id/play_pause_btn"

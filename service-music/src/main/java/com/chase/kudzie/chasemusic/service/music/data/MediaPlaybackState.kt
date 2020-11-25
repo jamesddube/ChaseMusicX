@@ -7,7 +7,7 @@ import android.util.Log
 import com.chase.kudzie.chasemusic.domain.scope.ApplicationContext
 import javax.inject.Inject
 
-class MediaPlaybackState @Inject constructor(
+internal class MediaPlaybackState @Inject constructor(
     @ApplicationContext private val context: Context,
     private val mediaSession: MediaSessionCompat
 ) {

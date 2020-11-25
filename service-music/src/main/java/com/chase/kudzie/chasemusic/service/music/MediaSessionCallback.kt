@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
+import com.chase.kudzie.chasemusic.service.music.data.RepeatMode
+import com.chase.kudzie.chasemusic.service.music.data.ShuffleMode
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerRepository
 import com.chase.kudzie.chasemusic.service.music.repository.QueueRepository
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
@@ -19,18 +21,20 @@ import javax.inject.Inject
  * @author Kudzai Chasinda
  */
 
-class MediaSessionCallback @Inject constructor(
+internal class MediaSessionCallback @Inject constructor(
     private val player: PlayerRepository,
-    private val queue: QueueRepository
+    private val queue: QueueRepository,
+    private val repeatMode: RepeatMode,
+    private val shuffleMode: ShuffleMode
 ) : MediaSessionCompat.Callback(), CoroutineScope by DefaultScope() {
 
     override fun onPrepare() {
-        super.onPrepare()
-        //TODO note:
-        /*
-        * I am thinking maybe on prepare I restore state from Shared Prefs and Db
-        * This is called first and would be best to query the db and do the things
-        * */
+        launch(Dispatchers.Main) {
+            val song = queue.prepare()
+            if (song != null){
+                player.prepare(song)
+            }
+        }
     }
 
     override fun onPlay() {
@@ -73,7 +77,6 @@ class MediaSessionCallback @Inject constructor(
                 }
             }
         }
-
     }
 
     override fun onStop() {
@@ -114,6 +117,24 @@ class MediaSessionCallback @Inject constructor(
     override fun onPlayFromUri(uri: Uri?, extras: Bundle?) {
         super.onPlayFromUri(uri, extras)
         TODO("implement")
+    }
+
+    override fun onSetRepeatMode(repeatMode: Int) {
+        super.onSetRepeatMode(repeatMode)
+
+        this.repeatMode.toggleRepeatMode()
+        this.queue.onSetRepeatMode()
+    }
+
+    override fun onSetShuffleMode(shuffleMode: Int) {
+        super.onSetShuffleMode(shuffleMode)
+
+        val isShuffleOn = this.shuffleMode.toggleShuffleMode()
+        if (isShuffleOn) {
+            queue.shuffleSongs()
+        } else {
+            queue.sortSongs()
+        }
     }
 
 

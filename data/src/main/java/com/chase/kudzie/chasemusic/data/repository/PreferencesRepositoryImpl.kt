@@ -13,43 +13,43 @@ class PreferencesRepositoryImpl @Inject constructor(
     private val preferences: SharedPreferences
 ) : PreferencesRepository {
 
-    override suspend fun setShuffleMode(shuffleMode: Int) {
+    override  fun setShuffleMode(shuffleMode: Int) {
         preferences.shuffleMode = shuffleMode
     }
 
-    override suspend fun setRepeatMode(repeatMode: Int) {
+    override  fun setRepeatMode(repeatMode: Int) {
         preferences.repeatMode = repeatMode
     }
 
-    override suspend fun setCurrentQueuePosition(positionInQueue: Int) {
+    override  fun setCurrentQueuePosition(positionInQueue: Int) {
         preferences.currentPositionInQueue = positionInQueue
     }
 
-    override suspend fun setCurrentPlayMode(playMode: Int) {
+    override  fun setCurrentPlayMode(playMode: Int) {
         preferences.playMode = playMode
     }
 
-    override suspend fun setCurrentSongDurationPos(currentDuration: Long) {
+    override  fun setCurrentSongDurationPos(currentDuration: Long) {
         preferences.currentSongDurationPos = currentDuration
     }
 
-    override suspend fun getShuffleMode(): Int {
+    override  fun getShuffleMode(): Int {
         return preferences.shuffleMode
     }
 
-    override suspend fun getRepeatMode(): Int {
+    override  fun getRepeatMode(): Int {
         return preferences.repeatMode
     }
 
-    override suspend fun getCurrentQueuePosition(): Int {
+    override  fun getCurrentQueuePosition(): Int {
         return preferences.currentPositionInQueue
     }
 
-    override suspend fun getCurrentPlayMode(): Int {
+    override  fun getCurrentPlayMode(): Int {
         return preferences.playMode
     }
 
-    override suspend fun getCurrentSongDurationPos(): Long {
+    override  fun getCurrentSongDurationPos(): Long {
         return preferences.currentSongDurationPos
     }
 }

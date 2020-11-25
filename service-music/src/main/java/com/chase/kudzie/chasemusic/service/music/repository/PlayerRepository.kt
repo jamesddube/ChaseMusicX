@@ -5,7 +5,7 @@ import com.chase.kudzie.chasemusic.service.music.model.PlayableMediaItem
 /**
  * @author Kudzai Chasinda
  */
-interface PlayerRepository : PlayerPlaybackState {
+internal interface PlayerRepository : PlayerPlaybackState {
 
     fun isPlaying(): Boolean
 

@@ -12,11 +12,12 @@ import com.chase.kudzie.chasemusic.databinding.FragmentPlayerBinding
 import com.chase.kudzie.chasemusic.media.IMediaProvider
 import com.chase.kudzie.chasemusic.media.model.MediaMetadata
 import com.chase.kudzie.chasemusic.media.model.MediaPlaybackState
+import com.chase.kudzie.chasemusic.media.model.MediaRepeatMode
+import com.chase.kudzie.chasemusic.media.model.MediaShuffleMode
 import com.chase.kudzie.chasemusic.util.makeReadableDuration
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.util.*
 
 class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
 
@@ -62,6 +63,19 @@ class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
                 }
             )
 
+            mediaProvider.observeRepeatMode().observe(viewLifecycleOwner, {
+                it?.let {
+                    Timber.e(it.toString())
+                    updateRepeatMode(it)
+                }
+            })
+
+            mediaProvider.observeShuffleMode().observe(viewLifecycleOwner, {
+                it?.let {
+                    updateShuffleMode(it)
+                }
+            })
+
             skipToNextBtn.setOnClickListener {
                 mediaProvider.skipToNext()
             }
@@ -73,6 +87,10 @@ class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
             playPauseBtn.setOnClickListener {
                 mediaProvider.playPause()
             }
+
+            shuffleBtn.setOnClickListener { mediaProvider.toggleShuffleMode() }
+
+            repeatBtn.setOnClickListener { mediaProvider.toggleRepeatMode() }
 
             songName.isSelected = true
 
@@ -87,7 +105,7 @@ class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                    stopSeekbarUpdate()
+                    stopSeekBarUpdate()
                 }
 
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
@@ -98,12 +116,20 @@ class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
         }
     }
 
+    private fun updateRepeatMode(repeatMode: MediaRepeatMode) {
+        this.binding.repeatMode = repeatMode
+    }
+
+    private fun updateShuffleMode(shuffleMode: MediaShuffleMode) {
+        this.binding.shuffleMode = shuffleMode
+    }
+
     private fun updatePlaybackState(playbackState: MediaPlaybackState) {
         this.binding.playbackState = playbackState
         if (playbackState.isPlaying) {
             startSeekBarUpdate(playbackState)
         } else {
-            stopSeekbarUpdate()
+            stopSeekBarUpdate()
         }
     }
 
@@ -112,12 +138,12 @@ class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
         this.binding.musicSeekbar.max = (metadata.duration / 1000).toInt()
     }
 
-    private fun stopSeekbarUpdate() {
+    private fun stopSeekBarUpdate() {
         durationJob?.cancel()
     }
 
     private fun startSeekBarUpdate(playbackState: MediaPlaybackState) {
-        stopSeekbarUpdate()
+        stopSeekBarUpdate()
         durationJob = CoroutineScope(Dispatchers.IO).launchPeriodicAsync(1000) {
             updateProgress(playbackState)
         }

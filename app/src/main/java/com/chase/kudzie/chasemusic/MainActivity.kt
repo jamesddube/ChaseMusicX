@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -22,8 +23,7 @@ import com.chase.kudzie.chasemusic.extensions.show
 import com.chase.kudzie.chasemusic.media.IMediaProvider
 import com.chase.kudzie.chasemusic.media.MediaGateway
 import com.chase.kudzie.chasemusic.media.connection.OnConnectionChangedListener
-import com.chase.kudzie.chasemusic.media.model.MediaMetadata
-import com.chase.kudzie.chasemusic.media.model.MediaPlaybackState
+import com.chase.kudzie.chasemusic.media.model.*
 import com.chase.kudzie.chasemusic.ui.nowplaying.PlayerMiniFragment
 import com.chase.kudzie.chasemusic.util.contentView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -33,6 +33,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -286,6 +287,14 @@ class MainActivity :
 
     }
 
+    override fun toggleShuffleMode() {
+        transportControls()?.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_INVALID)
+    }
+
+    override fun toggleRepeatMode() {
+        transportControls()?.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_INVALID)
+    }
+
     override fun observeMetadata(): LiveData<MediaMetadata> {
         return mediaGateway.observeMetadata()
     }
@@ -294,5 +303,15 @@ class MainActivity :
         return mediaGateway.observePlaybackState()
     }
 
+    override fun observeRepeatMode(): LiveData<MediaRepeatMode> {
+        return mediaGateway.observeRepeatMode()
+    }
 
+    override fun observeShuffleMode(): LiveData<MediaShuffleMode> {
+        return mediaGateway.observeShuffleMode()
+    }
+
+    override fun observePlayingQueue(): Flow<List<PlayableMediaItem>> {
+        return mediaGateway.observePlayingQueue()
+    }
 }

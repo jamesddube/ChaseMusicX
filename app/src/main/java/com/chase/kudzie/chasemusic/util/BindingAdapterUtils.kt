@@ -8,6 +8,8 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -15,11 +17,64 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.chase.kudzie.chasemusic.R
 import com.chase.kudzie.chasemusic.domain.model.Artist
+import com.chase.kudzie.chasemusic.media.model.MediaRepeatMode
+import com.chase.kudzie.chasemusic.media.model.MediaShuffleMode
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
  * File for handling all issues to do with binding.
+ * TODO split by type maybe?
  * */
+
+
+fun ImageButton.setImageDrawableExt(@DrawableRes drawable: Int) {
+    this.setImageDrawable(this.context.getDrawable(drawable))
+}
+
+@BindingAdapter("cycle_repeat")
+fun ImageButton.bindRepeatMode(mode: MediaRepeatMode?) {
+    mode?.let {
+        when (mode.getMode()) {
+            MediaRepeatMode.Mode.ALL -> {
+                this.setImageDrawableExt(R.drawable.ic_repeat)
+                this.setColorFilter(
+                    ContextCompat.getColor(context, R.color.colorPrimary),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+            }
+            MediaRepeatMode.Mode.ONE -> {
+                this.setImageDrawableExt(R.drawable.ic_repeat_one)
+               this.setColorFilter(
+                    ContextCompat.getColor(context, R.color.colorPrimary),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+            }
+            else -> {
+                this.setImageDrawableExt(R.drawable.ic_repeat)
+                clearColorFilter()
+            }
+        }
+    }
+}
+
+@BindingAdapter("cycle_shuffle")
+fun ImageButton.bindShuffleMode(mode: MediaShuffleMode?) {
+    mode?.let {
+        when (mode.getMode()) {
+            MediaShuffleMode.Mode.ALL -> {
+                this.setImageDrawableExt(R.drawable.ic_shuffle)
+                this.setColorFilter(
+                    ContextCompat.getColor(context, R.color.colorPrimary),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+            }
+            else -> {
+                this.setImageDrawableExt(R.drawable.ic_shuffle)
+                clearColorFilter()
+            }
+        }
+    }
+}
 
 @BindingAdapter("duration_update")
 fun TextView.bindDurationUpdate(currentSongPos: Long) {

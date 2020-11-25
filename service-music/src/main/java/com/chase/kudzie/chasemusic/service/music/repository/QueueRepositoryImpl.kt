@@ -1,42 +1,81 @@
 package com.chase.kudzie.chasemusic.service.music.repository
 
+import android.support.v4.media.MediaDescriptionCompat
+import android.support.v4.media.session.MediaSessionCompat
+import android.util.Log
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.chase.kudzie.chasemusic.domain.interactor.songs.GetSongsByCategory
 import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
+import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.domain.model.Song
+import com.chase.kudzie.chasemusic.domain.repository.PreferencesRepository
 import com.chase.kudzie.chasemusic.domain.repository.SongQueueRepository
 import com.chase.kudzie.chasemusic.service.music.extensions.toMediaItem
 import com.chase.kudzie.chasemusic.service.music.extensions.toPlayableMediaItem
-import com.chase.kudzie.chasemusic.domain.model.MediaItem
+import com.chase.kudzie.chasemusic.service.music.injection.scope.LifecycleService
 import com.chase.kudzie.chasemusic.service.music.model.PlayableMediaItem
-import kotlinx.coroutines.yield
+import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
+import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class QueueRepositoryImpl @Inject constructor(
+internal class QueueRepositoryImpl @Inject constructor(
     private val songsQueueRepository: SongQueueRepository,
     private val getSongsByCategory: GetSongsByCategory,
-) : QueueRepository {
+    private val preferencesRepository: PreferencesRepository,
+    private val mediaSession: MediaSessionCompat,
+    @LifecycleService lifecycle: Lifecycle
+) : QueueRepository,
+    CoroutineScope by DefaultScope(),
+    DefaultLifecycleObserver {
 
     private val songQueue = ArrayList<MediaItem>()
     private var currentQueuePosition: Int = -1
 
-    override fun sortSongs() {
-        TODO("Not yet implemented")
+    private var queueStateJob: Job? = null
+
+    private val queueFlow = MutableSharedFlow<List<MediaItem>>(replay = 0)
+
+    init {
+        lifecycle.addObserver(this)
+        launch {
+            queueFlow.collect {
+                consumeQueue(it)
+            }
+        }
     }
 
-    override fun shuffleSongs() {
-        TODO("Not yet implemented")
+    private fun publishQueue(list: List<MediaItem>) {
+        launch {
+            queueFlow.emit(list)
+        }
+    }
+
+    private fun consumeQueue(list: List<MediaItem>) {
+        val queue = list.map { it.toQueueItem() }
+        mediaSession.setQueue(
+            queue
+        )
     }
 
     override fun isQueueEmpty(): Boolean {
         return songQueue.isEmpty()
     }
 
+    override fun onSetRepeatMode() {
+        Log.d("QUEUEREP", " On Set Repeat Called Do something important here")
+    }
+
     override suspend fun skipToNext(): PlayableMediaItem? {
         if (isQueueEmpty()) {
             return null
         }
-        updatePositionInQueue(true)
+        updatePositionInQueue(isNext = true)
         //TODO Maybe check if position in queue is valid
 
         val resultTrack = songQueue[currentQueuePosition]
@@ -47,15 +86,33 @@ class QueueRepositoryImpl @Inject constructor(
         if (isQueueEmpty())
             return null
 
-        updatePositionInQueue(false)
+        updatePositionInQueue(isNext = false)
         //TODO Maybe check if position in queue is valid
 
         val resultTrack = songQueue[currentQueuePosition]
         return resultTrack.toPlayableMediaItem()
     }
 
-    override fun prepare() {
-        TODO("Not yet implemented")
+    override suspend fun prepare(): PlayableMediaItem? {
+        val songsQueue = retrieveQueueState()
+        val lastPositionInQueue = preferencesRepository.getCurrentQueuePosition()
+
+        val currentTrackIndex =
+            songsQueue.indexOfFirst { song -> song.positionInQueue == lastPositionInQueue }
+
+        val resultTrack = songsQueue.getOrNull(currentTrackIndex) ?: return null
+
+        publishQueue(songsQueue)
+        updateSongQueue(songsQueue)
+
+        currentQueuePosition = currentTrackIndex
+
+        return resultTrack.toPlayableMediaItem()
+    }
+
+    private fun updateSongQueue(songs: List<MediaItem>) {
+        songQueue.clear()
+        songQueue.addAll(songs)
     }
 
     override suspend fun onPlayFromMediaId(mediaIdCategory: MediaIdCategory): PlayableMediaItem? {
@@ -71,13 +128,14 @@ class QueueRepositoryImpl @Inject constructor(
             song.toIndexedSong(index).toMediaItem(mediaIdCategory)
         }
 
-        songQueue.clear()
-        songQueue.addAll(queueSongs)
+        updateSongQueue(queueSongs)
 
         val currentTrackIndex = queueSongs.indexOfFirst { song -> song.id == songId }
         currentQueuePosition = currentTrackIndex
+
+        publishQueue(songQueue)
         saveQueueState(queueSongs)
-        yield()
+
         val resultTrack = queueSongs.getOrNull(currentTrackIndex) ?: return null
         //return the song to play
         return resultTrack.toPlayableMediaItem()
@@ -100,6 +158,7 @@ class QueueRepositoryImpl @Inject constructor(
     }
 
     private fun updatePositionInQueue(isNext: Boolean) {
+        //TODO set repeat mode conditionals
         if (isNext) {
             if (currentQueuePosition != songQueue.size - 1)
                 currentQueuePosition += 1
@@ -114,13 +173,63 @@ class QueueRepositoryImpl @Inject constructor(
             else
                 currentQueuePosition = songQueue.size - 1
         }
+        publishQueue(songQueue)
     }
 
-    private suspend fun saveQueueState(songs: List<MediaItem>) {
-        songsQueueRepository.updateQueue(songs)
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        saveQueueState(songQueue)
+        songQueue.getOrNull(currentQueuePosition)?.let {
+            preferencesRepository.setCurrentQueuePosition(it.positionInQueue)
+        }
+        cancel()
     }
 
-    suspend fun retrieveQueueState(): List<MediaItem> {
+    override fun sortSongs() {
+        if (isQueueEmpty()) {
+            return
+        }
+
+        val currentTrack = songQueue.getOrNull(currentQueuePosition) ?: return
+        songQueue.sortBy { it.positionInQueue }
+
+        val newTrackIndex =
+            songQueue.indexOfFirst { song -> song.positionInQueue == currentTrack.positionInQueue }
+        currentQueuePosition = newTrackIndex
+
+        publishQueue(songQueue)
+    }
+
+    override fun shuffleSongs() {
+        if (isQueueEmpty()) {
+            return
+        }
+
+        val currentTrack = songQueue.getOrNull(currentQueuePosition) ?: return
+
+        val queue = songQueue.shuffled()
+        updateSongQueue(queue)
+
+        val currentTrackIndex =
+            queue.indexOfFirst { song -> song.positionInQueue == currentTrack.positionInQueue }
+
+        if (currentTrackIndex != 0) {
+            Collections.swap(queue, 0, currentTrackIndex)
+        }
+        currentQueuePosition = 0
+
+        publishQueue(songQueue)
+    }
+
+    private fun saveQueueState(songs: List<MediaItem>) {
+        queueStateJob?.cancel()
+        queueStateJob = launch {
+            songsQueueRepository.updateQueue(songs)
+            yield()
+        }
+    }
+
+    private suspend fun retrieveQueueState(): List<MediaItem> {
         return songsQueueRepository.getQueueSongs()
     }
 
@@ -139,4 +248,14 @@ class QueueRepositoryImpl @Inject constructor(
         )
     }
 
+    private fun MediaItem.toQueueItem(): MediaSessionCompat.QueueItem {
+        val description = MediaDescriptionCompat.Builder()
+            .setMediaId(mediaId.toString())
+            .setTitle(this.title)
+            .setSubtitle(this.artist)
+            .setDescription(this.album)
+            .build()
+
+        return MediaSessionCompat.QueueItem(description, positionInQueue.toLong())
+    }
 }
