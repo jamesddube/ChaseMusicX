@@ -48,7 +48,8 @@ abstract class QueueDao {
         for (item in queueList) {
             val id = item.songId
             val song = (songArr[id] ?: continue)[0]
-            filteredSongsList.add(song)
+
+            filteredSongsList.add(song.copy(positionInQueue = item.positionInQueue))
         }
         return filteredSongsList
     }

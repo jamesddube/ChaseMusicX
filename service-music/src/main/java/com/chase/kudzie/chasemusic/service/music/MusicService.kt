@@ -93,6 +93,7 @@ class MusicService : MediaBrowserServiceCompat(),
         //Setup Media Session and retrieve a session token
         mediaSession.setMediaButtonReceiver(makeMediaButtonReceiver())
         mediaSession.setCallback(callback)
+        callback.onPrepare()
         mediaSession.isActive = true
 
         sessionToken = mediaSession.sessionToken

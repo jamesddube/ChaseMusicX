@@ -18,8 +18,7 @@ class SongQueueRepositoryImpl @Inject constructor(
 
     override suspend fun getQueueSongs(): List<MediaItem> {
         //Returns an existing queue or make one
-        val queue =
-            queueDao.getQueuedSongs(songRepository.getSongs().map { song -> song.toMediaItem() })
+        val queue = queueDao.getQueuedSongs(songRepository.getSongs().map { song -> song.toMediaItem() })
         if (queue.isNotEmpty()) {
             return queue
         }

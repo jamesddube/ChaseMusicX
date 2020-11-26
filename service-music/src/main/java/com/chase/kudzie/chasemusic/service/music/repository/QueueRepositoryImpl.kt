@@ -133,7 +133,7 @@ internal class QueueRepositoryImpl @Inject constructor(
         val currentTrackIndex = queueSongs.indexOfFirst { song -> song.id == songId }
         currentQueuePosition = currentTrackIndex
 
-        publishQueue(songQueue)
+        publishQueue(queueSongs)
         saveQueueState(queueSongs)
 
         val resultTrack = queueSongs.getOrNull(currentTrackIndex) ?: return null
