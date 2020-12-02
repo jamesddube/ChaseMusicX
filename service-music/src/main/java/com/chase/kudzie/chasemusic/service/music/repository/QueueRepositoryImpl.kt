@@ -28,8 +28,7 @@ internal class QueueRepositoryImpl @Inject constructor(
     private val songsQueueRepository: SongQueueRepository,
     private val getSongsByCategory: GetSongsByCategory,
     private val preferencesRepository: PreferencesRepository,
-    private val mediaSession: MediaSessionCompat,
-    @LifecycleService lifecycle: Lifecycle
+    private val mediaSession: MediaSessionCompat
 ) : QueueRepository,
     CoroutineScope by DefaultScope(),
     DefaultLifecycleObserver {
@@ -42,7 +41,6 @@ internal class QueueRepositoryImpl @Inject constructor(
     private val queueFlow = MutableSharedFlow<List<MediaItem>>(replay = 0)
 
     init {
-        lifecycle.addObserver(this)
         launch {
             queueFlow.collect {
                 consumeQueue(it)
@@ -179,10 +177,6 @@ internal class QueueRepositoryImpl @Inject constructor(
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
         saveQueueState(songQueue)
-        songQueue.getOrNull(currentQueuePosition)?.let {
-            preferencesRepository.setCurrentQueuePosition(it.positionInQueue)
-        }
-        cancel()
     }
 
     override fun sortSongs() {
@@ -225,6 +219,9 @@ internal class QueueRepositoryImpl @Inject constructor(
         queueStateJob?.cancel()
         queueStateJob = launch {
             songsQueueRepository.updateQueue(songs)
+            songs.getOrNull(currentQueuePosition)?.let {
+                preferencesRepository.setCurrentQueuePosition(it.positionInQueue)
+            }
             yield()
         }
     }

@@ -44,7 +44,7 @@ fun ImageButton.bindRepeatMode(mode: MediaRepeatMode?) {
             }
             MediaRepeatMode.Mode.ONE -> {
                 this.setImageDrawableExt(R.drawable.ic_repeat_one)
-               this.setColorFilter(
+                this.setColorFilter(
                     ContextCompat.getColor(context, R.color.colorPrimary),
                     android.graphics.PorterDuff.Mode.SRC_IN
                 )

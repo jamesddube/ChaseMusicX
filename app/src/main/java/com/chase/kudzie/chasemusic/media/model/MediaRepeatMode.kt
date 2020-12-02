@@ -2,7 +2,7 @@ package com.chase.kudzie.chasemusic.media.model
 
 import android.support.v4.media.session.PlaybackStateCompat
 
-data class MediaRepeatMode(var repeatMode: Int = PlaybackStateCompat.REPEAT_MODE_NONE) {
+data class MediaRepeatMode(var repeatMode: Int) {
     enum class Mode { NONE, ONE, ALL }
 
     fun getMode(): Mode {

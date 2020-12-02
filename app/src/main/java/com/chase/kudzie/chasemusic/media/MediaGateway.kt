@@ -91,6 +91,9 @@ class MediaGateway(
     fun initialize(mediaController: MediaControllerCompat) {
         callback.onMetadataChanged(mediaController.metadata)
         callback.onPlaybackStateChanged(mediaController.playbackState)
+        callback.onQueueChanged(mediaController.queue)
+        callback.onRepeatModeChanged(mediaController.repeatMode)
+        callback.onShuffleModeChanged(mediaController.shuffleMode)
     }
 
 
@@ -107,15 +110,11 @@ class MediaGateway(
     }
 
     override fun onShuffleModeChanged(shuffleMode: Int) {
-        if (shuffleMode != -1) {
-            shuffleModeLiveData.value = MediaShuffleMode(shuffleMode)
-        }
+        shuffleModeLiveData.value = MediaShuffleMode(shuffleMode)
     }
 
     override fun onRepeatModeChanged(repeatMode: Int) {
-        if (repeatMode != -1) {
-            repeatModeLiveData.value = MediaRepeatMode(repeatMode)
-        }
+        repeatModeLiveData.value = MediaRepeatMode(repeatMode)
     }
 
     override fun onQueueChanged(queue: MutableList<MediaSessionCompat.QueueItem>?) {
