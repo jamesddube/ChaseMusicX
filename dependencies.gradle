@@ -33,10 +33,11 @@ ext {
     navigationVersion = '2.2.0-rc01'
     exoPlayerVersion = '2.11.4'
     mediaVersion = '1.1.0'
-    lifecycleVersion = '2.1.0'
+    lifecycleVersion = '2.2.0'
     roomVersion = '2.2.5'
     moshiVersion = '1.9.3'
 
+    livedataktxVersion = '2.2.0'
     //Compose versions
     composeVersion = '1.0.0-alpha01'
 
@@ -153,6 +154,7 @@ ext {
             androidxFragment             : 'androidx.fragment:fragment:${fragmentVersion}',
             androidxLifecycleExtensions  : "androidx.lifecycle:lifecycle-extensions:${androidXLifecycleVersion}",
             androidxLifecycleViewmodelKtx: "androidx.lifecycle:lifecycle-viewmodel-ktx:${androidXLifecycleVersion}",
+            androidLiveDataKtx           : "androidx.lifecycle:lifecycle-livedata-ktx:${livedataktxVersion}",
             multiDex                     : "androidx.multidex:multidex:${multiDexVersion}",
             navigationFragment           : "androidx.navigation:navigation-fragment-ktx:${navigationVersion}",
             navigationUI                 : "androidx.navigation:navigation-ui-ktx:${navigationVersion}",

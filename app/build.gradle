@@ -81,6 +81,7 @@ dependencies {
     implementation appDependencies.timber
     implementation appDependencies.androidxLifecycleExtensions
     implementation appDependencies.androidxLifecycleViewmodelKtx
+    implementation appDependencies.androidLiveDataKtx
     implementation appDependencies.multiDex
     implementation appDependencies.navigationFragment
     implementation appDependencies.navigationUI

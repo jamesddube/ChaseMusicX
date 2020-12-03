@@ -28,6 +28,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
     buildTypes {
         debug {
             buildConfigField("String", "LAST_FM_API_KEY", "\"" + localProperties['LAST_FM_API_KEY'] + "\"")
