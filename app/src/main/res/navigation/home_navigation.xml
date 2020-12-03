@@ -74,4 +74,20 @@
             app:argType="string"
             android:defaultValue="Playlist" />
     </fragment>
+    <fragment
+        android:id="@+id/player"
+        android:name="com.chase.kudzie.chasemusic.ui.nowplaying.PlayerFragment"
+        android:label="PlayerFragment"
+        tools:layout="@layout/fragment_player"
+        >
+        <action
+            android:id="@+id/action_playerFragment_to_playingQueueFragment"
+            app:destination="@id/playingQueue" />
+    </fragment>
+    <fragment
+        android:id="@+id/playingQueue"
+        android:name="com.chase.kudzie.chasemusic.ui.queue.PlayingQueueFragment"
+        android:label="PlayingQueueFragment"
+        tools:layout="@layout/fragment_playing_queue"
+        />
 </navigation>
