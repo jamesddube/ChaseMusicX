@@ -175,7 +175,6 @@ fun ImageView.bindArtistArtwork(artist: Artist?, loadListener: GlideBitmapLoadLi
         .asBitmap()
         .load(artist)
         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-        .onlyRetrieveFromCache(true)
     if (loadListener != null) request.listener(loadListener)
 
     request.into(object : CustomTarget<Bitmap>() {

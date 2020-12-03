@@ -12,6 +12,7 @@ import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.domain.repository.PreferencesRepository
 import com.chase.kudzie.chasemusic.domain.repository.SongQueueRepository
+import com.chase.kudzie.chasemusic.service.music.extensions.getAlbumArtUri
 import com.chase.kudzie.chasemusic.service.music.extensions.toMediaItem
 import com.chase.kudzie.chasemusic.service.music.extensions.toPlayableMediaItem
 import com.chase.kudzie.chasemusic.service.music.injection.scope.LifecycleService
@@ -251,6 +252,7 @@ internal class QueueRepositoryImpl @Inject constructor(
             .setTitle(this.title)
             .setSubtitle(this.artist)
             .setDescription(this.album)
+            .setIconUri(getAlbumArtUri(this.albumId))
             .build()
 
         return MediaSessionCompat.QueueItem(description, positionInQueue.toLong())

@@ -1,17 +1,16 @@
 package com.chase.kudzie.chasemusic.service.music.data
 
-import android.content.ContentUris
 import android.content.Context
-import android.net.Uri
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.chase.kudzie.chasemusic.domain.model.MediaConstants.METADATA_KEY_ALBUM_ID
+import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.domain.scope.ApplicationContext
+import com.chase.kudzie.chasemusic.service.music.extensions.getAlbumArtUri
 import com.chase.kudzie.chasemusic.service.music.extensions.retrieveGlideBitmap
 import com.chase.kudzie.chasemusic.service.music.injection.scope.PerService
-import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerPlaybackState
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
 import kotlinx.coroutines.CoroutineScope
@@ -71,11 +70,4 @@ internal class MediaMetadata @Inject constructor(
         super.onDestroy(owner)
         cancel() //Cancel any pending coroutines
     }
-
-    //TODO perhaps make this into extension function
-    private fun getAlbumArtUri(albumId: Long): Uri =
-        ContentUris.withAppendedId(
-            Uri.parse("content://media/external/audio/albumart"), albumId
-        )
-
 }

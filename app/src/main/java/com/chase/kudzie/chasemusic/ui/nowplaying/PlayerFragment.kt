@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.chase.kudzie.chasemusic.databinding.FragmentPlayerBinding
 import com.chase.kudzie.chasemusic.media.IMediaProvider
 import com.chase.kudzie.chasemusic.media.model.MediaMetadata
@@ -92,6 +93,18 @@ class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
 
             repeatBtn.setOnClickListener { mediaProvider.toggleRepeatMode() }
 
+            playlistBtn.setOnClickListener {
+                navigateToPlayingQueue()
+            }
+
+            likeBtn.setOnClickListener {
+                //TODO -- Add to favorites playlist
+            }
+
+            closeBtn.setOnClickListener {
+                //TODO -- Close sheet
+            }
+
             songName.isSelected = true
 
 
@@ -114,6 +127,12 @@ class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
                 }
             })
         }
+    }
+
+    private fun navigateToPlayingQueue() {
+        //TODO fix crash here
+        val directions = PlayerFragmentDirections.actionPlayerFragmentToPlayingQueueFragment()
+        this.binding.root.findNavController().navigate(directions)
     }
 
     private fun updateRepeatMode(repeatMode: MediaRepeatMode) {
