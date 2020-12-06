@@ -11,7 +11,6 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.chase.kudzie.chasemusic.service.music.data.MediaPlaybackState
 import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
-import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.service.music.model.PlayableMediaItem
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
@@ -81,13 +80,11 @@ internal class PlayerRepositoryImpl @Inject constructor(
             it.onMetadataChanged(mediaItem)
         }
         serviceController.start()
-
     }
 
     override fun pause(isServiceAlive: Boolean) {
         player.playWhenReady = false
-        val currState =
-            if (isPlaying()) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+
         val playerPlaybackState =
             playbackState.update(PlaybackStateCompat.STATE_PAUSED, getCurrentSeekPos())
 
@@ -123,6 +120,8 @@ internal class PlayerRepositoryImpl @Inject constructor(
     }
 
     override fun prepare(playableMediaItem: PlayableMediaItem) {
+        //TODO -- Current Prepare Impl shows Notification
+        //TODO -- Revisit this.
         val mediaItem = playableMediaItem.mediaItem
 
         val media =

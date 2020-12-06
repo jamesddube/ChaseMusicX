@@ -11,9 +11,7 @@ internal interface QueueRepository {
 
     fun isQueueEmpty(): Boolean
 
-    fun onSetRepeatMode()
-
-    suspend fun skipToNext(): PlayableMediaItem?
+    suspend fun skipToNext(isFromUser: Boolean): PlayableMediaItem?
 
     suspend fun skipToPrevious(): PlayableMediaItem?
 
@@ -23,9 +21,9 @@ internal interface QueueRepository {
 
     suspend fun getCurrentPlayingSong(): PlayableMediaItem?
 
-    //TODO choose songID or maybe Index
-    fun removeSongFromQueue()
+    suspend fun removeSongFromQueue(positionAt: Int)
 
-    fun addSongToQueue()
+    suspend fun addSongToQueue(mediaIdCategory: MediaIdCategory)
 
+    fun clearQueue()
 }

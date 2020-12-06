@@ -255,7 +255,7 @@ class MusicService : MediaBrowserServiceCompat(),
     }
 
     override fun notifySongEnded(isTrackEnded: Boolean) {
-        callback.onSkipToNext() //TODO provide better implementation
+        callback.playerHasRequestedNext(isTrackEnded) //TODO provide better implementation
     }
 
 

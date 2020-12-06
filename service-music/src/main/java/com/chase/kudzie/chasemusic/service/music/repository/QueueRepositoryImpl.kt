@@ -2,9 +2,7 @@ package com.chase.kudzie.chasemusic.service.music.repository
 
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.chase.kudzie.chasemusic.domain.interactor.songs.GetSongsByCategory
 import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
@@ -12,15 +10,19 @@ import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.domain.repository.PreferencesRepository
 import com.chase.kudzie.chasemusic.domain.repository.SongQueueRepository
+import com.chase.kudzie.chasemusic.domain.repository.SongRepository
+import com.chase.kudzie.chasemusic.service.music.data.RepeatMode
 import com.chase.kudzie.chasemusic.service.music.extensions.getAlbumArtUri
 import com.chase.kudzie.chasemusic.service.music.extensions.toMediaItem
 import com.chase.kudzie.chasemusic.service.music.extensions.toPlayableMediaItem
-import com.chase.kudzie.chasemusic.service.music.injection.scope.LifecycleService
 import com.chase.kudzie.chasemusic.service.music.model.PlayableMediaItem
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -28,7 +30,9 @@ import kotlin.collections.ArrayList
 internal class QueueRepositoryImpl @Inject constructor(
     private val songsQueueRepository: SongQueueRepository,
     private val getSongsByCategory: GetSongsByCategory,
+    private val songRepository: SongRepository,
     private val preferencesRepository: PreferencesRepository,
+    private val repeatMode: RepeatMode,
     private val mediaSession: MediaSessionCompat
 ) : QueueRepository,
     CoroutineScope by DefaultScope(),
@@ -66,30 +70,39 @@ internal class QueueRepositoryImpl @Inject constructor(
         return songQueue.isEmpty()
     }
 
-    override fun onSetRepeatMode() {
-        Log.d("QUEUEREP", " On Set Repeat Called Do something important here")
-    }
-
-    override suspend fun skipToNext(): PlayableMediaItem? {
+    override suspend fun skipToNext(isFromUser: Boolean): PlayableMediaItem? {
         if (isQueueEmpty()) {
             return null
         }
-        updatePositionInQueue(isNext = true)
-        //TODO Maybe check if position in queue is valid
+        val newPosition = updatePositionInQueue(isNext = true, isFromUser)
 
-        val resultTrack = songQueue[currentQueuePosition]
-        return resultTrack.toPlayableMediaItem()
+        if (newPosition in 0..songQueue.lastIndex) {
+            currentQueuePosition = newPosition
+            val resultTrack = songQueue.getOrNull(newPosition)
+            //You know what we do! ✌
+            publishQueue(songQueue)
+            saveQueuePosition(songQueue)
+            return resultTrack?.toPlayableMediaItem()
+        }
+        return null
     }
 
     override suspend fun skipToPrevious(): PlayableMediaItem? {
         if (isQueueEmpty())
             return null
 
-        updatePositionInQueue(isNext = false)
-        //TODO Maybe check if position in queue is valid
+        val newPosition = updatePositionInQueue(isNext = false)
 
-        val resultTrack = songQueue[currentQueuePosition]
-        return resultTrack.toPlayableMediaItem()
+        if (newPosition in 0..songQueue.lastIndex) {
+            currentQueuePosition = newPosition
+            val resultTrack = songQueue.getOrNull(newPosition)
+            //You know what we do! ✌
+            publishQueue(songQueue)
+            saveQueuePosition(songQueue)
+            return resultTrack?.toPlayableMediaItem()
+        }
+
+        return null
     }
 
     override suspend fun prepare(): PlayableMediaItem? {
@@ -148,32 +161,107 @@ internal class QueueRepositoryImpl @Inject constructor(
         return songQueue.getOrNull(currentQueuePosition)?.toPlayableMediaItem()
     }
 
-    override fun removeSongFromQueue() {
-        TODO("Not yet implemented")
+    override suspend fun removeSongFromQueue(positionAt: Int) {
+        if (isQueueEmpty()) {
+            return
+        }
+
+        songQueue.removeAt(positionAt)
+
+        publishQueue(songQueue)
+        saveQueueState(songQueue)
     }
 
-    override fun addSongToQueue() {
-        TODO("Not yet implemented")
+    override suspend fun addSongToQueue(mediaIdCategory: MediaIdCategory) {
+        val song = songRepository.getSong(mediaIdCategory.songId)
+
+        //Add the song to the bottom of the queue.
+        val bottomIndex: Int = if (isQueueEmpty()) {
+            0
+        } else {
+            songQueue.last().positionInQueue + 1
+        }
+
+        val mediaItem = song.toIndexedSong(bottomIndex).toMediaItem(mediaIdCategory)
+        songQueue.add(mediaItem)
+
+        publishQueue(songQueue)
+        saveQueueState(songQueue)
     }
 
-    private fun updatePositionInQueue(isNext: Boolean) {
-        //TODO set repeat mode conditionals
-        if (isNext) {
-            if (currentQueuePosition != songQueue.size - 1)
-                currentQueuePosition += 1
+    override fun clearQueue() {
+        songQueue.clear()
+        publishQueue(songQueue)
+        saveQueueState(songQueue)
+    }
+
+    private fun updatePositionInQueue(isNext: Boolean, isFromUser: Boolean = false): Int {
+        return when {
+            repeatMode.isRepeatModeOne() -> {
+                repeatOne(isNext, isFromUser)
+            }
+            repeatMode.isRepeatModeAll() -> {
+                repeatAll(isNext, isFromUser)
+            }
+            else -> {
+                repeatNone(isNext, isFromUser)
+            }
+        }
+    }
+
+    private fun repeatOne(isNext: Boolean, isFromUser: Boolean): Int {
+        var newQueuePosition = currentQueuePosition
+        if (isNext && isFromUser) {
+            if (newQueuePosition != songQueue.size - 1)
+                newQueuePosition += 1
             else
-            //This is a condition for Repeat All ---
-            //TODO add repeat && Shuffle conditions
-                currentQueuePosition = 0
+                newQueuePosition = 0
+        } else if (!isNext) {
+            if (newQueuePosition != 0)
+                newQueuePosition -= 1
+            else
+                newQueuePosition = songQueue.size - 1
+        }
+        return newQueuePosition
+    }
+
+    private fun repeatAll(isNext: Boolean, isFromUser: Boolean): Int {
+        var newQueuePosition = currentQueuePosition
+        if (isNext) {
+            if (newQueuePosition != songQueue.size - 1)
+                newQueuePosition += 1
+            else
+                newQueuePosition = 0
         } else {
             //This is previous
-            if (currentQueuePosition != 0)
-                currentQueuePosition -= 1
+            if (newQueuePosition != 0)
+                newQueuePosition -= 1
             else
-                currentQueuePosition = songQueue.size - 1
+                newQueuePosition = songQueue.size - 1
         }
-        publishQueue(songQueue)
+        return newQueuePosition
     }
+
+    private fun repeatNone(isNext: Boolean, isFromUser: Boolean): Int {
+        var newQueuePosition = currentQueuePosition
+        if (isNext && isFromUser) {
+            if (newQueuePosition != songQueue.size - 1)
+                newQueuePosition += 1
+            else
+                newQueuePosition = songQueue.size - 1
+        } else if (isNext && !isFromUser) {
+            newQueuePosition += 1
+        } else {
+            //This is previous
+            if (newQueuePosition != 0)
+                newQueuePosition -= 1
+            else
+                newQueuePosition = 0
+        }
+
+        return newQueuePosition
+    }
+
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
@@ -220,17 +308,20 @@ internal class QueueRepositoryImpl @Inject constructor(
         queueStateJob?.cancel()
         queueStateJob = launch {
             songsQueueRepository.updateQueue(songs)
-            songs.getOrNull(currentQueuePosition)?.let {
-                preferencesRepository.setCurrentQueuePosition(it.positionInQueue)
-            }
+            saveQueuePosition(songs)
             yield()
+        }
+    }
+
+    private fun saveQueuePosition(songs: List<MediaItem>) {
+        songs.getOrNull(currentQueuePosition)?.let {
+            preferencesRepository.setCurrentQueuePosition(it.positionInQueue)
         }
     }
 
     private suspend fun retrieveQueueState(): List<MediaItem> {
         return songsQueueRepository.getQueueSongs()
     }
-
 
     private fun Song.toIndexedSong(index: Int): Song {
         return Song(

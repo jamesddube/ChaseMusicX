@@ -79,9 +79,7 @@ class ArtistDetailsFragment : Fragment() {
         binding.apply {
 
             artistViewModel.artist.observe(viewLifecycleOwner, { artist ->
-                artistLoadListener {
-
-                }
+                artistLoadListener {}
                 this.artist = artist
                 //Fetch our data
                 artistDetailsViewModel.getAlbumsByArtist(artist.id)

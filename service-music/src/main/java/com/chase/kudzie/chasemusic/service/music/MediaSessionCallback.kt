@@ -31,7 +31,7 @@ internal class MediaSessionCallback @Inject constructor(
     override fun onPrepare() {
         launch(Dispatchers.Main) {
             val song = queue.prepare()
-            if (song != null){
+            if (song != null) {
                 player.prepare(song)
             }
         }
@@ -52,17 +52,25 @@ internal class MediaSessionCallback @Inject constructor(
 
     override fun onSkipToNext() {
         super.onSkipToNext()
-        launch {
-            val song = queue.skipToNext()
-            withContext(Dispatchers.Main) {
-                if (song != null) {
-                    player.play(song, false)
-                } else {
-                    //TODO maybe stop service at this point
-                }
+        onSkipToNext(true)
+    }
 
+    private fun onSkipToNext(fromUser: Boolean) = launch(Dispatchers.Main) {
+        val nextSong = queue.skipToNext(fromUser)
+        if (nextSong != null) {
+            player.play(nextSong, false)
+        } else {
+            val currentSong = queue.getCurrentPlayingSong()
+            if (currentSong != null) {
+                player.play(currentSong, true)
+                player.pause(false)
+                player.seekTo(0L)
+            } else {
+                onPause()
             }
         }
+
+
     }
 
     override fun onSkipToPrevious() {
@@ -108,7 +116,7 @@ internal class MediaSessionCallback @Inject constructor(
                 if (song != null) {
                     player.play(song, false)
                 } else {
-                    //TODO maybe stop service at this point
+
                 }
             }
         }
@@ -123,7 +131,6 @@ internal class MediaSessionCallback @Inject constructor(
         super.onSetRepeatMode(repeatMode)
 
         this.repeatMode.toggleRepeatMode()
-        this.queue.onSetRepeatMode()
     }
 
     override fun onSetShuffleMode(shuffleMode: Int) {
@@ -135,6 +142,11 @@ internal class MediaSessionCallback @Inject constructor(
         } else {
             queue.sortSongs()
         }
+    }
+
+    fun playerHasRequestedNext(isTrackEnded: Boolean) {
+        //I do not know if this will even work bro
+        onSkipToNext(false)
     }
 
 
