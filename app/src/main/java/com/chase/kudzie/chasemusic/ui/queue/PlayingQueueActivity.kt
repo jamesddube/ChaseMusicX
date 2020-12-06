@@ -7,7 +7,7 @@ import com.chase.kudzie.chasemusic.R
 import com.chase.kudzie.chasemusic.base.BaseMediaActivity
 import com.chase.kudzie.chasemusic.databinding.ActivityPlayingQueueBinding
 import com.chase.kudzie.chasemusic.media.model.PlayableMediaItem
-import com.chase.kudzie.chasemusic.util.contentView
+import com.chase.kudzie.chasemusic.util.bindingadapters.contentView
 import dagger.android.AndroidInjection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn

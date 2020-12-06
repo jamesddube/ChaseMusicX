@@ -1,4 +1,4 @@
-package com.chase.kudzie.chasemusic.util
+package com.chase.kudzie.chasemusic.util.bindingadapters
 
 import android.app.Activity
 import androidx.annotation.LayoutRes

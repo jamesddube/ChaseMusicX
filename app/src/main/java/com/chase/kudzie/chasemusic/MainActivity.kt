@@ -15,7 +15,7 @@ import com.chase.kudzie.chasemusic.extensions.hide
 import com.chase.kudzie.chasemusic.extensions.show
 import com.chase.kudzie.chasemusic.media.model.*
 import com.chase.kudzie.chasemusic.ui.nowplaying.PlayerMiniFragment
-import com.chase.kudzie.chasemusic.util.contentView
+import com.chase.kudzie.chasemusic.util.bindingadapters.contentView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
