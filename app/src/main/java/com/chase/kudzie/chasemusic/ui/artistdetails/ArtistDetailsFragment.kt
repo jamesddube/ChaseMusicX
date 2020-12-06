@@ -82,7 +82,6 @@ class ArtistDetailsFragment : Fragment() {
                 artistLoadListener {
 
                 }
-                startPostponedEnterTransition()
                 this.artist = artist
                 //Fetch our data
                 artistDetailsViewModel.getAlbumsByArtist(artist.id)
