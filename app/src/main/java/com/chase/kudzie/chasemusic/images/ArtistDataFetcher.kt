@@ -8,14 +8,14 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.chase.kudzie.chasemusic.domain.model.Artist
 import com.chase.kudzie.chasemusic.domain.model.DeezerArtist
 import com.chase.kudzie.chasemusic.domain.repository.DeezerRepository
-import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
 import kotlinx.coroutines.*
 import java.io.InputStream
 
 class ArtistDataFetcher(
     val artist: Artist,
     private val deezerRepository: DeezerRepository
-) : DataFetcher<InputStream>, CoroutineScope by DefaultScope() {
+) : DataFetcher<InputStream>,
+    CoroutineScope by ImageScope() {
 
     companion object {
         const val REQUEST_TIMEOUT = 4000
