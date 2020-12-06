@@ -2,6 +2,7 @@ package com.chase.kudzie.chasemusic.util.bindingadapters
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -14,6 +15,14 @@ import com.chase.kudzie.chasemusic.util.GlideBitmapLoadListener
 import com.chase.kudzie.chasemusic.util.GlideDrawableLoadListener
 import com.chase.kudzie.chasemusic.util.getAlbumArtUri
 
+
+@BindingAdapter("cover_uri", "placeholder", requireAll = false)
+fun ImageView.bindImageIconUri(uri: Uri, placeholder: Drawable?) {
+    val request = Glide.with(this)
+        .load(uri)
+    if (placeholder != null) request.placeholder(placeholder)
+    request.into(this)
+}
 
 @BindingAdapter("playlist_icon")
 fun ImageView.bindPlaylistIcon(name: String) {

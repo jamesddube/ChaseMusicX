@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:importantForAccessibility="no"
-                app:album_artwork="@{item.mediaId.idValue}"
+                app:cover_uri="@{item.artWorkUri}"
                 app:placeholder="@{@drawable/song_placeholder}"
                 tools:srcCompat="@tools:sample/avatars[4]" />
         </com.google.android.material.card.MaterialCardView>
