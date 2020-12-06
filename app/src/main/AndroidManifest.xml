@@ -26,6 +26,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.queue.PlayingQueueActivity" />
+
         <service android:name=".service.music.MusicService">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />

@@ -9,7 +9,7 @@ import com.chase.kudzie.chasemusic.ui.nowplaying.PlayerFragment
 import com.chase.kudzie.chasemusic.ui.nowplaying.PlayerMiniFragment
 import com.chase.kudzie.chasemusic.ui.playlists.PlaylistsFragment
 import com.chase.kudzie.chasemusic.ui.playlistdetails.PlaylistDetailsFragment
-import com.chase.kudzie.chasemusic.ui.queue.PlayingQueueFragment
+import com.chase.kudzie.chasemusic.ui.queue.PlayingQueueActivity
 import com.chase.kudzie.chasemusic.ui.songs.SongsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -18,6 +18,9 @@ import dagger.android.ContributesAndroidInjector
 abstract class UIModule {
     @ContributesAndroidInjector
     abstract fun contributesMainActivity(): MainActivity
+
+    @ContributesAndroidInjector
+    abstract fun contributesPlayingQueueActivity(): PlayingQueueActivity
 }
 
 @Module
@@ -48,7 +51,4 @@ abstract class FragmentScreenModule {
 
     @ContributesAndroidInjector
     abstract fun contributesPlaylistSongsFragment(): PlaylistDetailsFragment
-
-    @ContributesAndroidInjector
-    abstract fun contributesPlayingQueueFragment(): PlayingQueueFragment
 }

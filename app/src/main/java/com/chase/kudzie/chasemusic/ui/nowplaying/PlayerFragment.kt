@@ -1,6 +1,7 @@
 package com.chase.kudzie.chasemusic.ui.nowplaying
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -8,13 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import com.chase.kudzie.chasemusic.databinding.FragmentPlayerBinding
 import com.chase.kudzie.chasemusic.media.IMediaProvider
 import com.chase.kudzie.chasemusic.media.model.MediaMetadata
 import com.chase.kudzie.chasemusic.media.model.MediaPlaybackState
 import com.chase.kudzie.chasemusic.media.model.MediaRepeatMode
 import com.chase.kudzie.chasemusic.media.model.MediaShuffleMode
+import com.chase.kudzie.chasemusic.ui.queue.PlayingQueueActivity
 import com.chase.kudzie.chasemusic.util.makeReadableDuration
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.coroutines.*
@@ -130,9 +131,8 @@ class PlayerFragment : Fragment(), CoroutineScope by MainScope() {
     }
 
     private fun navigateToPlayingQueue() {
-        //TODO fix crash here
-        val directions = PlayerFragmentDirections.actionPlayerFragmentToPlayingQueueFragment()
-        this.binding.root.findNavController().navigate(directions)
+        val intent = Intent(requireActivity(), PlayingQueueActivity::class.java)
+        startActivity(intent)
     }
 
     private fun updateRepeatMode(repeatMode: MediaRepeatMode) {
