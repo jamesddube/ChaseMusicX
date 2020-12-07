@@ -1,6 +1,7 @@
 package com.chase.kudzie.chasemusic.ui.queue
 
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -10,7 +11,8 @@ import com.chase.kudzie.chasemusic.media.model.PlayableMediaItem
 import com.chase.kudzie.chasemusic.model.PlayableMediaItemDiff
 
 class PlayingQueueAdapter(
-    val itemClick: (View, PlayableMediaItem) -> Unit
+    val itemClick: (View, PlayableMediaItem) -> Unit,
+    val startDrag: (RecyclerView.ViewHolder) -> Unit
 ) : ListAdapter<PlayableMediaItem, PlayingQueueAdapter.ItemHolder>(PlayableMediaItemDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
@@ -38,6 +40,14 @@ class PlayingQueueAdapter(
                 this.item = item
 
                 click(item)
+
+                this.dragButton.setOnTouchListener { view, motionEvent ->
+                    if (motionEvent.actionMasked == MotionEvent.ACTION_DOWN) {
+                        startDrag(this@ItemHolder)
+                    }
+                    return@setOnTouchListener true
+                }
+
                 executePendingBindings()
             }
         }

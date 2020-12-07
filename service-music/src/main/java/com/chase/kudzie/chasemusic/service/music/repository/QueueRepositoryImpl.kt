@@ -196,6 +196,8 @@ internal class QueueRepositoryImpl @Inject constructor(
     }
 
     private fun updatePositionInQueue(isNext: Boolean, isFromUser: Boolean = false): Int {
+        //TODO refactor and make it better
+        //TODO maybe decouple next and previous functionality for cleaner code.
         return when {
             repeatMode.isRepeatModeOne() -> {
                 repeatOne(isNext, isFromUser)

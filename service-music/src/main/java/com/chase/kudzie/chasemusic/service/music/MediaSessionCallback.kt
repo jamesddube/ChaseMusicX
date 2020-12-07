@@ -26,7 +26,8 @@ internal class MediaSessionCallback @Inject constructor(
     private val queue: QueueRepository,
     private val repeatMode: RepeatMode,
     private val shuffleMode: ShuffleMode
-) : MediaSessionCompat.Callback(), CoroutineScope by DefaultScope() {
+) : MediaSessionCompat.Callback(),
+    CoroutineScope by DefaultScope() {
 
     override fun onPrepare() {
         launch(Dispatchers.Main) {
@@ -69,8 +70,6 @@ internal class MediaSessionCallback @Inject constructor(
                 onPause()
             }
         }
-
-
     }
 
     override fun onSkipToPrevious() {

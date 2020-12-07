@@ -3,6 +3,8 @@ package com.chase.kudzie.chasemusic.ui.queue
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.asLiveData
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.chase.kudzie.chasemusic.R
 import com.chase.kudzie.chasemusic.base.BaseMediaActivity
 import com.chase.kudzie.chasemusic.databinding.ActivityPlayingQueueBinding
@@ -16,6 +18,8 @@ class PlayingQueueActivity : BaseMediaActivity() {
 
     private val binding: ActivityPlayingQueueBinding by contentView(R.layout.activity_playing_queue)
 
+    private lateinit var itemTouchHelper: ItemTouchHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -23,11 +27,20 @@ class PlayingQueueActivity : BaseMediaActivity() {
         binding.apply {
             observePlayingQueue()
                 .flowOn(Dispatchers.Default)
-                .asLiveData().observe(this@PlayingQueueActivity, {
+                .asLiveData().observe(this@PlayingQueueActivity, { queue ->
                     songsList.apply {
-                        adapter = PlayingQueueAdapter(::onQueueItemClicked).apply {
-                            submitList(it)
+                        adapter = PlayingQueueAdapter(
+                            ::onQueueItemClicked,
+                            ::startDragging
+                        ).apply {
+                            submitList(queue)
                         }
+
+                        itemTouchHelper = DragTouchHelper(
+                            queue,
+                            ::onItemDragged
+                        ).itemTouchHelper
+                        itemTouchHelper.attachToRecyclerView(this)
                     }
                 })
 
@@ -35,6 +48,14 @@ class PlayingQueueActivity : BaseMediaActivity() {
                 finish()
             }
         }
+    }
+
+    private fun onItemDragged(from: Int, to: Int) {
+        //TODO implement custom action to perform swap on DATA source
+    }
+
+    private fun startDragging(viewHolder: RecyclerView.ViewHolder) {
+        itemTouchHelper.startDrag(viewHolder)
     }
 
     private fun onQueueItemClicked(view: View, item: PlayableMediaItem) {
