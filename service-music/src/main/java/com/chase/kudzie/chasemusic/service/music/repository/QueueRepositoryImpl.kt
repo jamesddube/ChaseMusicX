@@ -306,6 +306,26 @@ internal class QueueRepositoryImpl @Inject constructor(
         publishQueue(songQueue)
     }
 
+    override fun swap(from: Int, to: Int) {
+        if (isQueueEmpty()) {
+            return
+        }
+
+        if (from !in 0..songQueue.lastIndex || to !in 0..songQueue.lastIndex) {
+            return
+        }
+
+        val currentSong = songQueue.getOrNull(currentQueuePosition) ?: return
+
+        Collections.swap(songQueue, from, to)
+
+        //Update current queue position
+        val newQueuePosition =
+            songQueue.indexOfFirst { song -> song.positionInQueue == currentSong.positionInQueue }
+        currentQueuePosition = newQueuePosition
+        saveQueueState(songQueue)
+    }
+
     private fun saveQueueState(songs: List<MediaItem>) {
         queueStateJob?.cancel()
         queueStateJob = launch {

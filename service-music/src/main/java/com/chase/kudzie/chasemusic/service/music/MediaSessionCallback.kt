@@ -9,6 +9,8 @@ import com.chase.kudzie.chasemusic.service.music.data.RepeatMode
 import com.chase.kudzie.chasemusic.service.music.data.ShuffleMode
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerRepository
 import com.chase.kudzie.chasemusic.service.music.repository.QueueRepository
+import com.chase.kudzie.chasemusic.shared.constants.CustomActions
+import com.chase.kudzie.chasemusic.shared.constants.IntentArguments
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -146,6 +148,36 @@ internal class MediaSessionCallback @Inject constructor(
     fun playerHasRequestedNext(isTrackEnded: Boolean) {
         //I do not know if this will even work bro
         onSkipToNext(false)
+    }
+
+    override fun onCustomAction(action: String?, extras: Bundle?) {
+        super.onCustomAction(action, extras)
+
+        when (action) {
+            CustomActions.SWAP -> {
+                requireNotNull(extras)
+                val from = extras.getInt(IntentArguments.INTENT_POSITION_FROM, 0)
+                val to = extras.getInt(IntentArguments.INTENT_POSITION_TO, 0)
+
+                queue.swap(from, to)
+            }
+
+            CustomActions.ADD_TO_QUEUE -> {
+
+            }
+
+            CustomActions.REMOVE_FROM_QUEUE -> {
+
+            }
+
+            CustomActions.SHUFFLE_PLAY -> {
+
+            }
+
+            CustomActions.PLAY_NEXT -> {
+
+            }
+        }
     }
 
 

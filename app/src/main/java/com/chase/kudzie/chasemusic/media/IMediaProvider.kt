@@ -18,6 +18,10 @@ interface IMediaProvider {
     fun toggleShuffleMode()
     fun toggleRepeatMode()
 
+    fun swap(from: Int, to: Int)
+    fun removeFromQueue(positionAt: Int)
+    fun addToQueue(mediaIdCategory: MediaIdCategory)
+
     fun observeMetadata(): LiveData<MediaMetadata>
     fun observePlaybackState(): LiveData<MediaPlaybackState>
     fun observeRepeatMode(): LiveData<MediaRepeatMode>

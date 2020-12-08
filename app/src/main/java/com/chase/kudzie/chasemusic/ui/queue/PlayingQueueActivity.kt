@@ -51,7 +51,7 @@ class PlayingQueueActivity : BaseMediaActivity() {
     }
 
     private fun onItemDragged(from: Int, to: Int) {
-        //TODO implement custom action to perform swap on DATA source
+        swap(from, to)
     }
 
     private fun startDragging(viewHolder: RecyclerView.ViewHolder) {
@@ -59,7 +59,7 @@ class PlayingQueueActivity : BaseMediaActivity() {
     }
 
     private fun onQueueItemClicked(view: View, item: PlayableMediaItem) {
-
+        playMediaFromId(item.mediaId)
     }
 
 }

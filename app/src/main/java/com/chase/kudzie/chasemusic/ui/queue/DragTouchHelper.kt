@@ -28,6 +28,8 @@ class DragTouchHelper(
                     Collections.swap(queue, from, to)
                     adapter.notifyItemMoved(from, to)
 
+                    onItemDragged(from, to)
+
                     return true
                 }
 

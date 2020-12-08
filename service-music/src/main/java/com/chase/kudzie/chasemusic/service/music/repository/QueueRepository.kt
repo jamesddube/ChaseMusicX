@@ -25,5 +25,7 @@ internal interface QueueRepository {
 
     suspend fun addSongToQueue(mediaIdCategory: MediaIdCategory)
 
+    fun swap(from: Int, to: Int)
+
     fun clearQueue()
 }
