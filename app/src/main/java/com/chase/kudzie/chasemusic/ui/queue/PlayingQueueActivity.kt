@@ -41,6 +41,8 @@ class PlayingQueueActivity : BaseMediaActivity() {
                             ::onItemDragged
                         ).itemTouchHelper
                         itemTouchHelper.attachToRecyclerView(this)
+
+//                        val position = queue.indexOfFirst { song-> song.positionInQueue ==  }
                     }
                 })
 
@@ -59,7 +61,7 @@ class PlayingQueueActivity : BaseMediaActivity() {
     }
 
     private fun onQueueItemClicked(view: View, item: PlayableMediaItem) {
-        playMediaFromId(item.mediaId)
+        skipToQueueItem(item.positionInQueue)
     }
 
 }

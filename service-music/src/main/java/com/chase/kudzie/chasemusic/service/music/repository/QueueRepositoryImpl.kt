@@ -326,6 +326,26 @@ internal class QueueRepositoryImpl @Inject constructor(
         saveQueueState(songQueue)
     }
 
+    override suspend fun skipToQueueItem(id: Long): PlayableMediaItem? {
+
+        if (isQueueEmpty()) {
+            return null
+        }
+
+        val position = songQueue.indexOfFirst { song -> song.positionInQueue == id.toInt() }
+
+        if (position == -1) {
+            return null
+        }
+
+
+        currentQueuePosition = position
+        publishQueue(songQueue)
+        saveQueueState(songQueue)
+
+        return songQueue.getOrNull(currentQueuePosition)?.toPlayableMediaItem()
+    }
+
     private fun saveQueueState(songs: List<MediaItem>) {
         queueStateJob?.cancel()
         queueStateJob = launch {

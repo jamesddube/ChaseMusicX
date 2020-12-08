@@ -1,5 +1,6 @@
 package com.chase.kudzie.chasemusic.ui.queue
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -35,13 +36,14 @@ class PlayingQueueAdapter(
     inner class ItemHolder(private val binding: ItemQueueSongBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("ClickableViewAccessibility")
         fun bind(item: PlayableMediaItem) {
             binding.run {
                 this.item = item
 
                 click(item)
 
-                this.dragButton.setOnTouchListener { view, motionEvent ->
+                this.dragButton.setOnTouchListener { _, motionEvent ->
                     if (motionEvent.actionMasked == MotionEvent.ACTION_DOWN) {
                         startDrag(this@ItemHolder)
                     }

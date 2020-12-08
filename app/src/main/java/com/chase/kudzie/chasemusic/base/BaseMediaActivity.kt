@@ -118,13 +118,11 @@ abstract class BaseMediaActivity : BaseActivity(),
     }
 
     override fun skipToQueueItem(id: Long) {
-        //TODO implement core functionality
         transportControls()?.skipToQueueItem(id)
     }
 
     override fun favouriteSong(songId: Long) {
         TODO("Needs a custom action to be set in Transport controls and handled")
-
     }
 
     override fun toggleShuffleMode() {

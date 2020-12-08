@@ -123,6 +123,18 @@ internal class MediaSessionCallback @Inject constructor(
         }
     }
 
+    override fun onSkipToQueueItem(id: Long) {
+        super.onSkipToQueueItem(id)
+        launch(Dispatchers.Main) {
+            val queueItem = queue.skipToQueueItem(id)
+            if (queueItem != null) {
+                player.play(queueItem, false)
+            } else {
+                onPause()
+            }
+        }
+    }
+
     override fun onPlayFromUri(uri: Uri?, extras: Bundle?) {
         super.onPlayFromUri(uri, extras)
         TODO("implement")
