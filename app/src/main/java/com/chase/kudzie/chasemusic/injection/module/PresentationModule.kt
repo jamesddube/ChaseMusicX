@@ -8,6 +8,7 @@ import com.chase.kudzie.chasemusic.ui.artistdetails.ArtistDetailsViewModel
 import com.chase.kudzie.chasemusic.ui.artists.ArtistsViewModel
 import com.chase.kudzie.chasemusic.ui.playlistdetails.PlaylistDetailsViewModel
 import com.chase.kudzie.chasemusic.ui.playlists.PlaylistsViewModel
+import com.chase.kudzie.chasemusic.ui.queue.QueueViewModel
 import com.chase.kudzie.chasemusic.ui.songs.SongViewModel
 import dagger.Binds
 import dagger.Module
@@ -50,5 +51,10 @@ abstract class PresentationModule {
     @IntoMap
     @ViewModelKey(PlaylistDetailsViewModel::class)
     abstract fun bindPlaylistDetailsViewModel(viewModel: PlaylistDetailsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(QueueViewModel::class)
+    abstract fun bindQueueViewModel(viewModel: QueueViewModel): ViewModel
 }
 

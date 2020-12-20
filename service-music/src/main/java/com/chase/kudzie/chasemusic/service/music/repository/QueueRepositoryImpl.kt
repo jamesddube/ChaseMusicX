@@ -355,7 +355,7 @@ internal class QueueRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun saveQueuePosition(songs: List<MediaItem>) {
+    private suspend fun saveQueuePosition(songs: List<MediaItem>) {
         songs.getOrNull(currentQueuePosition)?.let {
             preferencesRepository.setCurrentQueuePosition(it.positionInQueue)
         }
