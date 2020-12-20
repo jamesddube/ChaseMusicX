@@ -36,6 +36,7 @@ ext {
     lifecycleVersion = '2.2.0'
     roomVersion = '2.2.5'
     moshiVersion = '1.9.3'
+    dataStoreVersion = '1.0.0-alpha05'
 
     livedataktxVersion = '2.2.0'
     //Compose versions
@@ -81,7 +82,8 @@ ext {
             dagger               : "com.google.dagger:dagger:${daggerVersion}",
             moshi                : "com.squareup.moshi:moshi-kotlin:${moshiVersion}",
             moshiCodegen         : "com.squareup.moshi:moshi-kotlin-codegen:${moshiVersion}",
-            okHttpLogger         : "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
+            okHttpLogger         : "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
+            dataStorePrefs       : "androidx.datastore:datastore-preferences:${dataStoreVersion}",
     ]
 
     dataTestDependencies = [
@@ -126,7 +128,8 @@ ext {
             kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}",
             kotlinCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
             androidCoroutines   : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion",
-            room                : "androidx.room:room-runtime:${roomVersion}"
+            room                : "androidx.room:room-runtime:${roomVersion}",
+            dataStorePrefs      : "androidx.datastore:datastore-preferences:${dataStoreVersion}"
     ]
 
     appDependencies = [
@@ -158,7 +161,8 @@ ext {
             multiDex                     : "androidx.multidex:multidex:${multiDexVersion}",
             navigationFragment           : "androidx.navigation:navigation-fragment-ktx:${navigationVersion}",
             navigationUI                 : "androidx.navigation:navigation-ui-ktx:${navigationVersion}",
-            media                        : "androidx.media:media:${mediaVersion}"
+            media                        : "androidx.media:media:${mediaVersion}",
+            dataStorePrefs               : "androidx.datastore:datastore-preferences:${dataStoreVersion}"
     ]
 
     composeDependencies = [

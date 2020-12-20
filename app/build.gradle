@@ -87,6 +87,9 @@ dependencies {
     implementation appDependencies.navigationUI
     implementation appDependencies.media
 
+    //Data store
+    implementation appDependencies.dataStorePrefs
+
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
     kapt appDependencies.daggerCompiler
