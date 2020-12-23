@@ -7,15 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.chase.kudzie.chasemusic.domain.interactor.artists.GetArtist
 import com.chase.kudzie.chasemusic.domain.interactor.browse.artists.GetArtists
 import com.chase.kudzie.chasemusic.domain.model.Artist
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ArtistsViewModel @Inject constructor(
-    private val getArtists: GetArtists,
-    private val _getArtist: GetArtist
+    private val getArtistsUseCase: GetArtists,
+    private val getArtistUseCase: GetArtist,
 ) : ViewModel() {
 
     private val _artists = MutableLiveData<List<Artist>>()
@@ -27,7 +26,7 @@ class ArtistsViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main) {
-                _artists.value = getArtists()
+                _artists.value = getArtistsUseCase()
             }
         }
     }
@@ -35,9 +34,10 @@ class ArtistsViewModel @Inject constructor(
     fun getArtist(artistId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main) {
-                _artist.value = _getArtist(GetArtist.Params.forArtist(artistId))
+                _artist.value = getArtistUseCase(GetArtist.Params.forArtist(artistId))
             }
         }
     }
+
 
 }

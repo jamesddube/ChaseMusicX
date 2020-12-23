@@ -1,9 +1,9 @@
 package com.chase.kudzie.chasemusic.service.music.repository
 
 import android.support.v4.media.session.PlaybackStateCompat
-import com.chase.kudzie.chasemusic.service.music.model.MediaItem
+import com.chase.kudzie.chasemusic.domain.model.MediaItem
 
-interface PlayerPlaybackState {
+internal interface PlayerPlaybackState {
     fun addListener(listener: Listener)
     fun removeListener(listener: Listener)
 

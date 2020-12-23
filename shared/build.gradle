@@ -48,6 +48,7 @@ dependencies {
     implementation sharedModuleDependencies.kotlinCoroutines
     implementation sharedModuleDependencies.androidCoroutines
     implementation sharedModuleDependencies.room
+    implementation sharedModuleDependencies.dataStorePrefs
 
     kapt sharedModuleDependencies.daggerCompiler
     kapt sharedModuleDependencies.daggerProcessor

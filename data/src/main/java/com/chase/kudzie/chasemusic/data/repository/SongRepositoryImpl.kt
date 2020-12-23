@@ -6,7 +6,9 @@ import com.chase.kudzie.chasemusic.data.extensions.queryAll
 import com.chase.kudzie.chasemusic.data.extensions.queryOne
 import com.chase.kudzie.chasemusic.data.loaders.AlbumLoader
 import com.chase.kudzie.chasemusic.data.loaders.ArtistLoader
+import com.chase.kudzie.chasemusic.data.loaders.PlaylistLoader
 import com.chase.kudzie.chasemusic.data.loaders.SongLoader
+import com.chase.kudzie.chasemusic.data.mapper.toPlaylistSong
 import com.chase.kudzie.chasemusic.data.mapper.toSong
 import com.chase.kudzie.chasemusic.domain.model.Song
 import com.chase.kudzie.chasemusic.domain.repository.SongRepository
@@ -36,10 +38,6 @@ class SongRepositoryImpl @Inject constructor(
         ) { it.toSong() }!!
     }
 
-    override suspend fun deleteSong(id: Long) {
-        TODO("research song deletion via content provider?")
-    }
-
     override suspend fun getSongsByAlbum(albumId: Long): List<Song> {
         return contentResolver.queryAll(
             AlbumLoader(contentResolver).getAlbumSongs(albumId)
@@ -50,5 +48,15 @@ class SongRepositoryImpl @Inject constructor(
         return contentResolver.queryAll(
             ArtistLoader(contentResolver).getArtistSongs(artistId)
         ) { it.toSong() }
+    }
+
+    override suspend fun getSongsByPlaylist(playlistId: Long): List<Song> {
+        return contentResolver.queryAll(
+            PlaylistLoader(contentResolver).getPlaylistSongs(playlistId)
+        ) { it.toPlaylistSong() }
+    }
+
+    override suspend fun deleteSong(id: Long) {
+        TODO("research song deletion via content provider?")
     }
 }

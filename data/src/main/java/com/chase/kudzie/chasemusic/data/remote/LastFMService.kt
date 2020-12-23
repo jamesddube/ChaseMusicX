@@ -7,10 +7,9 @@ import retrofit2.http.Query
 
 interface LastFMService {
 
-    @GET("2.0/")
+    @GET("2.0/?method=artist.getinfo")
     suspend fun getArtistInfo(
         @Query("artist") artistName: String,
-        @Query("method") method: String? = "artist.getinfo",
         @Query("api_key") apiKey: String? = BuildConfig.LAST_FM_API_KEY,
         @Query("format") format: String? = "json"
     ): LastFMArtistEntity

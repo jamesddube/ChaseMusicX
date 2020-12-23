@@ -23,7 +23,6 @@ import javax.inject.Singleton
 )
 interface SharedComponent {
     //A bit hacky
-
     @ApplicationContext
     fun context(): Context
 
@@ -34,6 +33,7 @@ interface SharedComponent {
     fun preferencesRepository(): PreferencesRepository
     fun songQueueRepository(): SongQueueRepository
     fun lastFMRepository(): LastFMRepository
+    fun deezerRepository(): DeezerRepository
 
     @Component.Factory
     interface Factory {

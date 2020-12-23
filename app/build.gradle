@@ -5,18 +5,18 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
-kapt {
-    correctErrorTypes = true
-}
+
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "com.chase.kudzie.chasemusic"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -49,13 +49,14 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = '1.8'
     }
 }
 
 dependencies {
     def appDependencies = rootProject.ext.appDependencies
     def appTestDependencies = rootProject.ext.appTestDependencies
+    def composeDependencies = rootProject.ext.composeDependencies
 
     implementation project(':data')
     implementation project(':domain')
@@ -80,10 +81,16 @@ dependencies {
     implementation appDependencies.timber
     implementation appDependencies.androidxLifecycleExtensions
     implementation appDependencies.androidxLifecycleViewmodelKtx
+    implementation appDependencies.androidLiveDataKtx
     implementation appDependencies.multiDex
     implementation appDependencies.navigationFragment
     implementation appDependencies.navigationUI
     implementation appDependencies.media
+
+    //Data store
+    implementation appDependencies.dataStorePrefs
+
+    implementation 'androidx.palette:palette-ktx:1.0.0'
 
     kapt appDependencies.daggerCompiler
     kapt appDependencies.daggerProcessor

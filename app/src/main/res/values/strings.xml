@@ -9,4 +9,18 @@
     <string name="permissions_denied_message">Permissions were denied bla bla</string>
     <string name="grant_permission">Grant</string>
     <string name="action_settings">Settings</string>
+    <string name="artist_image">Image of the artist</string>
+    <string name="placeholder_mini">Mini Player Placeholder</string>
+    <string name="placeholder_content">Music Information Placeholder</string>
+    <string name="shuffle_play">Shuffle Play</string>
+    <string name="play_pause_button_description">Play Pause Button</string>
+    <string name="more_options_description">More options</string>
+    <string name="toggle_repeat_mode_description">Toggle repeat mode</string>
+    <string name="skip_to_previous">skip to previous</string>
+    <string name="skip_to_next_song">Skip to next song</string>
+    <string name="toggle_shuffle_mode">Toggle shuffle mode</string>
+    <string name="add_song_to_favorites">Add song to favorites</string>
+    <string name="close_currently_playing_screen">Close currently playing screen</string>
+    <string name="open_current_song_queue_playlist">Open current song queue playlist</string>
+    <string name="drag_indicator">Drag Indicator</string>
 </resources>

@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chase.kudzie.chasemusic.data.database.ChaseMusicDatabase
 import com.chase.kudzie.chasemusic.data.database.dao.QueueDao
-import com.chase.kudzie.chasemusic.data.factory.SongFactory
+import com.chase.kudzie.chasemusic.data.factory.MediaItemFactory
 
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.yield
@@ -40,7 +40,7 @@ class QueueSongEntityTest {
     @Test
     @Throws(Exception::class)
     fun db_insertAndRetrieveQueueSongs() = runBlocking {
-        val songs = SongFactory.makeFakeSongs()
+        val songs = MediaItemFactory.makeFakeSongs()
         //Insert into queue
         dao.insertIntoQueue(songs)
         yield()
@@ -54,7 +54,7 @@ class QueueSongEntityTest {
     @Test
     @Throws(Exception::class)
     fun db_clearsAll() = runBlocking {
-        val songs = SongFactory.makeFakeSongs()
+        val songs = MediaItemFactory.makeFakeSongs()
 
         dao.insertIntoQueue(songs)
         yield()
@@ -67,7 +67,7 @@ class QueueSongEntityTest {
     @Test
     @Throws(Exception::class)
     fun db_correctSongExistsInQueue() = runBlocking {
-        val songs = SongFactory.makeFakeSongs()
+        val songs = MediaItemFactory.makeFakeSongs()
 
         dao.insertIntoQueue(songs)
         yield()
@@ -78,6 +78,6 @@ class QueueSongEntityTest {
         //I've picked a random song I know exists.
         val single = queuedSongs.first { song -> song.id == 3.toLong() }
 
-        assert(single.artistName == "Galantis")
+        assert(single.artist == "Galantis")
     }
 }

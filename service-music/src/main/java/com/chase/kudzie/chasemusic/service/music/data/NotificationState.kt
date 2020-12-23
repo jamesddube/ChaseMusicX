@@ -1,7 +1,7 @@
 package com.chase.kudzie.chasemusic.service.music.data
 
 import android.support.v4.media.session.PlaybackStateCompat
-import com.chase.kudzie.chasemusic.service.music.model.MediaItem
+import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import java.util.concurrent.TimeUnit
 
 sealed class Event {

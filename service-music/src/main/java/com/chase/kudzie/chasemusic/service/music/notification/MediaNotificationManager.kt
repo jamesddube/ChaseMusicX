@@ -10,13 +10,13 @@ import com.chase.kudzie.chasemusic.service.music.data.Event
 import com.chase.kudzie.chasemusic.service.music.data.NotificationState
 import com.chase.kudzie.chasemusic.service.music.extensions.isOreo
 import com.chase.kudzie.chasemusic.service.music.injection.scope.PerService
-import com.chase.kudzie.chasemusic.service.music.model.MediaItem
+import com.chase.kudzie.chasemusic.domain.model.MediaItem
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerPlaybackState
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
 
@@ -35,7 +35,8 @@ internal class MediaNotificationManager @Inject constructor(
 
     private var isForeground: Boolean = false
 
-    private val publisher = Channel<Event>(Channel.UNLIMITED)
+    private val playbackFlow =
+        MutableSharedFlow<Event>(replay = 0, extraBufferCapacity = Channel.UNLIMITED)
     private val currState = NotificationState()
     private var job: Job? = null
 
@@ -57,7 +58,7 @@ internal class MediaNotificationManager @Inject constructor(
         playerPlaybackState.addListener(playerListener)
 
         launch {
-            publisher.consumeAsFlow()
+            playbackFlow
                 .filter { event ->
                     when (event) {
                         is Event.Metadata -> currState.isDifferentMetadata(event.mediaItem)
@@ -112,7 +113,7 @@ internal class MediaNotificationManager @Inject constructor(
     }
 
     private fun stopForeground() {
-        Log.e("SERVICE","SERVICE STOPPED")
+        Log.e("SERVICE", "SERVICE STOPPED")
         context.stopForeground(true)
         mediaNotification.cancel()
         isForeground = false
@@ -130,10 +131,15 @@ internal class MediaNotificationManager @Inject constructor(
 
 
     private fun onNextMetadata(mediaItem: MediaItem) {
-        publisher.offer(Event.Metadata(mediaItem))
+        launch {
+            playbackFlow.emit(Event.Metadata(mediaItem))
+        }
+
     }
 
     private fun onNextState(playbackState: PlaybackStateCompat) {
-        publisher.offer(Event.State(playbackState))
+        launch {
+            playbackFlow.emit(Event.State(playbackState))
+        }
     }
 }

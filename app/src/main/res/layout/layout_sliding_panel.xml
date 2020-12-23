@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/player_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface"
+        android:clickable="true"
+        android:focusable="true"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <fragment
+            android:id="@+id/player_fragment"
+            android:name="com.chase.kudzie.chasemusic.ui.nowplaying.PlayerFragment"
+            android:tag="player"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout="@layout/fragment_player" />
+
+        <fragment
+            android:id="@+id/player_mini_fragment"
+            android:name="com.chase.kudzie.chasemusic.ui.nowplaying.PlayerMiniFragment"
+            android:tag="mini_player"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout="@layout/fragment_player_mini" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

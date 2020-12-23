@@ -12,8 +12,7 @@
         app:paddingTopSystemWindowInsets="@{true}"
         app:paddingLeftSystemWindowInsets="@{true}"
         app:paddingRightSystemWindowInsets="@{true}"
-        tools:context=".ui.albums.AlbumsFragment"
-        >
+        tools:context=".ui.albums.AlbumsFragment">
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -21,6 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipToPadding="false"
+            android:transitionGroup="true"
             android:paddingHorizontal="8dp"
             android:scrollbarStyle="outsideOverlay"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"

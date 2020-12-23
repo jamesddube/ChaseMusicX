@@ -1,8 +1,9 @@
 package com.chase.kudzie.chasemusic.service.music.repository
 
-import com.chase.kudzie.chasemusic.service.music.model.MediaItem
+import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
+import com.chase.kudzie.chasemusic.service.music.model.PlayableMediaItem
 
-interface QueueRepository {
+internal interface QueueRepository {
 
     fun sortSongs()
 
@@ -10,19 +11,23 @@ interface QueueRepository {
 
     fun isQueueEmpty(): Boolean
 
-    suspend fun skipToNext(): MediaItem?
+    suspend fun skipToNext(isFromUser: Boolean): PlayableMediaItem?
 
-    suspend fun skipToPrevious(): MediaItem?
+    suspend fun skipToPrevious(): PlayableMediaItem?
 
-    fun prepare()
+    suspend fun prepare(): PlayableMediaItem?
 
-    suspend fun onPlayFromMediaId(mediaId: String): MediaItem?
+    suspend fun onPlayFromMediaId(mediaIdCategory: MediaIdCategory): PlayableMediaItem?
 
-    suspend fun getCurrentPlayingSong(): MediaItem?
+    suspend fun getCurrentPlayingSong(): PlayableMediaItem?
 
-    //TODO choose songID or maybe Index
-    fun removeSongFromQueue()
+    suspend fun removeSongFromQueue(positionAt: Int)
 
-    fun addSongToQueue()
+    suspend fun addSongToQueue(mediaIdCategory: MediaIdCategory)
 
+    suspend fun skipToQueueItem(id: Long): PlayableMediaItem?
+
+    fun swap(from: Int, to: Int)
+
+    fun clearQueue()
 }

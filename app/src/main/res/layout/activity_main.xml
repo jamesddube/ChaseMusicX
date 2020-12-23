@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,18 +15,25 @@
             android:id="@+id/nav_host"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             app:defaultNavHost="true"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:navGraph="@navigation/home_navigation" />
+
+        <include
+            android:id="@+id/layout_bottom_sheet"
+            layout="@layout/layout_sliding_panel"
+            />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:elevation="0dp"
             app:marginBottomSystemWindowInsets="@{true}"
             app:menu="@menu/home" />
 
-    </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

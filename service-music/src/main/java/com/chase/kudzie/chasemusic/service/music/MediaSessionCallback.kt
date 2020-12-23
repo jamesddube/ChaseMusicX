@@ -3,8 +3,14 @@ package com.chase.kudzie.chasemusic.service.music
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
+import android.util.Log
+import com.chase.kudzie.chasemusic.domain.model.MediaIdCategory
+import com.chase.kudzie.chasemusic.service.music.data.RepeatMode
+import com.chase.kudzie.chasemusic.service.music.data.ShuffleMode
 import com.chase.kudzie.chasemusic.service.music.repository.PlayerRepository
 import com.chase.kudzie.chasemusic.service.music.repository.QueueRepository
+import com.chase.kudzie.chasemusic.shared.constants.CustomActions
+import com.chase.kudzie.chasemusic.shared.constants.IntentArguments
 import com.chase.kudzie.chasemusic.shared.injection.coroutinescope.DefaultScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,18 +23,21 @@ import javax.inject.Inject
  * @author Kudzai Chasinda
  */
 
-class MediaSessionCallback @Inject constructor(
+internal class MediaSessionCallback @Inject constructor(
     private val player: PlayerRepository,
-    private val queue: QueueRepository
-) : MediaSessionCompat.Callback(), CoroutineScope by DefaultScope() {
+    private val queue: QueueRepository,
+    private val repeatMode: RepeatMode,
+    private val shuffleMode: ShuffleMode
+) : MediaSessionCompat.Callback(),
+    CoroutineScope by DefaultScope() {
 
     override fun onPrepare() {
-        super.onPrepare()
-        //TODO note:
-        /*
-        * I am thinking maybe on prepare I restore state from Shared Prefs and Db
-        * This is called first and would be best to query the db and do the things
-        * */
+        launch(Dispatchers.Main) {
+            val song = queue.prepare()
+            if (song != null) {
+                player.prepare(song)
+            }
+        }
     }
 
     override fun onPlay() {
@@ -46,15 +55,21 @@ class MediaSessionCallback @Inject constructor(
 
     override fun onSkipToNext() {
         super.onSkipToNext()
-        launch {
-            val song = queue.skipToNext()
-            withContext(Dispatchers.Main) {
-                if (song != null) {
-                    player.play(song, false)
-                } else {
-                    //TODO maybe stop service at this point
-                }
+        onSkipToNext(true)
+    }
 
+    private fun onSkipToNext(fromUser: Boolean) = launch(Dispatchers.Main) {
+        val nextSong = queue.skipToNext(fromUser)
+        if (nextSong != null) {
+            player.play(nextSong, false)
+        } else {
+            val currentSong = queue.getCurrentPlayingSong()
+            if (currentSong != null) {
+                player.play(currentSong, true)
+                player.pause(false)
+                player.seekTo(0L)
+            } else {
+                onPause()
             }
         }
     }
@@ -71,7 +86,6 @@ class MediaSessionCallback @Inject constructor(
                 }
             }
         }
-
     }
 
     override fun onStop() {
@@ -93,17 +107,30 @@ class MediaSessionCallback @Inject constructor(
         }
     }
 
-    override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
+    override fun onPlayFromMediaId(mediaId: String, extras: Bundle?) {
         super.onPlayFromMediaId(mediaId, extras)
+        Log.e("MEDIA_ID", mediaId)
         launch {
             //Get the song from queue and play
-            val song = queue.onPlayFromMediaId(mediaId!!)
+            val song = queue.onPlayFromMediaId(MediaIdCategory.fromString(mediaId))
             withContext(Dispatchers.Main) {
                 if (song != null) {
                     player.play(song, false)
                 } else {
-                    //TODO maybe stop service at this point
+
                 }
+            }
+        }
+    }
+
+    override fun onSkipToQueueItem(id: Long) {
+        super.onSkipToQueueItem(id)
+        launch(Dispatchers.Main) {
+            val queueItem = queue.skipToQueueItem(id)
+            if (queueItem != null) {
+                player.play(queueItem, false)
+            } else {
+                onPause()
             }
         }
     }
@@ -111,6 +138,58 @@ class MediaSessionCallback @Inject constructor(
     override fun onPlayFromUri(uri: Uri?, extras: Bundle?) {
         super.onPlayFromUri(uri, extras)
         TODO("implement")
+    }
+
+    override fun onSetRepeatMode(repeatMode: Int) {
+        super.onSetRepeatMode(repeatMode)
+
+        this.repeatMode.toggleRepeatMode()
+    }
+
+    override fun onSetShuffleMode(shuffleMode: Int) {
+        super.onSetShuffleMode(shuffleMode)
+
+        val isShuffleOn = this.shuffleMode.toggleShuffleMode()
+        if (isShuffleOn) {
+            queue.shuffleSongs()
+        } else {
+            queue.sortSongs()
+        }
+    }
+
+    fun playerHasRequestedNext(isTrackEnded: Boolean) {
+        //I do not know if this will even work bro
+        onSkipToNext(false)
+    }
+
+    override fun onCustomAction(action: String?, extras: Bundle?) {
+        super.onCustomAction(action, extras)
+
+        when (action) {
+            CustomActions.SWAP -> {
+                requireNotNull(extras)
+                val from = extras.getInt(IntentArguments.INTENT_POSITION_FROM, 0)
+                val to = extras.getInt(IntentArguments.INTENT_POSITION_TO, 0)
+
+                queue.swap(from, to)
+            }
+
+            CustomActions.ADD_TO_QUEUE -> {
+
+            }
+
+            CustomActions.REMOVE_FROM_QUEUE -> {
+
+            }
+
+            CustomActions.SHUFFLE_PLAY -> {
+
+            }
+
+            CustomActions.PLAY_NEXT -> {
+
+            }
+        }
     }
 
 

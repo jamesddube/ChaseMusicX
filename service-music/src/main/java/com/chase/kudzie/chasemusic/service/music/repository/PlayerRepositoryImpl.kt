@@ -6,13 +6,12 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.chase.kudzie.chasemusic.service.music.data.MediaPlaybackState
 import com.chase.kudzie.chasemusic.service.music.injection.scope.ServiceContext
-import com.chase.kudzie.chasemusic.service.music.model.MediaItem
+import com.chase.kudzie.chasemusic.service.music.model.PlayableMediaItem
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -27,7 +26,7 @@ import javax.inject.Inject
  * @author Kudzai Chasinda
  */
 
-class PlayerRepositoryImpl @Inject constructor(
+internal class PlayerRepositoryImpl @Inject constructor(
     @ServiceContext private val context: Context,
     private val playbackState: MediaPlaybackState,
     private val serviceController: ServiceController,
@@ -65,7 +64,8 @@ class PlayerRepositoryImpl @Inject constructor(
         serviceController.start()
     }
 
-    override fun play(mediaItem: MediaItem, hasTrackEnded: Boolean) {
+    override fun play(playableMediaItem: PlayableMediaItem, hasTrackEnded: Boolean) {
+        val mediaItem = playableMediaItem.mediaItem
         val media =
             ConcatenatingMediaSource(
                 mediaSource.createMediaSource(getSongUri(mediaItem.id))
@@ -80,13 +80,11 @@ class PlayerRepositoryImpl @Inject constructor(
             it.onMetadataChanged(mediaItem)
         }
         serviceController.start()
-
     }
 
     override fun pause(isServiceAlive: Boolean) {
         player.playWhenReady = false
-        val currState =
-            if (isPlaying()) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED
+
         val playerPlaybackState =
             playbackState.update(PlaybackStateCompat.STATE_PAUSED, getCurrentSeekPos())
 
@@ -121,7 +119,11 @@ class PlayerRepositoryImpl @Inject constructor(
         TODO("This supposed to make a database or playlist entry into favorites.")
     }
 
-    override fun prepare(mediaItem: MediaItem) {
+    override fun prepare(playableMediaItem: PlayableMediaItem) {
+        //TODO -- Current Prepare Impl shows Notification
+        //TODO -- Revisit this.
+        val mediaItem = playableMediaItem.mediaItem
+
         val media =
             ConcatenatingMediaSource(
                 mediaSource.createMediaSource(getSongUri(mediaItem.id))

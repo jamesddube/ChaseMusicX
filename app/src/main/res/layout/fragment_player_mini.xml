@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="metadata"
+            type="com.chase.kudzie.chasemusic.media.model.MediaMetadata" />
+
+        <variable
+            name="playbackState"
+            type="com.chase.kudzie.chasemusic.media.model.MediaPlaybackState" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/colorSurface">
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_artwork"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="?colorSurface"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/album_artwork"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:album_artwork="@{metadata.albumId}"
+                app:placeholder="@{@drawable/song_placeholder}"
+                tools:srcCompat="@tools:sample/avatars[4]" />
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/card_artwork"
+            app:layout_constraintEnd_toStartOf="@+id/play_pause_btn"
+            app:layout_constraintStart_toEndOf="@+id/card_artwork"
+            app:layout_constraintTop_toTopOf="@+id/card_artwork">
+
+            <TextView
+                android:id="@+id/song_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@{metadata.title}"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                tools:text="Take Care(feat. Rihanna)" />
+        </LinearLayout>
+
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/play_pause_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/card_artwork"
+            app:layout_constraintEnd_toStartOf="@+id/skip_to_next_btn"
+            app:layout_constraintTop_toTopOf="@+id/card_artwork"
+            app:play_pause_btn="@{playbackState.playing}"
+            app:srcCompat="@drawable/ic_pause_24" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/skip_to_next_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/card_artwork"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/card_artwork"
+            app:srcCompat="@drawable/ic_skip_next_24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

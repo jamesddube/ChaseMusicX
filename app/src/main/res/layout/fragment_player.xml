@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="metadata"
+            type="com.chase.kudzie.chasemusic.media.model.MediaMetadata" />
+
+        <variable
+            name="playbackState"
+            type="com.chase.kudzie.chasemusic.media.model.MediaPlaybackState" />
+
+        <variable
+            name="repeatMode"
+            type="com.chase.kudzie.chasemusic.media.model.MediaRepeatMode" />
+
+        <variable
+            name="shuffleMode"
+            type="com.chase.kudzie.chasemusic.media.model.MediaShuffleMode" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/background_layer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_artwork"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp"
+            android:elevation="8dp"
+            app:cardBackgroundColor="?colorSurface"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintStart_toStartOf="@+id/guideline5"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/album_artwork"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/album_artwork"
+                android:scaleType="centerCrop"
+                app:album_artwork="@{metadata.albumId}"
+                app:placeholder="@{@drawable/song_placeholder}"
+                tools:srcCompat="@tools:sample/avatars[4]" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <LinearLayout
+            android:id="@+id/song_details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/menu_btn"
+            app:layout_constraintStart_toStartOf="@+id/guideline12"
+            app:layout_constraintTop_toTopOf="@+id/guideline3">
+
+            <TextView
+                android:id="@+id/song_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@{metadata.title}"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                tools:text="Good Grief" />
+
+            <TextView
+                android:id="@+id/artist_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@{metadata.artist}"
+                android:textAppearance="?attr/textAppearanceBody1"
+                tools:text="Bastille" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="10dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textAppearance="?attr/textAppearanceCaption"
+            app:duration_update="@{playbackState.currentSeekPos}"
+            app:layout_constraintBottom_toTopOf="@+id/guideline11"
+            app:layout_constraintStart_toStartOf="@+id/music_seekbar"
+            app:layout_constraintTop_toTopOf="@+id/guideline11"
+            tools:text="0:00" />
+
+        <TextView
+            android:id="@+id/end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textAppearance="?attr/textAppearanceCaption"
+            app:duration_text="@{metadata.duration}"
+            app:layout_constraintBottom_toTopOf="@+id/guideline11"
+            app:layout_constraintEnd_toEndOf="@+id/music_seekbar"
+            app:layout_constraintTop_toTopOf="@+id/guideline11"
+            tools:text="3:12" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/music_seekbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:theme="@style/Widget.ChaseMusicX.SeekBar"
+            app:layout_constraintBottom_toTopOf="@+id/guideline11"
+            app:layout_constraintEnd_toStartOf="@+id/guideline13"
+            app:layout_constraintStart_toStartOf="@+id/guideline12"
+            app:layout_constraintTop_toBottomOf="@+id/song_details"
+            app:seekbar_duration="@{playbackState.currentSeekPos}"
+            tools:progress="50" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.10" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/play_pause_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:contentDescription="@string/play_pause_button_description"
+            android:focusable="true"
+            app:layout_constraintBottom_toTopOf="@+id/guideline6"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintStart_toStartOf="@+id/guideline5"
+            app:layout_constraintTop_toTopOf="@+id/guideline11"
+            app:play_pause_icon="@{playbackState.playing}"
+            tools:srcCompat="@drawable/ic_pause_48" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/skip_to_prev_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/skip_to_previous"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/play_pause_btn"
+            app:layout_constraintEnd_toStartOf="@+id/play_pause_btn"
+            app:layout_constraintStart_toEndOf="@+id/repeat_btn"
+            app:layout_constraintTop_toTopOf="@+id/play_pause_btn"
+            app:srcCompat="@drawable/ic_skip_previous_24" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/skip_to_next_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/skip_to_next_song"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/play_pause_btn"
+            app:layout_constraintEnd_toStartOf="@+id/shuffle_btn"
+            app:layout_constraintStart_toEndOf="@+id/play_pause_btn"
+            app:layout_constraintTop_toTopOf="@+id/play_pause_btn"
+            app:srcCompat="@drawable/ic_skip_next_24" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.67" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05109489" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <ImageButton
+            android:id="@+id/menu_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/more_options_description"
+            android:padding="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline14"
+            app:layout_constraintEnd_toStartOf="@+id/guideline13"
+            app:layout_constraintTop_toTopOf="@+id/guideline14"
+            app:srcCompat="@drawable/ic_more_vertical" />
+
+        <ImageButton
+            android:id="@+id/repeat_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/toggle_repeat_mode_description"
+            android:padding="8dp"
+            app:cycle_repeat="@{repeatMode}"
+            app:layout_constraintBottom_toBottomOf="@+id/play_pause_btn"
+            app:layout_constraintStart_toStartOf="@+id/guideline12"
+            app:layout_constraintTop_toTopOf="@+id/play_pause_btn"
+            app:srcCompat="@drawable/ic_repeat" />
+
+        <ImageButton
+            android:id="@+id/shuffle_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/toggle_shuffle_mode"
+            android:padding="8dp"
+            app:cycle_shuffle="@{shuffleMode}"
+            app:layout_constraintBottom_toBottomOf="@+id/play_pause_btn"
+            app:layout_constraintEnd_toStartOf="@+id/guideline13"
+            app:layout_constraintTop_toTopOf="@+id/play_pause_btn"
+            app:srcCompat="@drawable/ic_shuffle" />
+
+        <ImageButton
+            android:id="@+id/playlist_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/open_current_song_queue_playlist"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/close_btn"
+            app:layout_constraintEnd_toStartOf="@+id/guideline13"
+            app:layout_constraintTop_toTopOf="@+id/close_btn"
+            app:srcCompat="@drawable/ic_playlist_play" />
+
+        <ImageButton
+            android:id="@+id/like_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/add_song_to_favorites"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/close_btn"
+            app:layout_constraintStart_toStartOf="@+id/guideline12"
+            app:layout_constraintTop_toTopOf="@+id/close_btn"
+            app:srcCompat="@drawable/ic_like_outline" />
+
+        <ImageButton
+            android:id="@+id/close_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/close_currently_playing_screen"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintStart_toStartOf="@+id/guideline5"
+            app:layout_constraintTop_toTopOf="@+id/guideline6"
+            app:srcCompat="@drawable/ic_arrow_down" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.56" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

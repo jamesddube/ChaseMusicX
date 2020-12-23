@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="song"
+            type="com.chase.kudzie.chasemusic.domain.model.Song" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/track_number"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceBody1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:track_number="@{song.trackNumber}"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/song_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:maxLines="1"
+            android:text="@{song.title}"
+            android:textAppearance="?attr/textAppearanceBody1"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toStartOf="@+id/btn_more_options"
+            app:layout_constraintStart_toEndOf="@id/track_number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.8"
+            tools:text="Song Name" />
+
+        <TextView
+            android:id="@+id/duration_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:duration_text="@{song.duration}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_more_options"
+            app:layout_constraintStart_toEndOf="@id/track_number"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            app:layout_constraintVertical_bias="0.2"
+            tools:text="3:10" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageButton
+            android:id="@+id/btn_more_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_more_vertical" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

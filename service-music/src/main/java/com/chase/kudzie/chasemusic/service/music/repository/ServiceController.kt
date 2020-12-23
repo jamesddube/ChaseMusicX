@@ -1,6 +1,6 @@
 package com.chase.kudzie.chasemusic.service.music.repository
 
-interface ServiceController {
+internal interface ServiceController {
     fun start()
     fun stop()
 
